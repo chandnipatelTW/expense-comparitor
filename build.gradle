@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'idea'
 }
 
 repositories {
@@ -15,4 +16,16 @@ dependencies {
 task runLocal(dependsOn: jar, type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'org.spargonaut.MyJavaApplication'
+}
+
+idea {
+    project {
+        vcs = 'Git'
+    }
+
+    module {
+        excludeDirs += file 'gradle'
+        excludeDirs += file 'build'
+        excludeDirs += file '.idea'
+    }
 }
