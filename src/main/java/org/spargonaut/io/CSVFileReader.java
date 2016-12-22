@@ -8,7 +8,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChargeReader {
+public class CSVFileReader {
 
     public List<String> readCreditCardFile(File creditCardFile) {
         List<String> chargeLines = new ArrayList<>();

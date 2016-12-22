@@ -8,9 +8,9 @@ import java.util.List;
 
 public class ExpenseParser {
 
-    private final ChargeReader csvFileReader;
+    private final CSVFileReader csvFileReader;
 
-    public ExpenseParser(ChargeReader csvFileReader) {
+    public ExpenseParser(CSVFileReader csvFileReader) {
         this.csvFileReader = csvFileReader;
     }
 

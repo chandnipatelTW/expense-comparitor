@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 
 public class ChargeParserTest {
 
-    private ChargeReader mockChargeReader;
+    private CSVFileReader mockCSVFileReader;
     private File mockFile;
 
     @Before
@@ -25,13 +25,13 @@ public class ChargeParserTest {
         List<String> chargeStrings = Arrays.asList(headerLine, chargeLine);
 
         mockFile = mock(File.class);
-        mockChargeReader = mock(ChargeReader.class);
-        when(mockChargeReader.readCreditCardFile(mockFile)).thenReturn(chargeStrings);
+        mockCSVFileReader = mock(CSVFileReader.class);
+        when(mockCSVFileReader.readCreditCardFile(mockFile)).thenReturn(chargeStrings);
     }
 
     @Test
     public void shouldParseAChargeLineIntoACreditCardActivity() {
-        ChargeParser chargeParser = new ChargeParser(mockChargeReader);
+        ChargeParser chargeParser = new ChargeParser(mockCSVFileReader);
         List<CreditCardActivity> creditCardActivityList = chargeParser.parseCharges(mockFile);
         CreditCardActivity actualCreditCardActivity = creditCardActivityList.get(0);
 
@@ -44,7 +44,7 @@ public class ChargeParserTest {
 
     @Test
     public void shouldIgnoreTheHeaderLineInTheCreditCardActivityFile() {
-        ChargeParser chargeParser = new ChargeParser(mockChargeReader);
+        ChargeParser chargeParser = new ChargeParser(mockCSVFileReader);
         List<CreditCardActivity> creditCardActivityList = chargeParser.parseCharges(mockFile);
         assertThat(creditCardActivityList.size(), is(1));
     }

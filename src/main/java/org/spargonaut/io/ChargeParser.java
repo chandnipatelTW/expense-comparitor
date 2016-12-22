@@ -8,16 +8,16 @@ import java.util.List;
 
 public class ChargeParser {
 
-    ChargeReader chargeReader;
+    CSVFileReader csvFileReader;
 
-    public ChargeParser(ChargeReader chargeReader) {
-        this.chargeReader = chargeReader;
+    public ChargeParser(CSVFileReader csvFileReader) {
+        this.csvFileReader = csvFileReader;
     }
 
     public List<CreditCardActivity> parseCharges(File chargeFile) {
         String chargeDelimiter = ",";
 
-        List<String> chargeLines = chargeReader.readCreditCardFile(chargeFile);
+        List<String> chargeLines = csvFileReader.readCreditCardFile(chargeFile);
         List<CreditCardActivity> creditCardActivities = new ArrayList<>();
 
         for (String chargeLine : chargeLines) {

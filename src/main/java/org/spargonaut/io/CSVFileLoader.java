@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ChargeLoader {
+public class CSVFileLoader {
 
     public List<File> getFileNamesIn(String directoryName) {
         File directory = new File(directoryName);

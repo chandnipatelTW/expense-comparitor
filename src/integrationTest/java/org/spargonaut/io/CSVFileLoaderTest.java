@@ -8,14 +8,14 @@ import java.util.List;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
-public class ChargeLoaderTest {
+public class CSVFileLoaderTest {
 
     @Test
     public void shouldGetTheListOfChargeFilesInADirectory() throws Exception {
         String testDirectoryName = "src/integrationTest/resources/test_charge_file_directory";
 
-        ChargeLoader chargeLoader = new ChargeLoader();
-        List<File> chargeFiles = chargeLoader.getFileNamesIn(testDirectoryName);
+        CSVFileLoader csvFileLoader = new CSVFileLoader();
+        List<File> chargeFiles = csvFileLoader.getFileNamesIn(testDirectoryName);
 
         assertThat(chargeFiles.size(), is(2));
     }
