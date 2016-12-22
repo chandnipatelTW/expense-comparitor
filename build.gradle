@@ -15,7 +15,7 @@ dependencies {
 
 task runLocal(dependsOn: jar, type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
-    main = 'org.spargonaut.MyJavaApplication'
+    main = 'org.spargonaut.Application'
 }
 
 idea {
