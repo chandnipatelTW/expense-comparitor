@@ -1,5 +1,6 @@
 package org.spargonaut.io;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.spargonaut.datamodels.CreditCardActivity;
 
@@ -13,19 +14,25 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ChargeParserTest {
+
+    private ChargeReader mockChargeReader;
+    private File mockFile;
+
+    @Before
+    public void setUp() {
+        String headerLine = "Type,Trans Date,Post Date,Description,Amount";
+        String chargeLine = "Sale,12/10/2016,12/11/2016,UBER   *US DEC09 DFMHE,-18.09";
+        List<String> chargeStrings = Arrays.asList(headerLine, chargeLine);
+
+        mockFile = mock(File.class);
+        mockChargeReader = mock(ChargeReader.class);
+        when(mockChargeReader.readCreditCardFile(mockFile)).thenReturn(chargeStrings);
+    }
+
     @Test
     public void shouldParseAChargeLineIntoACreditCardActivity() {
-        String chargeLine = "Sale,12/10/2016,12/11/2016,UBER   *US DEC09 DFMHE,-18.09";
-        List<String> chargeStrings = Arrays.asList(chargeLine);
-
-        File mockFile = mock(File.class);
-        ChargeReader mockChargeReader = mock(ChargeReader.class);
-        when(mockChargeReader.readCreditCardFile(mockFile)).thenReturn(chargeStrings);
-
         ChargeParser chargeParser = new ChargeParser(mockChargeReader);
-
         List<CreditCardActivity> creditCardActivityList = chargeParser.parseCharges(mockFile);
-
         CreditCardActivity actualCreditCardActivity = creditCardActivityList.get(0);
 
         assertThat(actualCreditCardActivity.getType(), is("Sale"));
@@ -37,18 +44,8 @@ public class ChargeParserTest {
 
     @Test
     public void shouldIgnoreTheHeaderLineInTheCreditCardActivityFile() {
-        String headerLine = "Type,Trans Date,Post Date,Description,Amount";
-        String chargeLine = "Sale,12/10/2016,12/11/2016,UBER   *US DEC09 DFMHE,-18.09";
-        List<String> chargeStrings = Arrays.asList(headerLine, chargeLine);
-
-        File mockFile = mock(File.class);
-        ChargeReader mockChargeReader = mock(ChargeReader.class);
-        when(mockChargeReader.readCreditCardFile(mockFile)).thenReturn(chargeStrings);
-
         ChargeParser chargeParser = new ChargeParser(mockChargeReader);
-
         List<CreditCardActivity> creditCardActivityList = chargeParser.parseCharges(mockFile);
-
         assertThat(creditCardActivityList.size(), is(1));
     }
 }
