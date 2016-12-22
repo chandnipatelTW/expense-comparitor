@@ -21,6 +21,7 @@ public class ChargeParser {
         List<CreditCardActivity> creditCardActivities = new ArrayList<>();
 
         for (String chargeLine : chargeLines) {
+            if (isHeaderLine(chargeLine)) { continue; }
             String[] chargeTokens = chargeLine.split(chargeDelimiter);
             CreditCardActivity creditCardActivity = new CreditCardActivity(
                     chargeTokens[0],
@@ -32,5 +33,9 @@ public class ChargeParser {
         }
 
         return creditCardActivities;
+    }
+
+    private boolean isHeaderLine(String chargeLine) {
+        return chargeLine.equals("Type,Trans Date,Post Date,Description,Amount");
     }
 }

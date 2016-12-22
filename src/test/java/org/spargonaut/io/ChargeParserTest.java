@@ -34,4 +34,21 @@ public class ChargeParserTest {
         assertThat(actualCreditCardActivity.getDescription(), is("UBER   *US DEC09 DFMHE"));
         assertThat(actualCreditCardActivity.getAmount(), is("-18.09"));
     }
+
+    @Test
+    public void shouldIgnoreTheHeaderLineInTheCreditCardActivityFile() {
+        String headerLine = "Type,Trans Date,Post Date,Description,Amount";
+        String chargeLine = "Sale,12/10/2016,12/11/2016,UBER   *US DEC09 DFMHE,-18.09";
+        List<String> chargeStrings = Arrays.asList(headerLine, chargeLine);
+
+        File mockFile = mock(File.class);
+        ChargeReader mockChargeReader = mock(ChargeReader.class);
+        when(mockChargeReader.readCreditCardFile(mockFile)).thenReturn(chargeStrings);
+
+        ChargeParser chargeParser = new ChargeParser(mockChargeReader);
+
+        List<CreditCardActivity> creditCardActivityList = chargeParser.parseCharges(mockFile);
+
+        assertThat(creditCardActivityList.size(), is(1));
+    }
 }
