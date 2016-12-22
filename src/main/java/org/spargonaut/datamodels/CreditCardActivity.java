@@ -2,14 +2,14 @@ package org.spargonaut.datamodels;
 
 public class CreditCardActivity {
 
-    private final String type;
+    private final ActivityType type;
     private final String transactionDate;
     private final String postDate;
     private final String description;
     private final String amount;
 
     public CreditCardActivity(String type, String transactionDate, String postDate, String description, String amount) {
-        this.type = type;
+        this.type = ActivityType.fromString(type);
         this.transactionDate = transactionDate;
         this.postDate = postDate;
         this.description = description;
@@ -17,7 +17,7 @@ public class CreditCardActivity {
     }
 
     public String getType() {
-        return type;
+        return type.getValue();
     }
 
     public String getTransactionDate() {
