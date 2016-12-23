@@ -3,3 +3,5 @@ build
 .gradle
 *.iml
 .idea
+unicode_expense_files
+
