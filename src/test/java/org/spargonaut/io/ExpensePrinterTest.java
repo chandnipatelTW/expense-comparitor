@@ -19,25 +19,25 @@ public class ExpensePrinterTest {
     @Test
     public void shouldPrintTheFormattedExpenses() {
         Expense expenseOne = new Expense(
-                "\"2016-12-12 00:00:00\"",
+                "2016-12-12 00:00:00",
                 "Uber",
                 "18.68",
                 "0",
-                "\"Local Transportation\"",
-                "\"Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Delivery Assurance\"",
-                "\"Uber DFW to office\"",
+                "Local Transportation",
+                "Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Delivery Assurance",
+                "Uber DFW to office",
                 "yes",
                 "USD",
                 "18.68",
                 "someURL"
                 );
         Expense expenseTwo = new Expense(
-                "\"2016-12-12 00:00:00\"",
-                "\"American Airlines\"",
+                "2016-12-12 00:00:00",
+                "American Airlines",
                 "747.20",
                 "0",
-                "\"Airfare & Upgrades\"",
-                "\"Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Travel\"",
+                "Airfare & Upgrades",
+                "Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Travel",
                 "Flight",
                 "yes",
                 "USD",
@@ -49,8 +49,8 @@ public class ExpensePrinterTest {
         ExpensePrinter expensePrinter = new ExpensePrinter();
         expensePrinter.printExpensesAsHumanReadable(expenses);
 
-        String expectedOutput = "\"2016-12-12 00:00:00\"          Uber                           18.68     \n" +
-                                "\"2016-12-12 00:00:00\"          \"American Airlines\"            747.20    \n";
+        String expectedOutput = "2016-12-12 00:00:00            Uber                           18.68     \n" +
+                                "2016-12-12 00:00:00            American Airlines              747.20    \n";
 
         assertThat(outputCapture.toString(), is(expectedOutput));
     }

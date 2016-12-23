@@ -24,23 +24,31 @@ public class ExpenseParser {
             if (isHeaderLine(expenseLine)) { continue; }
             String[] expenseTokens = expenseLine.split(expenseDelimiter);
             Expense expense = new Expense(
-                    expenseTokens[0],
-                    expenseTokens[1],
-                    expenseTokens[2],
-                    expenseTokens[3],
-                    expenseTokens[4],
-                    expenseTokens[5],
-                    expenseTokens[6],
-                    expenseTokens[7],
-                    expenseTokens[8],
-                    expenseTokens[9],
-                    expenseTokens[10]
+                    cleanOffQuotes(expenseTokens[0]),
+                    cleanOffQuotes(expenseTokens[1]),
+                    cleanOffQuotes(expenseTokens[2]),
+                    cleanOffQuotes(expenseTokens[3]),
+                    cleanOffQuotes(expenseTokens[4]),
+                    cleanOffQuotes(expenseTokens[5]),
+                    cleanOffQuotes(expenseTokens[6]),
+                    cleanOffQuotes(expenseTokens[7]),
+                    cleanOffQuotes(expenseTokens[8]),
+                    cleanOffQuotes(expenseTokens[9]),
+                    cleanOffQuotes(expenseTokens[10])
             );
             expenses.add(expense);
 
         }
 
         return expenses;
+    }
+
+    private String cleanOffQuotes(String token) {
+        String cleanedString = token;
+        if (token.startsWith("\"") && token.endsWith("\"")) {
+            cleanedString = token.substring(1, token.lastIndexOf("\""));
+        }
+        return cleanedString;
     }
 
     private boolean isHeaderLine(String expenseLine) {

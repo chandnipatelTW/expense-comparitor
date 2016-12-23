@@ -30,13 +30,13 @@ public class ExpenseParserTest {
         List<Expense> expenses = expenseParser.parseExpenses(mockFile);
         Expense actualExpense = expenses.get(0);
 
-        assertThat(actualExpense.getTimestamp(), is("\"2016-12-12 00:00:00\""));
+        assertThat(actualExpense.getTimestamp(), is("2016-12-12 00:00:00"));
         assertThat(actualExpense.getMerchant() , is("Uber"));
         assertThat(actualExpense.getAmount() , is("18.68"));
         assertThat(actualExpense.getMCC() , is("0"));
-        assertThat(actualExpense.getCategory() , is("\"Local Transportation\""));
-        assertThat(actualExpense.getTag() , is("\"Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Delivery Assurance\""));
-        assertThat(actualExpense.getComment() , is("\"Uber DFW to office\""));
+        assertThat(actualExpense.getCategory() , is("Local Transportation"));
+        assertThat(actualExpense.getTag() , is("Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Delivery Assurance"));
+        assertThat(actualExpense.getComment() , is("Uber DFW to office"));
         assertThat(actualExpense.isReimbursable() , is("yes"));
         assertThat(actualExpense.getOriginalCurrency() , is("USD"));
         assertThat(actualExpense.getOriginalAmount() , is("18.68"));
