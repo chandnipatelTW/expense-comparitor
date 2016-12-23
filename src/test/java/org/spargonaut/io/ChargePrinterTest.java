@@ -23,8 +23,7 @@ public class ChargePrinterTest {
         CreditCardActivity paymentOne = new CreditCardActivity("Payment", "11/26/2016", "11/27/2016", "Payment Thank You - Web", "3004.37");
 
         List<CreditCardActivity> activities = Arrays.asList(saleOne, saleTwo, paymentOne);
-        ChargePrinter chargePrinter = new ChargePrinter();
-        chargePrinter.printChargesAsHumanReadable(activities);
+        ChargePrinter.printChargesAsHumanReadable(activities);
 
         String expectedOutput = "Sale       11/28/2016      11/29/2016      UBER   *US NOV27 CQ6IT         -27.67    \n" +
                                 "Sale       11/28/2016      11/30/2016      SALATA - LAS COLINAS           -12.00    \n" +
