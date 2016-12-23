@@ -2,6 +2,7 @@ package org.spargonaut.io;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.spargonaut.datamodels.ActivityType;
 import org.spargonaut.datamodels.CreditCardActivity;
 
 import java.io.File;
@@ -35,7 +36,7 @@ public class ChargeParserTest {
         List<CreditCardActivity> creditCardActivityList = chargeParser.parseCharges(mockFile);
         CreditCardActivity actualCreditCardActivity = creditCardActivityList.get(0);
 
-        assertThat(actualCreditCardActivity.getType(), is("Sale"));
+        assertThat(actualCreditCardActivity.getType(), is(ActivityType.SALE));
         assertThat(actualCreditCardActivity.getTransactionDate(), is("12/10/2016"));
         assertThat(actualCreditCardActivity.getPostDate(), is("12/11/2016"));
         assertThat(actualCreditCardActivity.getDescription(), is("UBER   *US DEC09 DFMHE"));

@@ -1,5 +1,8 @@
 package org.spargonaut.datamodels;
 
+import lombok.Getter;
+
+@Getter
 public class CreditCardActivity {
 
     private final ActivityType type;
@@ -14,25 +17,5 @@ public class CreditCardActivity {
         this.postDate = postDate;
         this.description = description;
         this.amount = amount;
-    }
-
-    public String getType() {
-        return type.getValue();
-    }
-
-    public String getTransactionDate() {
-        return transactionDate;
-    }
-
-    public String getPostDate() {
-        return postDate;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getAmount() {
-        return amount;
     }
 }
