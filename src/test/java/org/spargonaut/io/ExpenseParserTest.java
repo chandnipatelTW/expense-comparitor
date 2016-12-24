@@ -30,6 +30,8 @@ public class ExpenseParserTest {
         DateTime expectedTimeStamp = new DateTime(2016, 12, 12, 0, 0);
         BigDecimal expectedAmount = new BigDecimal(18.68);
         expectedAmount = expectedAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        BigDecimal expectedOriginalAmount = new BigDecimal(18.68);
+        expectedOriginalAmount = expectedOriginalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 
         ExpenseParser expenseParser = new ExpenseParser(mockCSVFileReader);
         List<Expense> expenses = expenseParser.parseExpenses(mockFile);
@@ -44,7 +46,7 @@ public class ExpenseParserTest {
         assertThat(actualExpense.getComment() , is("Uber DFW to office"));
         assertThat(actualExpense.isReimbursable() , is(true));
         assertThat(actualExpense.getOriginalCurrency() , is("USD"));
-        assertThat(actualExpense.getOriginalAmount() , is("18.68"));
+        assertThat(actualExpense.getOriginalAmount() , is(expectedOriginalAmount));
         assertThat(actualExpense.getReceiptURL() , is("https://salesforce.expensify.com/verifyReceipt?action=verifyreceipt&transactionID=7871304959002483&amount=-1868&created=2016-12-12"));
     }
 

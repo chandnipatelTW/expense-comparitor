@@ -16,11 +16,11 @@ public class Expense {
     private final String comment;
     private final boolean reimbursable;
     private final String originalCurrency;
-    private final String originalAmount;
+    private final BigDecimal originalAmount;
     private final String receiptURL;
     private String MCC;
 
-    public Expense(DateTime timestamp, String merchant, BigDecimal amount, String mcc, String category, String tag, String comment, boolean reimbursable, String originalCurrency, String originalAmount, String receiptURL) {
+    public Expense(DateTime timestamp, String merchant, BigDecimal amount, String mcc, String category, String tag, String comment, boolean reimbursable, String originalCurrency, BigDecimal originalAmount, String receiptURL) {
         this.timestamp = timestamp;
         this.merchant = merchant;
         this.amount = amount;

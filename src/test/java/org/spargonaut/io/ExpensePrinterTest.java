@@ -24,6 +24,8 @@ public class ExpensePrinterTest {
         DateTime dateTimeForExpenseOne = new DateTime(2016, 12, 12, 0, 0);
         BigDecimal amountForExpenseOne = new BigDecimal(18.68);
         amountForExpenseOne = amountForExpenseOne.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        BigDecimal originalAmountForExpenseOne = new BigDecimal(18.68);
+        originalAmountForExpenseOne = originalAmountForExpenseOne.setScale(2, BigDecimal.ROUND_HALF_EVEN);
         Expense expenseOne = new Expense(
                 dateTimeForExpenseOne,
                 "Uber",
@@ -34,12 +36,14 @@ public class ExpensePrinterTest {
                 "Uber DFW to office",
                 true,
                 "USD",
-                "18.68",
+                originalAmountForExpenseOne,
                 "someURL"
                 );
         DateTime dateTimeForExpenseTwo = new DateTime(2016, 12, 12, 0, 0);
         BigDecimal amountForExpenseTwo = new BigDecimal(747.20);
         amountForExpenseTwo = amountForExpenseTwo.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        BigDecimal originalAmountForExpenseTwo = new BigDecimal(747.20);
+        originalAmountForExpenseTwo = originalAmountForExpenseTwo.setScale(2, BigDecimal.ROUND_HALF_EVEN);
         Expense expenseTwo = new Expense(
                 dateTimeForExpenseTwo,
                 "American Airlines",
@@ -50,7 +54,7 @@ public class ExpensePrinterTest {
                 "Flight",
                 true,
                 "USD",
-                "747.20",
+                originalAmountForExpenseTwo,
                 "anotherURL"
         );
 

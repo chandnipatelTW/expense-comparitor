@@ -32,6 +32,9 @@ public class ExpenseParser {
             BigDecimal amount = new BigDecimal(Float.parseFloat(expenseTokens[2]));
             amount = amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 
+            BigDecimal originalAmount = new BigDecimal(Float.parseFloat(expenseTokens[9]));
+            originalAmount = originalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+
             Expense expense = new Expense(
                     dateTimeTimeStamp,
                     cleanOffQuotes(expenseTokens[1]),
@@ -42,7 +45,7 @@ public class ExpenseParser {
                     cleanOffQuotes(expenseTokens[6]),
                     reimbursable,
                     cleanOffQuotes(expenseTokens[8]),
-                    cleanOffQuotes(expenseTokens[9]),
+                    originalAmount,
                     cleanOffQuotes(expenseTokens[10])
             );
             expenses.add(expense);
