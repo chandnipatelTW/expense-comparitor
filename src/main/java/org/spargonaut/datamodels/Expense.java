@@ -1,5 +1,8 @@
 package org.spargonaut.datamodels;
 
+import lombok.Getter;
+
+@Getter
 public class Expense {
     private final String timestamp;
     private final String merchant;
@@ -28,47 +31,7 @@ public class Expense {
         this.receiptURL = receiptURL;
     }
 
-    public String getTimestamp() {
-        return this.timestamp;
-    }
-
-    public String getMerchant() {
-        return this.merchant;
-    }
-
-    public String getAmount() {
-        return this.amount;
-    }
-
-    public String getMCC() {
-        return this.mcc;
-    }
-
-    public String getCategory() {
-        return this.category;
-    }
-
-    public String getTag() {
-        return this.tag;
-    }
-
-    public String getComment() {
-        return this.comment;
-    }
-
     public String isReimbursable() {
         return this.reimbursable;
-    }
-
-    public String getOriginalCurrency() {
-        return this.originalCurrency;
-    }
-
-    public String getOriginalAmount() {
-        return this.originalAmount;
-    }
-
-    public String getRecieptURL() {
-        return this.receiptURL;
     }
 }
