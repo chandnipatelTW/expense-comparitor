@@ -81,6 +81,22 @@ public class ExpenseParserTest {
         expenseParser.parseExpenses(mockFile);
     }
 
+    @Test
+    public void shouldKeepCommentsTogetherWhenTheyContainCommas() {
+        String expenseString = "\"2016-12-09 00:00:00\",\"Taco Diner\",97.19,0,\"Business Meals\",\"Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Delivery Assurance\",\"Lunch for myself, Max, Blake, Charith, Timothy, Bryan\",yes,USD,97.19,https://salesforce.expensify.com/verifyReceipt?action=verifyreceipt&transactionID=7871304959002493&amount=-9719&created=2016-12-09";
+
+        List<String> expenseStrings = Arrays.asList(expenseString);
+        File mockFile = mock(File.class);
+        CSVFileReader mockCSVFileReader = mock(CSVFileReader.class);
+        when(mockCSVFileReader.readCreditCardFile(mockFile)).thenReturn(expenseStrings);
+
+        ExpenseParser expenseParser = new ExpenseParser(mockCSVFileReader);
+        List<Expense> actualExpenses = expenseParser.parseExpenses(mockFile);
+        Expense actualExpense = actualExpenses.get(0);
+
+        assertThat(actualExpense.getComment() , is("Lunch for myself, Max, Blake, Charith, Timothy, Bryan"));
+    }
+
     private BigDecimal createBigDecimalFrom(double value) {
         BigDecimal expectedAmount = new BigDecimal(value);
         expectedAmount = expectedAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);

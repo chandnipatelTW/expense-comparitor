@@ -17,14 +17,16 @@ public class ExpenseParser {
     }
 
     public List<Expense> parseExpenses(File expenseFile) {
-        String expenseDelimiter = ",";
+        String expenseDelimiter = "\\|";
 
         List<String> expenseLines = csvFileReader.readCreditCardFile(expenseFile);
         List<Expense> expenses = new ArrayList<>();
 
         for (String expenseLine : expenseLines) {
             if (isHeaderLine(expenseLine)) { continue; }
-            String[] expenseTokens = expenseLine.split(expenseDelimiter);
+            String pipedExpenseString = createPipedExpenseString(expenseLine);
+            String[] expenseTokens = pipedExpenseString.split(expenseDelimiter);
+
 
             boolean reimbursable = parseReimbursableness(expenseTokens[7]);
             DateTime dateTimeTimeStamp = parseTheTimeStamp(expenseTokens[0]);
@@ -50,6 +52,21 @@ public class ExpenseParser {
         }
 
         return expenses;
+    }
+
+    private String createPipedExpenseString(String expenseLine) {
+        int quoteCount = 0;
+        for (int i = 0; i < expenseLine.length(); i++) {
+
+            if ('"' == expenseLine.charAt(i)) {
+                quoteCount++;
+            }
+
+            if (',' == expenseLine.charAt(i) && quoteCount % 2 == 0) {
+                expenseLine = expenseLine.substring(0, i) + "|" + expenseLine.substring(i + 1, expenseLine.length());
+            }
+        }
+        return expenseLine;
     }
 
     private BigDecimal parseDollarValue(String expenseToken) {
@@ -84,7 +101,10 @@ public class ExpenseParser {
         } else if ("no".equalsIgnoreCase(reimbursableString)) {
             reimbursable = false;
         } else {
-            throw new IllegalArgumentException("Unable to parse the string for Reimbursable");
+            String errorMessage = "Unable to parse the string for Reimbursable" +
+                    "\n" +
+                    "Tried parsing the value ->" + reimbursableString + "<-";
+            throw new IllegalArgumentException(errorMessage.toString());
         }
         return reimbursable;
     }
