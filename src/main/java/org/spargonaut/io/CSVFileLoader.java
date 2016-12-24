@@ -23,6 +23,10 @@ public class CSVFileLoader {
     }
 
     private boolean isCSVFile(File csvFile) {
-        return (csvFile.getName().endsWith(".csv") || csvFile.getName().endsWith(".CSV"));
+        String csvFileName = csvFile.getName();
+        int csvFileLength = csvFileName.length();
+        int indexOfSuffix = csvFileName.lastIndexOf('.');
+        String csvFileNameSuffix = csvFileName.substring(indexOfSuffix, csvFileLength);
+        return ".csv".equalsIgnoreCase(csvFileNameSuffix);
     }
 }
