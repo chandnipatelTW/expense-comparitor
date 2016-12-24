@@ -22,10 +22,9 @@ public class ExpensePrinterTest {
     public void shouldPrintTheFormattedExpenses() {
 
         DateTime dateTimeForExpenseOne = new DateTime(2016, 12, 12, 0, 0);
-        BigDecimal amountForExpenseOne = new BigDecimal(18.68);
-        amountForExpenseOne = amountForExpenseOne.setScale(2, BigDecimal.ROUND_HALF_EVEN);
-        BigDecimal originalAmountForExpenseOne = new BigDecimal(18.68);
-        originalAmountForExpenseOne = originalAmountForExpenseOne.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        double amountOne = 18.68;
+        BigDecimal amountForExpenseOne = createBigDecimalFrom(amountOne);
+        BigDecimal originalAmountForExpenseOne = createBigDecimalFrom(amountOne);
         Expense expenseOne = new Expense(
                 dateTimeForExpenseOne,
                 "Uber",
@@ -40,10 +39,9 @@ public class ExpensePrinterTest {
                 "someURL"
                 );
         DateTime dateTimeForExpenseTwo = new DateTime(2016, 12, 12, 0, 0);
-        BigDecimal amountForExpenseTwo = new BigDecimal(747.20);
-        amountForExpenseTwo = amountForExpenseTwo.setScale(2, BigDecimal.ROUND_HALF_EVEN);
-        BigDecimal originalAmountForExpenseTwo = new BigDecimal(747.20);
-        originalAmountForExpenseTwo = originalAmountForExpenseTwo.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        double amountTwo = 747.20;
+        BigDecimal amountForExpenseTwo = createBigDecimalFrom(amountTwo);
+        BigDecimal originalAmountForExpenseTwo = createBigDecimalFrom(amountTwo);
         Expense expenseTwo = new Expense(
                 dateTimeForExpenseTwo,
                 "American Airlines",
@@ -65,5 +63,11 @@ public class ExpensePrinterTest {
                                 "2016-12-12T00:00:00.000-06:00  American Airlines              747.20    \n";
 
         assertThat(outputCapture.toString(), is(expectedOutput));
+    }
+
+    private BigDecimal createBigDecimalFrom(double value) {
+        BigDecimal amountForExpenseOne = new BigDecimal(value);
+        amountForExpenseOne = amountForExpenseOne.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        return amountForExpenseOne;
     }
 }

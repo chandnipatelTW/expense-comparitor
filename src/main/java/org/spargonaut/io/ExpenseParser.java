@@ -29,11 +29,8 @@ public class ExpenseParser {
             boolean reimbursable = parseReimbursableness(expenseTokens[7]);
             DateTime dateTimeTimeStamp = parseTheTimeStamp(expenseTokens[0]);
 
-            BigDecimal amount = new BigDecimal(Float.parseFloat(expenseTokens[2]));
-            amount = amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
-
-            BigDecimal originalAmount = new BigDecimal(Float.parseFloat(expenseTokens[9]));
-            originalAmount = originalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+            BigDecimal amount = parseDollarValue(expenseTokens[2]);
+            BigDecimal originalAmount = parseDollarValue(expenseTokens[9]);
 
             Expense expense = new Expense(
                     dateTimeTimeStamp,
@@ -53,6 +50,12 @@ public class ExpenseParser {
         }
 
         return expenses;
+    }
+
+    private BigDecimal parseDollarValue(String expenseToken) {
+        BigDecimal amount = new BigDecimal(Float.parseFloat(expenseToken));
+        amount = amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        return amount;
     }
 
     private DateTime parseTheTimeStamp(String expenseToken) {

@@ -28,10 +28,9 @@ public class ExpenseParserTest {
         when(mockCSVFileReader.readCreditCardFile(mockFile)).thenReturn(expenseStrings);
 
         DateTime expectedTimeStamp = new DateTime(2016, 12, 12, 0, 0);
-        BigDecimal expectedAmount = new BigDecimal(18.68);
-        expectedAmount = expectedAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
-        BigDecimal expectedOriginalAmount = new BigDecimal(18.68);
-        expectedOriginalAmount = expectedOriginalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        double expectedExpenseOneAmount = 18.68;
+        BigDecimal expectedAmount = createBigDecimalFrom(expectedExpenseOneAmount);
+        BigDecimal expectedOriginalAmount = createBigDecimalFrom(expectedExpenseOneAmount);
 
         ExpenseParser expenseParser = new ExpenseParser(mockCSVFileReader);
         List<Expense> expenses = expenseParser.parseExpenses(mockFile);
@@ -80,5 +79,11 @@ public class ExpenseParserTest {
 
         ExpenseParser expenseParser = new ExpenseParser(mockCSVFileReader);
         expenseParser.parseExpenses(mockFile);
+    }
+
+    private BigDecimal createBigDecimalFrom(double value) {
+        BigDecimal expectedAmount = new BigDecimal(value);
+        expectedAmount = expectedAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        return expectedAmount;
     }
 }
