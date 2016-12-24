@@ -1,5 +1,6 @@
 package org.spargonaut.io;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.spargonaut.datamodels.ActivityType;
@@ -33,12 +34,16 @@ public class ChargeParserTest {
     @Test
     public void shouldParseAChargeLineIntoACreditCardActivity() {
         ChargeParser chargeParser = new ChargeParser(mockCSVFileReader);
+
+        DateTime expectedTransactionDate = new DateTime(2016, 12, 10, 0, 0);
+        DateTime expectedPostDate = new DateTime(2016, 12, 10, 0, 0);
+
         List<CreditCardActivity> creditCardActivityList = chargeParser.parseCharges(mockFile);
         CreditCardActivity actualCreditCardActivity = creditCardActivityList.get(0);
 
         assertThat(actualCreditCardActivity.getType(), is(ActivityType.SALE));
-        assertThat(actualCreditCardActivity.getTransactionDate(), is("12/10/2016"));
-        assertThat(actualCreditCardActivity.getPostDate(), is("12/11/2016"));
+        assertThat(actualCreditCardActivity.getTransactionDate(), is(expectedTransactionDate));
+        assertThat(actualCreditCardActivity.getPostDate(), is(expectedPostDate));
         assertThat(actualCreditCardActivity.getDescription(), is("UBER   *US DEC09 DFMHE"));
         assertThat(actualCreditCardActivity.getAmount(), is("-18.09"));
     }
