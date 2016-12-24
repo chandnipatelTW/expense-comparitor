@@ -3,6 +3,8 @@ package org.spargonaut.datamodels;
 import lombok.Getter;
 import org.joda.time.DateTime;
 
+import java.math.BigDecimal;
+
 @Getter
 public class CreditCardActivity {
 
@@ -10,9 +12,9 @@ public class CreditCardActivity {
     private final DateTime transactionDate;
     private final DateTime postDate;
     private final String description;
-    private final String amount;
+    private final BigDecimal amount;
 
-    public CreditCardActivity(String type, DateTime transactionDate, DateTime postDate, String description, String amount) {
+    public CreditCardActivity(String type, DateTime transactionDate, DateTime postDate, String description, BigDecimal amount) {
         this.type = ActivityType.fromString(type);
         this.transactionDate = transactionDate;
         this.postDate = postDate;

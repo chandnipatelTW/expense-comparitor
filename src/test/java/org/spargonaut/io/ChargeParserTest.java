@@ -7,6 +7,7 @@ import org.spargonaut.datamodels.ActivityType;
 import org.spargonaut.datamodels.CreditCardActivity;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,6 +38,8 @@ public class ChargeParserTest {
 
         DateTime expectedTransactionDate = new DateTime(2016, 12, 10, 0, 0);
         DateTime expectedPostDate = new DateTime(2016, 12, 10, 0, 0);
+        BigDecimal expectedAmount = new BigDecimal(-18.09);
+        expectedAmount = expectedAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 
         List<CreditCardActivity> creditCardActivityList = chargeParser.parseCharges(mockFile);
         CreditCardActivity actualCreditCardActivity = creditCardActivityList.get(0);
@@ -45,7 +48,7 @@ public class ChargeParserTest {
         assertThat(actualCreditCardActivity.getTransactionDate(), is(expectedTransactionDate));
         assertThat(actualCreditCardActivity.getPostDate(), is(expectedPostDate));
         assertThat(actualCreditCardActivity.getDescription(), is("UBER   *US DEC09 DFMHE"));
-        assertThat(actualCreditCardActivity.getAmount(), is("-18.09"));
+        assertThat(actualCreditCardActivity.getAmount(), is(expectedAmount));
     }
 
     @Test

@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.spargonaut.datamodels.CreditCardActivity;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,12 +28,15 @@ public class ChargeParser {
             DateTime transactionDate = createDateTimeFrom(chargeTokens[1]);
             DateTime postDate = createDateTimeFrom(chargeTokens[1]);
 
+            BigDecimal amount = new BigDecimal(chargeTokens[4]);
+            amount = amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+
             CreditCardActivity creditCardActivity = new CreditCardActivity(
                     chargeTokens[0],
                     transactionDate,
                     postDate,
                     chargeTokens[3],
-                    chargeTokens[4]);
+                    amount);
             creditCardActivities.add(creditCardActivity);
         }
 
