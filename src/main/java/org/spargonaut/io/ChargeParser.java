@@ -16,10 +16,10 @@ public class ChargeParser {
         this.csvFileReader = csvFileReader;
     }
 
-    public List<CreditCardActivity> parseCharges(File chargeFile) {
+    public List<CreditCardActivity> parseFile(File chargeFile) {
         String chargeDelimiter = ",";
 
-        List<String> chargeLines = csvFileReader.readCreditCardFile(chargeFile);
+        List<String> chargeLines = csvFileReader.readCsvFile(chargeFile);
         List<CreditCardActivity> creditCardActivities = new ArrayList<>();
 
         for (String chargeLine : chargeLines) {

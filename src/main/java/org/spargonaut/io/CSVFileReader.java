@@ -1,7 +1,5 @@
 package org.spargonaut.io;
 
-import org.spargonaut.datamodels.CreditCardActivity;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -10,7 +8,7 @@ import java.util.List;
 
 public class CSVFileReader {
 
-    public List<String> readCreditCardFile(File creditCardFile) {
+    public List<String> readCsvFile(File creditCardFile) {
         List<String> chargeLines = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(creditCardFile))) {

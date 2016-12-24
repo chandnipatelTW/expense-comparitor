@@ -16,7 +16,7 @@ public class CSVFileReaderTest {
         File creditCardFile = new File(testFileName);
 
         CSVFileReader csvFileReader = new CSVFileReader();
-        List<String> charges = csvFileReader.readCreditCardFile(creditCardFile);
+        List<String> charges = csvFileReader.readCsvFile(creditCardFile);
 
         assertThat(charges.size(), is(6));
     }

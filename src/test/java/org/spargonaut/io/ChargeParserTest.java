@@ -29,7 +29,7 @@ public class ChargeParserTest {
 
         mockFile = mock(File.class);
         mockCSVFileReader = mock(CSVFileReader.class);
-        when(mockCSVFileReader.readCreditCardFile(mockFile)).thenReturn(chargeStrings);
+        when(mockCSVFileReader.readCsvFile(mockFile)).thenReturn(chargeStrings);
     }
 
     @Test
@@ -41,7 +41,7 @@ public class ChargeParserTest {
         BigDecimal expectedAmount = new BigDecimal(-18.09);
         expectedAmount = expectedAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 
-        List<CreditCardActivity> creditCardActivityList = chargeParser.parseCharges(mockFile);
+        List<CreditCardActivity> creditCardActivityList = chargeParser.parseFile(mockFile);
         CreditCardActivity actualCreditCardActivity = creditCardActivityList.get(0);
 
         assertThat(actualCreditCardActivity.getType(), is(ActivityType.SALE));
@@ -54,7 +54,7 @@ public class ChargeParserTest {
     @Test
     public void shouldIgnoreTheHeaderLineInTheCreditCardActivityFile() {
         ChargeParser chargeParser = new ChargeParser(mockCSVFileReader);
-        List<CreditCardActivity> creditCardActivityList = chargeParser.parseCharges(mockFile);
+        List<CreditCardActivity> creditCardActivityList = chargeParser.parseFile(mockFile);
         assertThat(creditCardActivityList.size(), is(1));
     }
 }

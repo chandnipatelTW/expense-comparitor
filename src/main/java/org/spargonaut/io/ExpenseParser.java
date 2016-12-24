@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExpenseParser {
+public class ExpenseParser implements Parser {
 
     private final CSVFileReader csvFileReader;
 
@@ -16,10 +16,10 @@ public class ExpenseParser {
         this.csvFileReader = csvFileReader;
     }
 
-    public List<Expense> parseExpenses(File expenseFile) {
+    public List<Expense> parseFile(File expenseFile) {
         String expenseDelimiter = "\\|";
 
-        List<String> expenseLines = csvFileReader.readCreditCardFile(expenseFile);
+        List<String> expenseLines = csvFileReader.readCsvFile(expenseFile);
         List<Expense> expenses = new ArrayList<>();
 
         for (String expenseLine : expenseLines) {

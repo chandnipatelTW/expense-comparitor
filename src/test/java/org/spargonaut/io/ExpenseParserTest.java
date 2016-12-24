@@ -25,7 +25,7 @@ public class ExpenseParserTest {
 
         File mockFile = mock(File.class);
         CSVFileReader mockCSVFileReader = mock(CSVFileReader.class);
-        when(mockCSVFileReader.readCreditCardFile(mockFile)).thenReturn(expenseStrings);
+        when(mockCSVFileReader.readCsvFile(mockFile)).thenReturn(expenseStrings);
 
         DateTime expectedTimeStamp = new DateTime(2016, 12, 12, 0, 0);
         double expectedExpenseOneAmount = 18.68;
@@ -33,7 +33,7 @@ public class ExpenseParserTest {
         BigDecimal expectedOriginalAmount = createBigDecimalFrom(expectedExpenseOneAmount);
 
         ExpenseParser expenseParser = new ExpenseParser(mockCSVFileReader);
-        List<Expense> expenses = expenseParser.parseExpenses(mockFile);
+        List<Expense> expenses = expenseParser.parseFile(mockFile);
         Expense actualExpense = expenses.get(0);
 
         assertThat(actualExpense.getTimestamp(), is(expectedTimeStamp));
@@ -58,10 +58,10 @@ public class ExpenseParserTest {
 
         File mockFile = mock(File.class);
         CSVFileReader mockCSVFileReader = mock(CSVFileReader.class);
-        when(mockCSVFileReader.readCreditCardFile(mockFile)).thenReturn(expenseStrings);
+        when(mockCSVFileReader.readCsvFile(mockFile)).thenReturn(expenseStrings);
 
         ExpenseParser expenseParser = new ExpenseParser(mockCSVFileReader);
-        List<Expense> actualExpenses = expenseParser.parseExpenses(mockFile);
+        List<Expense> actualExpenses = expenseParser.parseFile(mockFile);
         
         assertThat(actualExpenses.size(), is(1));
     }
@@ -75,10 +75,10 @@ public class ExpenseParserTest {
 
         File mockFile = mock(File.class);
         CSVFileReader mockCSVFileReader = mock(CSVFileReader.class);
-        when(mockCSVFileReader.readCreditCardFile(mockFile)).thenReturn(expenseStrings);
+        when(mockCSVFileReader.readCsvFile(mockFile)).thenReturn(expenseStrings);
 
         ExpenseParser expenseParser = new ExpenseParser(mockCSVFileReader);
-        expenseParser.parseExpenses(mockFile);
+        expenseParser.parseFile(mockFile);
     }
 
     @Test
@@ -88,10 +88,10 @@ public class ExpenseParserTest {
         List<String> expenseStrings = Arrays.asList(expenseString);
         File mockFile = mock(File.class);
         CSVFileReader mockCSVFileReader = mock(CSVFileReader.class);
-        when(mockCSVFileReader.readCreditCardFile(mockFile)).thenReturn(expenseStrings);
+        when(mockCSVFileReader.readCsvFile(mockFile)).thenReturn(expenseStrings);
 
         ExpenseParser expenseParser = new ExpenseParser(mockCSVFileReader);
-        List<Expense> actualExpenses = expenseParser.parseExpenses(mockFile);
+        List<Expense> actualExpenses = expenseParser.parseFile(mockFile);
         Expense actualExpense = actualExpenses.get(0);
 
         assertThat(actualExpense.getComment() , is("Lunch for myself, Max, Blake, Charith, Timothy, Bryan"));
