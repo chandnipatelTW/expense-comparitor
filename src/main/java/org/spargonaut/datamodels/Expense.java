@@ -3,11 +3,13 @@ package org.spargonaut.datamodels;
 import lombok.Getter;
 import org.joda.time.DateTime;
 
+import java.math.BigDecimal;
+
 @Getter
 public class Expense {
     private final DateTime timestamp;
     private final String merchant;
-    private final String amount;
+    private final BigDecimal amount;
     private final String mcc;
     private final String category;
     private final String tag;
@@ -18,7 +20,7 @@ public class Expense {
     private final String receiptURL;
     private String MCC;
 
-    public Expense(DateTime timestamp, String merchant, String amount, String mcc, String category, String tag, String comment, boolean reimbursable, String originalCurrency, String originalAmount, String receiptURL) {
+    public Expense(DateTime timestamp, String merchant, BigDecimal amount, String mcc, String category, String tag, String comment, boolean reimbursable, String originalCurrency, String originalAmount, String receiptURL) {
         this.timestamp = timestamp;
         this.merchant = merchant;
         this.amount = amount;

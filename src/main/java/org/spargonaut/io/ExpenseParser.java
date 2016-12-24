@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.spargonaut.datamodels.Expense;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +29,13 @@ public class ExpenseParser {
             boolean reimbursable = parseReimbursableness(expenseTokens[7]);
             DateTime dateTimeTimeStamp = parseTheTimeStamp(expenseTokens[0]);
 
+            BigDecimal amount = new BigDecimal(Float.parseFloat(expenseTokens[2]));
+            amount = amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+
             Expense expense = new Expense(
                     dateTimeTimeStamp,
                     cleanOffQuotes(expenseTokens[1]),
-                    cleanOffQuotes(expenseTokens[2]),
+                    amount,
                     cleanOffQuotes(expenseTokens[3]),
                     cleanOffQuotes(expenseTokens[4]),
                     cleanOffQuotes(expenseTokens[5]),

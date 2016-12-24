@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.spargonaut.datamodels.Expense;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,7 +28,8 @@ public class ExpenseParserTest {
         when(mockCSVFileReader.readCreditCardFile(mockFile)).thenReturn(expenseStrings);
 
         DateTime expectedTimeStamp = new DateTime(2016, 12, 12, 0, 0);
-
+        BigDecimal expectedAmount = new BigDecimal(18.68);
+        expectedAmount = expectedAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 
         ExpenseParser expenseParser = new ExpenseParser(mockCSVFileReader);
         List<Expense> expenses = expenseParser.parseExpenses(mockFile);
@@ -35,7 +37,7 @@ public class ExpenseParserTest {
 
         assertThat(actualExpense.getTimestamp(), is(expectedTimeStamp));
         assertThat(actualExpense.getMerchant() , is("Uber"));
-        assertThat(actualExpense.getAmount() , is("18.68"));
+        assertThat(actualExpense.getAmount(), is(expectedAmount));
         assertThat(actualExpense.getMcc() , is("0"));
         assertThat(actualExpense.getCategory() , is("Local Transportation"));
         assertThat(actualExpense.getTag() , is("Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Delivery Assurance"));

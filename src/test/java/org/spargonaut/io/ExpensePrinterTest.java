@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.spargonaut.datamodels.Expense;
 import org.springframework.boot.test.OutputCapture;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,10 +22,12 @@ public class ExpensePrinterTest {
     public void shouldPrintTheFormattedExpenses() {
 
         DateTime dateTimeForExpenseOne = new DateTime(2016, 12, 12, 0, 0);
+        BigDecimal amountForExpenseOne = new BigDecimal(18.68);
+        amountForExpenseOne = amountForExpenseOne.setScale(2, BigDecimal.ROUND_HALF_EVEN);
         Expense expenseOne = new Expense(
                 dateTimeForExpenseOne,
                 "Uber",
-                "18.68",
+                amountForExpenseOne,
                 "0",
                 "Local Transportation",
                 "Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Delivery Assurance",
@@ -35,10 +38,12 @@ public class ExpensePrinterTest {
                 "someURL"
                 );
         DateTime dateTimeForExpenseTwo = new DateTime(2016, 12, 12, 0, 0);
+        BigDecimal amountForExpenseTwo = new BigDecimal(747.20);
+        amountForExpenseTwo = amountForExpenseTwo.setScale(2, BigDecimal.ROUND_HALF_EVEN);
         Expense expenseTwo = new Expense(
                 dateTimeForExpenseTwo,
                 "American Airlines",
-                "747.20",
+                amountForExpenseTwo,
                 "0",
                 "Airfare & Upgrades",
                 "Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Travel",
