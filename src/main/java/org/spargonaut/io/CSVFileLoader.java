@@ -9,20 +9,20 @@ public class CSVFileLoader {
 
     public List<File> getFileNamesIn(String directoryName) {
         File directory = new File(directoryName);
-        return getChargeFiles(Arrays.asList(directory.listFiles()));
+        return getCSVFiles(Arrays.asList(directory.listFiles()));
     }
 
-    private List<File> getChargeFiles(List<File> allFiles) {
-        List<File> chargeFiles = new ArrayList<>();
-        for (File chargeFile : allFiles) {
-            if (isCSVFile(chargeFile)) {
-                chargeFiles.add(chargeFile);
+    private List<File> getCSVFiles(List<File> allFiles) {
+        List<File> csvFiles = new ArrayList<>();
+        for (File csvFile : allFiles) {
+            if (isCSVFile(csvFile)) {
+                csvFiles.add(csvFile);
             }
         }
-        return chargeFiles;
+        return csvFiles;
     }
 
-    private boolean isCSVFile(File chargeFile) {
-        return (chargeFile.getName().endsWith(".csv") || chargeFile.getName().endsWith(".CSV"));
+    private boolean isCSVFile(File csvFile) {
+        return (csvFile.getName().endsWith(".csv") || csvFile.getName().endsWith(".CSV"));
     }
 }
