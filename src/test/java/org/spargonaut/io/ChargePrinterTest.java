@@ -31,9 +31,9 @@ public class ChargePrinterTest {
         List<CreditCardActivity> activities = Arrays.asList(saleOne, saleTwo, paymentOne);
         ChargePrinter.printChargesAsHumanReadable(activities);
 
-        String expectedOutput = "Sale       2016-11-28T00:00:00.000-06:00 2016-11-29T00:00:00.000-06:00 UBER   *US NOV27 CQ6IT         -27.67    \n" +
-                                "Sale       2016-11-28T00:00:00.000-06:00 2016-11-30T00:00:00.000-06:00 SALATA - LAS COLINAS           -12.00    \n" +
-                                "Payment    2016-11-26T00:00:00.000-06:00 2016-11-27T00:00:00.000-06:00 Payment Thank You - Web        3004.37   \n";
+        String expectedOutput = "Sale       2016-11-28      2016-11-29      UBER   *US NOV27 CQ6IT         -27.67    \n" +
+                                "Sale       2016-11-28      2016-11-30      SALATA - LAS COLINAS           -12.00    \n" +
+                                "Payment    2016-11-26      2016-11-27      Payment Thank You - Web        3004.37   \n";
 
         assertThat(capture.toString(), is(expectedOutput));
     }

@@ -9,8 +9,8 @@ public class ChargePrinter {
         for (CreditCardActivity activity : activities) {
             System.out.format("%-10s %-15s %-15s %-30s %-10s\n",
                     activity.getType().getValue(),
-                    activity.getTransactionDate(),
-                    activity.getPostDate(),
+                    activity.getTransactionDate().toLocalDate(),
+                    activity.getPostDate().toLocalDate(),
                     activity.getDescription(),
                     activity.getAmount());
         }
