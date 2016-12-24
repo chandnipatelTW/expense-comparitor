@@ -1,5 +1,6 @@
 package org.spargonaut.io;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.spargonaut.datamodels.Expense;
 
@@ -25,12 +26,14 @@ public class ExpenseParserTest {
         CSVFileReader mockCSVFileReader = mock(CSVFileReader.class);
         when(mockCSVFileReader.readCreditCardFile(mockFile)).thenReturn(expenseStrings);
 
-        ExpenseParser expenseParser = new ExpenseParser(mockCSVFileReader);
+        DateTime expectedTimeStamp = new DateTime(2016, 12, 12, 0, 0);
 
+
+        ExpenseParser expenseParser = new ExpenseParser(mockCSVFileReader);
         List<Expense> expenses = expenseParser.parseExpenses(mockFile);
         Expense actualExpense = expenses.get(0);
 
-        assertThat(actualExpense.getTimestamp(), is("2016-12-12 00:00:00"));
+        assertThat(actualExpense.getTimestamp(), is(expectedTimeStamp));
         assertThat(actualExpense.getMerchant() , is("Uber"));
         assertThat(actualExpense.getAmount() , is("18.68"));
         assertThat(actualExpense.getMcc() , is("0"));

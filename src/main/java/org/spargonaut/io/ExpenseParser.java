@@ -1,5 +1,6 @@
 package org.spargonaut.io;
 
+import org.joda.time.DateTime;
 import org.spargonaut.datamodels.Expense;
 
 import java.io.File;
@@ -24,19 +25,11 @@ public class ExpenseParser {
             if (isHeaderLine(expenseLine)) { continue; }
             String[] expenseTokens = expenseLine.split(expenseDelimiter);
 
-            String reimbursableString = cleanOffQuotes(expenseTokens[7]);
-            boolean reimbursable = false;
-
-            if ("yes".equalsIgnoreCase(reimbursableString)) {
-                reimbursable = true;
-            } else if ("no".equalsIgnoreCase(reimbursableString)) {
-                reimbursable = false;
-            } else {
-                throw new IllegalArgumentException("Unable to parse the string for Reimbursable");
-            }
+            boolean reimbursable = parseReimbursableness(expenseTokens[7]);
+            DateTime dateTimeTimeStamp = parseTheTimeStamp(expenseTokens[0]);
 
             Expense expense = new Expense(
-                    cleanOffQuotes(expenseTokens[0]),
+                    dateTimeTimeStamp,
                     cleanOffQuotes(expenseTokens[1]),
                     cleanOffQuotes(expenseTokens[2]),
                     cleanOffQuotes(expenseTokens[3]),
@@ -53,6 +46,37 @@ public class ExpenseParser {
         }
 
         return expenses;
+    }
+
+    private DateTime parseTheTimeStamp(String expenseToken) {
+        String cleanedTimeStamp = cleanOffQuotes(expenseToken);
+        String[] dateTimeTokens = cleanedTimeStamp.split(" ");
+        String dateChunk = dateTimeTokens[0];
+        String[] dateTokens = dateChunk.split("-");
+        int year = Integer.parseInt(dateTokens[0]);
+        int month = Integer.parseInt(dateTokens[1]);
+        int day = Integer.parseInt(dateTokens[2]);
+
+        String timeChunk = dateTimeTokens[1];
+        String[] timeTokens = timeChunk.split(":");
+        int hourOfDay = Integer.parseInt(timeTokens[0]);
+        int minutesOfHour = Integer.parseInt(timeTokens[1]);
+
+        return new DateTime(year, month, day, hourOfDay, minutesOfHour);
+    }
+
+    private boolean parseReimbursableness(String expenseToken) {
+        String reimbursableString = cleanOffQuotes(expenseToken);
+        boolean reimbursable = false;
+
+        if ("yes".equalsIgnoreCase(reimbursableString)) {
+            reimbursable = true;
+        } else if ("no".equalsIgnoreCase(reimbursableString)) {
+            reimbursable = false;
+        } else {
+            throw new IllegalArgumentException("Unable to parse the string for Reimbursable");
+        }
+        return reimbursable;
     }
 
     private String cleanOffQuotes(String token) {

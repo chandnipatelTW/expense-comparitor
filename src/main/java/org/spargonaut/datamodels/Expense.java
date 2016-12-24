@@ -1,10 +1,11 @@
 package org.spargonaut.datamodels;
 
 import lombok.Getter;
+import org.joda.time.DateTime;
 
 @Getter
 public class Expense {
-    private final String timestamp;
+    private final DateTime timestamp;
     private final String merchant;
     private final String amount;
     private final String mcc;
@@ -17,7 +18,7 @@ public class Expense {
     private final String receiptURL;
     private String MCC;
 
-    public Expense(String timestamp, String merchant, String amount, String mcc, String category, String tag, String comment, boolean reimbursable, String originalCurrency, String originalAmount, String receiptURL) {
+    public Expense(DateTime timestamp, String merchant, String amount, String mcc, String category, String tag, String comment, boolean reimbursable, String originalCurrency, String originalAmount, String receiptURL) {
         this.timestamp = timestamp;
         this.merchant = merchant;
         this.amount = amount;

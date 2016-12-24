@@ -1,5 +1,6 @@
 package org.spargonaut.io;
 
+import org.joda.time.DateTime;
 import org.junit.Rule;
 import org.junit.Test;
 import org.spargonaut.datamodels.Expense;
@@ -18,8 +19,10 @@ public class ExpensePrinterTest {
 
     @Test
     public void shouldPrintTheFormattedExpenses() {
+
+        DateTime dateTimeForExpenseOne = new DateTime(2016, 12, 12, 0, 0);
         Expense expenseOne = new Expense(
-                "2016-12-12 00:00:00",
+                dateTimeForExpenseOne,
                 "Uber",
                 "18.68",
                 "0",
@@ -31,8 +34,9 @@ public class ExpensePrinterTest {
                 "18.68",
                 "someURL"
                 );
+        DateTime dateTimeForExpenseTwo = new DateTime(2016, 12, 12, 0, 0);
         Expense expenseTwo = new Expense(
-                "2016-12-12 00:00:00",
+                dateTimeForExpenseTwo,
                 "American Airlines",
                 "747.20",
                 "0",
@@ -48,8 +52,8 @@ public class ExpensePrinterTest {
         List<Expense> expenses = Arrays.asList(expenseOne, expenseTwo);
         ExpensePrinter.printExpensesAsHumanReadable(expenses);
 
-        String expectedOutput = "2016-12-12 00:00:00            Uber                           18.68     \n" +
-                                "2016-12-12 00:00:00            American Airlines              747.20    \n";
+        String expectedOutput = "2016-12-12T00:00:00.000-06:00  Uber                           18.68     \n" +
+                                "2016-12-12T00:00:00.000-06:00  American Airlines              747.20    \n";
 
         assertThat(outputCapture.toString(), is(expectedOutput));
     }
