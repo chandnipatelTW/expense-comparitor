@@ -26,7 +26,7 @@ public class ExpensePrinterTest {
                 "Local Transportation",
                 "Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Delivery Assurance",
                 "Uber DFW to office",
-                "yes",
+                true,
                 "USD",
                 "18.68",
                 "someURL"
@@ -39,7 +39,7 @@ public class ExpensePrinterTest {
                 "Airfare & Upgrades",
                 "Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Travel",
                 "Flight",
-                "yes",
+                true,
                 "USD",
                 "747.20",
                 "anotherURL"

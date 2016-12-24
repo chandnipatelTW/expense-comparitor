@@ -11,13 +11,13 @@ public class Expense {
     private final String category;
     private final String tag;
     private final String comment;
-    private final String reimbursable;
+    private final boolean reimbursable;
     private final String originalCurrency;
     private final String originalAmount;
     private final String receiptURL;
     private String MCC;
 
-    public Expense(String timestamp, String merchant, String amount, String mcc, String category, String tag, String comment, String reimbursable, String originalCurrency, String originalAmount, String receiptURL) {
+    public Expense(String timestamp, String merchant, String amount, String mcc, String category, String tag, String comment, boolean reimbursable, String originalCurrency, String originalAmount, String receiptURL) {
         this.timestamp = timestamp;
         this.merchant = merchant;
         this.amount = amount;
@@ -29,9 +29,5 @@ public class Expense {
         this.originalCurrency = originalCurrency;
         this.originalAmount = originalAmount;
         this.receiptURL = receiptURL;
-    }
-
-    public String isReimbursable() {
-        return this.reimbursable;
     }
 }

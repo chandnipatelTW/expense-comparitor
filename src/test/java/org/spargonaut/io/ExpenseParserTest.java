@@ -37,7 +37,7 @@ public class ExpenseParserTest {
         assertThat(actualExpense.getCategory() , is("Local Transportation"));
         assertThat(actualExpense.getTag() , is("Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Delivery Assurance"));
         assertThat(actualExpense.getComment() , is("Uber DFW to office"));
-        assertThat(actualExpense.isReimbursable() , is("yes"));
+        assertThat(actualExpense.isReimbursable() , is(true));
         assertThat(actualExpense.getOriginalCurrency() , is("USD"));
         assertThat(actualExpense.getOriginalAmount() , is("18.68"));
         assertThat(actualExpense.getReceiptURL() , is("https://salesforce.expensify.com/verifyReceipt?action=verifyreceipt&transactionID=7871304959002483&amount=-1868&created=2016-12-12"));
@@ -58,5 +58,20 @@ public class ExpenseParserTest {
         List<Expense> actualExpenses = expenseParser.parseExpenses(mockFile);
         
         assertThat(actualExpenses.size(), is(1));
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void shouldThrowAnExceptionWhenReimbursableIsNotParsable() {
+        String headerString = "Timestamp,Merchant,Amount,MCC,Category,Tag,Comment,Reimbursable,\"Original Currency\",\"Original Amount\",Receipt";
+        String expenseString = "\"2016-12-12 00:00:00\",Uber,18.68,0,\"Local Transportation\",\"Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Delivery Assurance\",\"Uber DFW to office\",foo,USD,18.68,https://salesforce.expensify.com/verifyReceipt?action=verifyreceipt&transactionID=7871304959002483&amount=-1868&created=2016-12-12";
+
+        List<String> expenseStrings = Arrays.asList(headerString, expenseString);
+
+        File mockFile = mock(File.class);
+        CSVFileReader mockCSVFileReader = mock(CSVFileReader.class);
+        when(mockCSVFileReader.readCreditCardFile(mockFile)).thenReturn(expenseStrings);
+
+        ExpenseParser expenseParser = new ExpenseParser(mockCSVFileReader);
+        expenseParser.parseExpenses(mockFile);
     }
 }

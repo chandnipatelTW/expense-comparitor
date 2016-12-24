@@ -23,6 +23,18 @@ public class ExpenseParser {
         for (String expenseLine : expenseLines) {
             if (isHeaderLine(expenseLine)) { continue; }
             String[] expenseTokens = expenseLine.split(expenseDelimiter);
+
+            String reimbursableString = cleanOffQuotes(expenseTokens[7]);
+            boolean reimbursable = false;
+
+            if ("yes".equalsIgnoreCase(reimbursableString)) {
+                reimbursable = true;
+            } else if ("no".equalsIgnoreCase(reimbursableString)) {
+                reimbursable = false;
+            } else {
+                throw new IllegalArgumentException("Unable to parse the string for Reimbursable");
+            }
+
             Expense expense = new Expense(
                     cleanOffQuotes(expenseTokens[0]),
                     cleanOffQuotes(expenseTokens[1]),
@@ -31,7 +43,7 @@ public class ExpenseParser {
                     cleanOffQuotes(expenseTokens[4]),
                     cleanOffQuotes(expenseTokens[5]),
                     cleanOffQuotes(expenseTokens[6]),
-                    cleanOffQuotes(expenseTokens[7]),
+                    reimbursable,
                     cleanOffQuotes(expenseTokens[8]),
                     cleanOffQuotes(expenseTokens[9]),
                     cleanOffQuotes(expenseTokens[10])
