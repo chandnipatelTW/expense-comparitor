@@ -1,5 +1,6 @@
 package org.spargonaut.io;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
@@ -17,24 +18,27 @@ import static org.mockito.Mockito.when;
 
 public class DataLoaderTest {
 
+    private final String testDirectoryName = "./some-test-directory";
+    private final File mockFileOne = mock(File.class);
+    private final File mockFileTwo = mock(File.class);
+    private final List<File> mockFiles = Arrays.asList(mockFileOne, mockFileTwo);
+    private final CSVFileLoader mockCsvFileLoader = mock(CSVFileLoader.class);
+
+    @Before
+    public void setUp() {
+        when(mockCsvFileLoader.getFileNamesIn(testDirectoryName)).thenReturn(mockFiles);
+    }
+
     @Test
     public void shouldLoadTheExpenseFiles() {
-
-        String testDirectoryName = "./some-test-directory";
-
-        File mockFileOne = mock(File.class);
-        File mockFileTwo = mock(File.class);
-        List<File> mockFiles = Arrays.asList(mockFileOne, mockFileTwo);
-
-        CSVFileLoader mockCsvFileLoader = mock(CSVFileLoader.class);
-        when(mockCsvFileLoader.getFileNamesIn(testDirectoryName)).thenReturn(mockFiles);
-
         Expense expenseOneFromMockFileOne = new ExpenseBuilder().build();
         Expense expenseTwoFromMockFileOne = new ExpenseBuilder().build();
         List<Expense> expensesFromMockFileOne = Arrays.asList(expenseOneFromMockFileOne, expenseTwoFromMockFileOne);
+
         Expense expenseOneFromMockFileTwo = new ExpenseBuilder().build();
         Expense expenseTwoFromMockFileTwo = new ExpenseBuilder().build();
         List<Expense> expensesFromMockFileTwo = Arrays.asList(expenseOneFromMockFileTwo, expenseTwoFromMockFileTwo);
+
         Parser mockParser = mock(Parser.class);
         when(mockParser.parseFile(mockFileOne)).thenReturn(expensesFromMockFileOne);
         when(mockParser.parseFile(mockFileTwo)).thenReturn(expensesFromMockFileTwo);
@@ -47,16 +51,6 @@ public class DataLoaderTest {
 
     @Test
     public void shouldLoadTheChargeFiles() {
-
-        String testDirectoryName = "./another-test-directory";
-
-        File mockFileOne = mock(File.class);
-        File mockFileTwo = mock(File.class);
-        List<File> mockFiles = Arrays.asList(mockFileOne, mockFileTwo);
-
-        CSVFileLoader mockCsvFileLoader = mock(CSVFileLoader.class);
-        when(mockCsvFileLoader.getFileNamesIn(testDirectoryName)).thenReturn(mockFiles);
-
         CreditCardActivity creditCardActivityOneFromMockFileOne = new CreditCardActivityBuilder().build();
         CreditCardActivity creditCardActivityTwoFromMockFileOne = new CreditCardActivityBuilder().build();
         List<CreditCardActivity> creditCardActivitiesFromMockFileOne = Arrays.asList(creditCardActivityOneFromMockFileOne, creditCardActivityTwoFromMockFileOne);
