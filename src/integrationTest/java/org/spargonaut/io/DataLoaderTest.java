@@ -1,7 +1,9 @@
 package org.spargonaut.io;
 
 import org.junit.Test;
+import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
+import org.spargonaut.datamodels.testbuilders.CreditCardActivityBuilder;
 import org.spargonaut.datamodels.testbuilders.ExpenseBuilder;
 
 import java.io.File;
@@ -39,6 +41,36 @@ public class DataLoaderTest {
 
         DataLoader dataLoader = new DataLoader(mockCsvFileLoader);
         List<Expense> actualExpenseList = dataLoader.loadExpenses(testDirectoryName, mockParser);
+
+        assertThat(actualExpenseList.size(), is(4));
+    }
+
+    @Test
+    public void shouldLoadTheChargeFiles() {
+
+        String testDirectoryName = "./another-test-directory";
+
+        File mockFileOne = mock(File.class);
+        File mockFileTwo = mock(File.class);
+        List<File> mockFiles = Arrays.asList(mockFileOne, mockFileTwo);
+
+        CSVFileLoader mockCsvFileLoader = mock(CSVFileLoader.class);
+        when(mockCsvFileLoader.getFileNamesIn(testDirectoryName)).thenReturn(mockFiles);
+
+        CreditCardActivity creditCardActivityOneFromMockFileOne = new CreditCardActivityBuilder().build();
+        CreditCardActivity creditCardActivityTwoFromMockFileOne = new CreditCardActivityBuilder().build();
+        List<CreditCardActivity> creditCardActivitiesFromMockFileOne = Arrays.asList(creditCardActivityOneFromMockFileOne, creditCardActivityTwoFromMockFileOne);
+
+        CreditCardActivity creditCardActivityOneFromMockFileTwo = new CreditCardActivityBuilder().build();
+        CreditCardActivity creditCardActivityTwoFromMockFileTwo = new CreditCardActivityBuilder().build();
+        List<CreditCardActivity> creditCardActivitiesFromMockFileTwo = Arrays.asList(creditCardActivityOneFromMockFileTwo, creditCardActivityTwoFromMockFileTwo);
+
+        ChargeParser mockParser = mock(ChargeParser.class);
+        when(mockParser.parseFile(mockFileOne)).thenReturn(creditCardActivitiesFromMockFileOne);
+        when(mockParser.parseFile(mockFileTwo)).thenReturn(creditCardActivitiesFromMockFileTwo);
+
+        DataLoader dataLoader = new DataLoader(mockCsvFileLoader);
+        List<CreditCardActivity> actualExpenseList = dataLoader.loadCharges(testDirectoryName, mockParser);
 
         assertThat(actualExpenseList.size(), is(4));
     }

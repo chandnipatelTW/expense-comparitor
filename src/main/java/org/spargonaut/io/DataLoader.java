@@ -1,5 +1,6 @@
 package org.spargonaut.io;
 
+import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
 
 import java.io.File;
@@ -22,5 +23,15 @@ public class DataLoader {
             things.addAll(parser.parseFile(csvFile));
         }
         return  things;
+    }
+
+    public List<CreditCardActivity> loadCharges(String directoryName, ChargeParser parser) {
+        List<File> csvFilesNames = csvFileLoader.getFileNamesIn(directoryName);
+
+        List<CreditCardActivity> things = new ArrayList<>();
+        for (File csvFile : csvFilesNames) {
+            things.addAll(parser.parseFile(csvFile));
+        }
+        return things;
     }
 }
