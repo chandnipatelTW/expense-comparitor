@@ -13,7 +13,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class LoaderTest {
+public class DataLoaderTest {
 
     @Test
     public void shouldLoadTheExpenseFiles() {
@@ -37,8 +37,8 @@ public class LoaderTest {
         when(mockParser.parseFile(mockFileOne)).thenReturn(expensesFromMockFileOne);
         when(mockParser.parseFile(mockFileTwo)).thenReturn(expensesFromMockFileTwo);
 
-        Loader loader = new Loader(mockCsvFileLoader);
-        List<Expense> actualExpenseList = loader.loadExpenses(testDirectoryName, mockParser);
+        DataLoader dataLoader = new DataLoader(mockCsvFileLoader);
+        List<Expense> actualExpenseList = dataLoader.loadExpenses(testDirectoryName, mockParser);
 
         assertThat(actualExpenseList.size(), is(4));
     }

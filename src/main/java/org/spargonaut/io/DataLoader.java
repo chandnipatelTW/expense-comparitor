@@ -6,11 +6,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Loader {
+public class DataLoader {
 
     private final CSVFileLoader csvFileLoader;
 
-    public Loader(CSVFileLoader csvFilecsvFileLoader) {
+    public DataLoader(CSVFileLoader csvFilecsvFileLoader) {
         this.csvFileLoader = csvFilecsvFileLoader;
     }
 
