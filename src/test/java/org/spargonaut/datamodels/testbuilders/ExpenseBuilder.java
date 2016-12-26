@@ -26,4 +26,60 @@ public class ExpenseBuilder {
     public Expense build() {
         return new Expense(timestamp, merchant, amount, mcc, category, tag, comment, reimbursable, originalCurrency, originalAmount, receiptURL);
     }
+
+    public ExpenseBuilder setTimestamp(DateTime timestamp) {
+        this.timestamp = timestamp;
+        return this;
+    }
+
+    public ExpenseBuilder setMerchant(String merchant) {
+        this.merchant = merchant;
+        return this;
+    }
+
+    public ExpenseBuilder setAmount(double amount) {
+        this.amount = new BigDecimal(amount);
+        return this;
+    }
+
+    public ExpenseBuilder setMcc(String mcc) {
+        this.mcc = mcc;
+        return this;
+    }
+
+
+    public ExpenseBuilder setCategory(String category) {
+        this.category = category;
+        return this;
+    }
+
+    public ExpenseBuilder setTag(String tag) {
+        this.tag = tag;
+        return this;
+    }
+
+    public ExpenseBuilder setComment(String comment) {
+        this.comment = comment;
+        return this;
+    }
+
+    public ExpenseBuilder setReimbursable(boolean reimbursable) {
+        this.reimbursable = reimbursable;
+        return this;
+    }
+
+    public ExpenseBuilder setOriginalCurrency(String originalCurrency) {
+        this.originalCurrency = originalCurrency;
+        return this;
+    }
+
+    public ExpenseBuilder setOriginalAmmount(double originalAmmount) {
+        this.originalAmount = new BigDecimal(originalAmmount);
+        return this;
+    }
+
+    public ExpenseBuilder setReceiptUrl(String receiptUrl) {
+        this.receiptURL = receiptUrl;
+        return this;
+    }
 }

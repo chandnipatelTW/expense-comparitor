@@ -1,11 +1,13 @@
 package org.spargonaut.datamodels;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
 
 @Getter
+@EqualsAndHashCode
 public class Expense {
     private final DateTime timestamp;
     private final String merchant;
