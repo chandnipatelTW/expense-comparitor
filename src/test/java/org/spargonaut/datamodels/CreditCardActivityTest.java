@@ -1,0 +1,43 @@
+package org.spargonaut.datamodels;
+
+import org.joda.time.DateTime;
+import org.junit.Test;
+import org.spargonaut.datamodels.testbuilders.CreditCardActivityBuilder;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.*;
+
+public class CreditCardActivityTest {
+
+    @Test
+    public void shouldIndicateTwoCreditCardActivitiesAreEqual_whenTheyHaveTheSameValues() {
+        ActivityType activityType = ActivityType.SALE;
+        int transactionYear = 2016;
+        int transactionMonth = 12;
+        int transactionDay = 29;
+        int hourOfDay = 0;
+        int minuteOfHour = 0;
+        int postDayOfMonth = 30;
+        String description = "some sort of description";
+        double amount = 2.25;
+        CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder()
+                .setType(activityType)
+                .setTransactionDate(new DateTime(transactionYear, transactionMonth, transactionDay, hourOfDay, minuteOfHour))
+                .setPostDate(new DateTime(transactionYear, transactionMonth, postDayOfMonth, hourOfDay, minuteOfHour))
+                .setDescription(description)
+                .setAmount(amount)
+                .build();
+
+
+        CreditCardActivity creditCardActivityTwo = new CreditCardActivityBuilder()
+                .setType(activityType)
+                .setTransactionDate(new DateTime(transactionYear, transactionMonth, transactionDay, hourOfDay, minuteOfHour))
+                .setPostDate(new DateTime(transactionYear, transactionMonth, postDayOfMonth, hourOfDay, minuteOfHour))
+                .setDescription(description)
+                .setAmount(amount)
+                .build();
+
+        assertThat(creditCardActivityOne.equals(creditCardActivityTwo), is(true));
+    }
+
+}

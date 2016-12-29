@@ -21,4 +21,30 @@ public class CreditCardActivityBuilder {
     public CreditCardActivity build() {
         return new CreditCardActivity(type.getValue(), transactionDate, postDate, description, amount);
     }
+
+    public CreditCardActivityBuilder setType(ActivityType type) {
+        this.type = type;
+        return this;
+    }
+
+    public CreditCardActivityBuilder setTransactionDate(DateTime transactionDate) {
+        this.transactionDate = transactionDate;
+        return this;
+    }
+
+    public CreditCardActivityBuilder setPostDate(DateTime postDate) {
+        this.postDate = postDate;
+        return this;
+    }
+
+
+    public CreditCardActivityBuilder setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public CreditCardActivityBuilder setAmount(double amount) {
+        this.amount = new BigDecimal(amount);
+        return this;
+    }
 }
