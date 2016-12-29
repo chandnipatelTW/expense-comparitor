@@ -19,7 +19,7 @@ public class CreditCardActivityBuilder {
     private BigDecimal amount = new BigDecimal(randomizer.nextDouble());
 
     public CreditCardActivity build() {
-        return new CreditCardActivity(type.getValue(), transactionDate, postDate, description, amount);
+        return new CreditCardActivity(type, transactionDate, postDate, description, amount);
     }
 
     public CreditCardActivityBuilder setType(ActivityType type) {

@@ -3,6 +3,7 @@ package org.spargonaut.io;
 import org.joda.time.DateTime;
 import org.junit.Rule;
 import org.junit.Test;
+import org.spargonaut.datamodels.ActivityType;
 import org.spargonaut.datamodels.CreditCardActivity;
 import org.springframework.boot.test.OutputCapture;
 
@@ -24,9 +25,9 @@ public class ChargePrinterTest {
         BigDecimal saleTwoAmount = createBigDecimalFrom(-12.00);
         BigDecimal paymentOneAmount = createBigDecimalFrom(3004.37);
 
-        CreditCardActivity saleOne = new CreditCardActivity("Sale", new DateTime(2016, 11, 28, 0, 0), new DateTime(2016, 11, 29, 0, 0), "UBER   *US NOV27 CQ6IT", saleOneAmount);
-        CreditCardActivity saleTwo = new CreditCardActivity("Sale", new DateTime(2016, 11, 28, 0, 0), new DateTime(2016, 11, 30, 0, 0), "SALATA - LAS COLINAS", saleTwoAmount);
-        CreditCardActivity paymentOne = new CreditCardActivity("Payment", new DateTime(2016, 11, 26, 0, 0), new DateTime(2016, 11, 27, 0, 0), "Payment Thank You - Web", paymentOneAmount);
+        CreditCardActivity saleOne = new CreditCardActivity(ActivityType.SALE, new DateTime(2016, 11, 28, 0, 0), new DateTime(2016, 11, 29, 0, 0), "UBER   *US NOV27 CQ6IT", saleOneAmount);
+        CreditCardActivity saleTwo = new CreditCardActivity(ActivityType.SALE, new DateTime(2016, 11, 28, 0, 0), new DateTime(2016, 11, 30, 0, 0), "SALATA - LAS COLINAS", saleTwoAmount);
+        CreditCardActivity paymentOne = new CreditCardActivity(ActivityType.PAYMENT, new DateTime(2016, 11, 26, 0, 0), new DateTime(2016, 11, 27, 0, 0), "Payment Thank You - Web", paymentOneAmount);
 
         List<CreditCardActivity> activities = Arrays.asList(saleOne, saleTwo, paymentOne);
         ChargePrinter.printChargesAsHumanReadable(activities);

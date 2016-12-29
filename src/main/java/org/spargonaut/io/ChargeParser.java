@@ -1,6 +1,7 @@
 package org.spargonaut.io;
 
 import org.joda.time.DateTime;
+import org.spargonaut.datamodels.ActivityType;
 import org.spargonaut.datamodels.CreditCardActivity;
 
 import java.io.File;
@@ -32,7 +33,7 @@ public class ChargeParser {
             amount = amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 
             CreditCardActivity creditCardActivity = new CreditCardActivity(
-                    chargeTokens[0],
+                    ActivityType.fromString(chargeTokens[0]),
                     transactionDate,
                     postDate,
                     chargeTokens[3],
