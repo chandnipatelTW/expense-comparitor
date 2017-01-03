@@ -38,7 +38,8 @@ public class ExpenseBuilder {
     }
 
     public ExpenseBuilder setAmount(double amount) {
-        this.amount = new BigDecimal(amount);
+        BigDecimal formattedBigDecimal = new BigDecimal(amount);
+        this.amount = formattedBigDecimal.setScale(2, BigDecimal.ROUND_HALF_EVEN);
         return this;
     }
 
@@ -46,7 +47,6 @@ public class ExpenseBuilder {
         this.mcc = mcc;
         return this;
     }
-
 
     public ExpenseBuilder setCategory(String category) {
         this.category = category;
