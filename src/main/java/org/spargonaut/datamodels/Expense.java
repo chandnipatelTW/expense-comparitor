@@ -8,7 +8,7 @@ import org.joda.time.DateTime;
 import java.math.BigDecimal;
 
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode (of = {"amount"})
 @AllArgsConstructor
 public class Expense {
     private final DateTime timestamp;
