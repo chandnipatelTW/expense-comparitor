@@ -93,4 +93,28 @@ public class TransactionMatcherTest {
         assertThat(matchedTransactions.size(), is(0));
     }
 
+    @Test
+    public void shouldCreateAListOfCreditCardActivitiesThatHaveNotBeenMatched() {
+        double amountForCreditCardActivity = 5.56;
+        CreditCardActivity creditCardActivity = new CreditCardActivityBuilder()
+                .setAmount(amountForCreditCardActivity)
+                .build();
+
+        double amountForExpense = 4.45;
+        Expense expense = new ExpenseBuilder()
+                .setAmount(amountForExpense)
+                .build();
+
+        List<Expense> expenses = Arrays.asList(expense);
+
+        TransactionMatcher transactionMatcher = new TransactionMatcher(Arrays.asList(creditCardActivity));
+        transactionMatcher.createMatchedTransactionsWithExpenses(expenses);
+
+        List<CreditCardActivity> unmatchedCreditCardActivities =  transactionMatcher.getUnmatchedCreditCardActivies();
+
+        assertThat(unmatchedCreditCardActivities.size(), is(1));
+
+        CreditCardActivity unmatchedCreditCardActivity = unmatchedCreditCardActivities.get(0);
+        assertThat(unmatchedCreditCardActivity, is(creditCardActivity));
+    }
 }
