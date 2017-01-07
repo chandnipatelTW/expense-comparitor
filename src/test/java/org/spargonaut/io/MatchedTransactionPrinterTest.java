@@ -81,8 +81,7 @@ public class MatchedTransactionPrinterTest {
 
         List<MatchedTransaction> matchedTransactions = Arrays.asList (matchedTransactionOne, matchedTransactionTwo);
 
-        MatchedTransactionPrinter matchedTransactionPrinter = new MatchedTransactionPrinter ();
-        matchedTransactionPrinter.printMatchedTransactions (matchedTransactions);
+        MatchedTransactionPrinter.printMatchedTransactions (matchedTransactions);
 
         String expectedOutput = "               A credit card transaction description              2017-01-01      3.49      \n" +
                 "matched with:  An expense merchant                                2017-02-03       3.49      \n\n" +

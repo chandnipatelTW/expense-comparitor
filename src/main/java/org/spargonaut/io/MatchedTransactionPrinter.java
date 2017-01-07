@@ -7,14 +7,14 @@ import org.spargonaut.datamodels.Expense;
 import java.util.List;
 
 public class MatchedTransactionPrinter {
-    public void printMatchedTransactions (List<MatchedTransaction> matchedTransactions) {
+    public static void printMatchedTransactions (List<MatchedTransaction> matchedTransactions) {
         for (MatchedTransaction matchedTransaction : matchedTransactions) {
             printMatchedTransaction(matchedTransaction.getMatchedCreditCardActivity(),
                     matchedTransaction.getMatchedExpense());
         }
     }
 
-    private void printMatchedTransaction (CreditCardActivity creditCardActivity, Expense expense) {
+    private static void printMatchedTransaction (CreditCardActivity creditCardActivity, Expense expense) {
         System.out.format("               %-50s %-15s %-10s\nmatched with:  %-50s %-16s %-10s\n\n",
                 creditCardActivity.getDescription(),
                 creditCardActivity.getTransactionDate().toLocalDate(),
