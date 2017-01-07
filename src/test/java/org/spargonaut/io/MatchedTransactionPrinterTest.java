@@ -31,8 +31,9 @@ public class MatchedTransactionPrinterTest {
         DateTime activityTransactionDateOne = new DateTime (transactionYear, transactionMonthOne, transactionDayOne, 0, 0);
 
         String transactionDescriptionOne = "A credit card transaction description";
+        double matchedAmountOneForCreditCardActivityOne = matchedAmountOne * -1;
         CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder ()
-                .setAmount (matchedAmountOne)
+                .setAmount (matchedAmountOneForCreditCardActivityOne)
                 .setTransactionDate (activityTransactionDateOne)
                 .setDescription (transactionDescriptionOne)
                 .build ();
@@ -58,8 +59,9 @@ public class MatchedTransactionPrinterTest {
         DateTime activityTransactionDateTwo = new DateTime (transactionYear, transactionMonthTwo, transactionDayTwo, 0, 0);
 
         String transactionDescriptionTwo = "Another credit card transaction description";
+        double matchedAmountTwoForCreditCardActivityTwo = matchedAmountTwo * -1;
         CreditCardActivity creditCardActivityTwo = new CreditCardActivityBuilder ()
-                .setAmount (matchedAmountTwo)
+                .setAmount (matchedAmountTwoForCreditCardActivityTwo)
                 .setTransactionDate (activityTransactionDateTwo)
                 .setDescription (transactionDescriptionTwo)
                 .build ();
@@ -83,10 +85,10 @@ public class MatchedTransactionPrinterTest {
 
         MatchedTransactionPrinter.printMatchedTransactions (matchedTransactions);
 
-        String expectedOutput = "               A credit card transaction description              2017-01-01      3.49      \n" +
-                "matched with:  An expense merchant                                2017-02-03       3.49      \n\n" +
-                                "               Another credit card transaction description        2017-04-05      5.68      \n" +
-                "matched with:  Another expense merchant                           2017-06-07       5.68      \n\n";
+        String expectedOutput = "               A credit card transaction description              2017-01-01           -3.49\n" +
+                                "matched with:  An expense merchant                                2017-02-03            3.49\n\n" +
+                                "               Another credit card transaction description        2017-04-05           -5.68\n" +
+                                "matched with:  Another expense merchant                           2017-06-07            5.68\n\n";
 
         assertThat (outputCapture.toString(), is(expectedOutput));
     }
