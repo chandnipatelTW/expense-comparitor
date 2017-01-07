@@ -52,4 +52,23 @@ public class TransactionMatcher {
 
         return unmatchedCreditCardActivies;
     }
+
+    public List<Expense> getUnmatchedExpenses(List<Expense> expenses) {
+        List<Expense> unmatchedExpenses = new ArrayList<>();
+
+        for (Expense expense : expenses) {
+            boolean isMatched = false;
+            for (MatchedTransaction matchedTransaction : matchedTransactions) {
+                Expense matchedExpense = matchedTransaction.getMatchedExpense();
+                if (expense.equals(matchedExpense)) {
+                    isMatched = true;
+                }
+            }
+
+            if (!isMatched) {
+                unmatchedExpenses.add(expense);
+            }
+        }
+        return unmatchedExpenses;
+    }
 }
