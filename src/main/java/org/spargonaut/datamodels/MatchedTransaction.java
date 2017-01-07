@@ -1,9 +1,7 @@
-package org.spargonaut;
+package org.spargonaut.datamodels;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.spargonaut.datamodels.CreditCardActivity;
-import org.spargonaut.datamodels.Expense;
 
 @AllArgsConstructor
 @Getter

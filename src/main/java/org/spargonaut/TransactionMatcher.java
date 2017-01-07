@@ -2,6 +2,7 @@ package org.spargonaut;
 
 import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
+import org.spargonaut.datamodels.MatchedTransaction;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

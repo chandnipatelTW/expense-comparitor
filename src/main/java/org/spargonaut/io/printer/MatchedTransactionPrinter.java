@@ -1,8 +1,8 @@
 package org.spargonaut.io.printer;
 
-import org.spargonaut.MatchedTransaction;
 import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
+import org.spargonaut.datamodels.MatchedTransaction;
 
 import java.util.List;
 

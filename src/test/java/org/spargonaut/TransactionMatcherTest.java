@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.spargonaut.datamodels.ActivityType;
 import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
+import org.spargonaut.datamodels.MatchedTransaction;
 import org.spargonaut.datamodels.testbuilders.CreditCardActivityBuilder;
 import org.spargonaut.datamodels.testbuilders.ExpenseBuilder;
 
