@@ -84,10 +84,10 @@ public class MatchedTransactionPrinterTest {
         MatchedTransactionPrinter matchedTransactionPrinter = new MatchedTransactionPrinter ();
         matchedTransactionPrinter.printMatchedTransactions (matchedTransactions);
 
-        String expectedOutput = "A credit card transaction description              2017-01-01      3.49      \n" +
-                " matched with: An expense merchant                                2017-02-03      3.49      \n\n" +
-                "Another credit card transaction description        2017-04-05      5.68      \n" +
-                " matched with: Another expense merchant                           2017-06-07      5.68      \n\n";
+        String expectedOutput = "               A credit card transaction description              2017-01-01      3.49      \n" +
+                "matched with:  An expense merchant                                2017-02-03       3.49      \n\n" +
+                                "               Another credit card transaction description        2017-04-05      5.68      \n" +
+                "matched with:  Another expense merchant                           2017-06-07       5.68      \n\n";
 
         assertThat (outputCapture.toString(), is(expectedOutput));
     }
