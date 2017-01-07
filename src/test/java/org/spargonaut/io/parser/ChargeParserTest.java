@@ -1,10 +1,11 @@
-package org.spargonaut.io;
+package org.spargonaut.io.parser;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.spargonaut.datamodels.ActivityType;
 import org.spargonaut.datamodels.CreditCardActivity;
+import org.spargonaut.io.CSVFileReader;
 
 import java.io.File;
 import java.math.BigDecimal;

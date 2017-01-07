@@ -2,6 +2,8 @@ package org.spargonaut.io;
 
 import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
+import org.spargonaut.io.parser.ChargeParser;
+import org.spargonaut.io.parser.Parser;
 
 import java.io.File;
 import java.util.ArrayList;

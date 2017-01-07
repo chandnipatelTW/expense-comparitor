@@ -1,4 +1,4 @@
-package org.spargonaut.io;
+package org.spargonaut.io.parser;
 
 import org.spargonaut.datamodels.Expense;
 

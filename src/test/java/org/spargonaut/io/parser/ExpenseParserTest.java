@@ -1,8 +1,9 @@
-package org.spargonaut.io;
+package org.spargonaut.io.parser;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.spargonaut.datamodels.Expense;
+import org.spargonaut.io.CSVFileReader;
 
 import java.io.File;
 import java.math.BigDecimal;

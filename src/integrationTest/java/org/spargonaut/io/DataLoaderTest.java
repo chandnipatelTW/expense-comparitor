@@ -6,6 +6,8 @@ import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
 import org.spargonaut.datamodels.testbuilders.CreditCardActivityBuilder;
 import org.spargonaut.datamodels.testbuilders.ExpenseBuilder;
+import org.spargonaut.io.parser.ChargeParser;
+import org.spargonaut.io.parser.Parser;
 
 import java.io.File;
 import java.util.Arrays;
