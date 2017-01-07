@@ -22,41 +22,72 @@ public class MatchedTransactionPrinterTest {
     public OutputCapture outputCapture = new OutputCapture ();
 
     @Test
-    public void shouldPrintAFormattedMatchedTransaction () {
-        double matchedAmount = 3.49;
+    public void shouldPrintAFormattedSetOfMatchedTransaction () {
+        double matchedAmountOne = 3.49;
 
         int transactionYear = 2017;
-        int transactionMonth = 1;
-        int transactionDay = 1;
-        DateTime activityTransactionDate = new DateTime (transactionYear, transactionMonth, transactionDay, 0, 0);
+        int transactionMonthOne = 1;
+        int transactionDayOne = 1;
+        DateTime activityTransactionDateOne = new DateTime (transactionYear, transactionMonthOne, transactionDayOne, 0, 0);
 
-        String transactionDescription = "A credit card transaction description";
-        CreditCardActivity creditCardActivity = new CreditCardActivityBuilder ()
-                .setAmount (matchedAmount)
-                .setTransactionDate (activityTransactionDate)
-                .setDescription (transactionDescription)
+        String transactionDescriptionOne = "A credit card transaction description";
+        CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder ()
+                .setAmount (matchedAmountOne)
+                .setTransactionDate (activityTransactionDateOne)
+                .setDescription (transactionDescriptionOne)
                 .build ();
 
 
-        int expenseMonth = 2;
-        int expenseDay = 3;
-        DateTime expenseDate = new DateTime (transactionYear, expenseMonth, expenseDay, 0, 0);
+        int expenseMonthOne = 2;
+        int expenseDayOne = 3;
+        DateTime expenseDateOne = new DateTime (transactionYear, expenseMonthOne, expenseDayOne, 0, 0);
 
-        String merchant = "An expense merchant";
-        Expense expense = new ExpenseBuilder ()
-                .setAmount (matchedAmount)
-                .setTimestamp (expenseDate)
-                .setMerchant (merchant)
+        String merchantOne = "An expense merchant";
+        Expense expenseOne = new ExpenseBuilder ()
+                .setAmount (matchedAmountOne)
+                .setTimestamp (expenseDateOne)
+                .setMerchant (merchantOne)
                 .build ();
 
-        MatchedTransaction matchedTransaction = new MatchedTransaction (creditCardActivity, expense);
-        List<MatchedTransaction> matchedTransactions = Arrays.asList (matchedTransaction);
+        MatchedTransaction matchedTransactionOne = new MatchedTransaction (creditCardActivityOne, expenseOne);
+
+
+        double matchedAmountTwo = 5.68;
+        int transactionMonthTwo = 4;
+        int transactionDayTwo = 5;
+        DateTime activityTransactionDateTwo = new DateTime (transactionYear, transactionMonthTwo, transactionDayTwo, 0, 0);
+
+        String transactionDescriptionTwo = "Another credit card transaction description";
+        CreditCardActivity creditCardActivityTwo = new CreditCardActivityBuilder ()
+                .setAmount (matchedAmountTwo)
+                .setTransactionDate (activityTransactionDateTwo)
+                .setDescription (transactionDescriptionTwo)
+                .build ();
+
+
+        int expenseMonthTwo = 6;
+        int expenseDayTwo = 7;
+        DateTime expenseDateTwo = new DateTime (transactionYear, expenseMonthTwo, expenseDayTwo, 0, 0);
+
+        String merchantTwo = "Another expense merchant";
+        Expense expenseTwo = new ExpenseBuilder ()
+                .setAmount (matchedAmountTwo)
+                .setTimestamp (expenseDateTwo)
+                .setMerchant (merchantTwo)
+                .build ();
+
+        MatchedTransaction matchedTransactionTwo = new MatchedTransaction (creditCardActivityTwo, expenseTwo);
+
+
+        List<MatchedTransaction> matchedTransactions = Arrays.asList (matchedTransactionOne, matchedTransactionTwo);
 
         MatchedTransactionPrinter matchedTransactionPrinter = new MatchedTransactionPrinter ();
         matchedTransactionPrinter.printMatchedTransactions (matchedTransactions);
 
         String expectedOutput = "A credit card transaction description              2017-01-01      3.49      \n" +
-                " matched with: An expense merchant                                2017-02-03      3.49      \n";
+                " matched with: An expense merchant                                2017-02-03      3.49      \n\n" +
+                "Another credit card transaction description        2017-04-05      5.68      \n" +
+                " matched with: Another expense merchant                           2017-06-07      5.68      \n\n";
 
         assertThat (outputCapture.toString(), is(expectedOutput));
     }
