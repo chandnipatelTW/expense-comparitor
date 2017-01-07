@@ -47,7 +47,9 @@ public class TransactionMatcherTest {
         List<CreditCardActivity> creditCardActivitiesForTesting = Arrays.asList(creditCardActivityTwo, creditCardActivityOne);
         TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivitiesForTesting);
 
-        List<MatchedTransaction> matchedTransactions = transactionMatcher.createMatchedTransactionsWithExpense(expenseOne);
+        List<Expense> expenses = Arrays.asList(expenseOne);
+
+        List<MatchedTransaction> matchedTransactions = transactionMatcher.createMatchedTransactionsWithExpenses(expenses);
         assertThat(matchedTransactions.size(), is(1));
 
         CreditCardActivity expectedCreditCardActivityMatch = new CreditCardActivityBuilder()
@@ -81,8 +83,10 @@ public class TransactionMatcherTest {
                 .setAmount(amountForExpense)
                 .build();
 
+        List<Expense> expenses = Arrays.asList(expense);
+
         TransactionMatcher transactionMatcher = new TransactionMatcher(Arrays.asList(creditCardActivity));
-        List<MatchedTransaction> matchedTransactions = transactionMatcher.createMatchedTransactionsWithExpense(expense);
+        List<MatchedTransaction> matchedTransactions = transactionMatcher.createMatchedTransactionsWithExpenses(expenses);
 
         assertThat(matchedTransactions.size(), is(0));
     }

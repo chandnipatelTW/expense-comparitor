@@ -13,12 +13,14 @@ public class TransactionMatcher {
         this.creditCardActivities = creditCardActivities;
     }
 
-    public List<MatchedTransaction> createMatchedTransactionsWithExpense(Expense expense) {
+    public List<MatchedTransaction> createMatchedTransactionsWithExpenses(List<Expense> expenses) {
         List<MatchedTransaction> matchedTransactions = new ArrayList<>();
 
-        for (CreditCardActivity creditCardActivity : creditCardActivities) {
-            if (creditCardActivity.getAmount().equals(expense.getAmount())) {
-                matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
+        for (Expense expense : expenses) {
+            for (CreditCardActivity creditCardActivity : creditCardActivities) {
+                if (creditCardActivity.getAmount().equals(expense.getAmount())) {
+                    matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
+                }
             }
         }
 
