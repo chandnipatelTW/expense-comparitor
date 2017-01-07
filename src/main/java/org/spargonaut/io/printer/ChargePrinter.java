@@ -1,4 +1,4 @@
-package org.spargonaut.io;
+package org.spargonaut.io.printer;
 
 import org.spargonaut.datamodels.CreditCardActivity;
 
