@@ -3,6 +3,7 @@ package org.spargonaut;
 import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,10 @@ public class TransactionMatcher {
 
         for (Expense expense : expenses) {
             for (CreditCardActivity creditCardActivity : creditCardActivities) {
-                if (creditCardActivity.getAmount().equals(expense.getAmount())) {
+                BigDecimal creditCardActivityAmount = creditCardActivity.getAmount();
+                double positiveCreditCardActivityAmount = Math.abs(creditCardActivityAmount.doubleValue());
+                double expenseAmount = expense.getAmount().doubleValue();
+                if (expenseAmount == positiveCreditCardActivityAmount) {
                     matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
                 }
             }

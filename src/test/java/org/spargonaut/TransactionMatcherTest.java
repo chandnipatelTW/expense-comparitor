@@ -25,10 +25,12 @@ public class TransactionMatcherTest {
         String descriptionToMatchOn = "this is a description for a matched amount";
         double amountToMatchOn = 3.38;
 
+        double amountToMatchOnForCreditCardActivityOne = amountToMatchOn * -1;
+
         DateTime postDateToMatchOn = new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForPostToMatchOn, 0, 0);
         DateTime transactionDateToMatchOn = new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForTransactionToMatchOn, 0, 0);
         CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder()
-                .setAmount(amountToMatchOn)
+                .setAmount(amountToMatchOnForCreditCardActivityOne)
                 .setDescription(descriptionToMatchOn)
                 .setPostDate(postDateToMatchOn)
                 .setTransactionDate(transactionDateToMatchOn)
@@ -53,7 +55,7 @@ public class TransactionMatcherTest {
         assertThat(matchedTransactions.size(), is(1));
 
         CreditCardActivity expectedCreditCardActivityMatch = new CreditCardActivityBuilder()
-                .setAmount(amountToMatchOn)
+                .setAmount(amountToMatchOnForCreditCardActivityOne)
                 .setDescription(descriptionToMatchOn)
                 .setPostDate(new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForPostToMatchOn, 0, 0))
                 .setTransactionDate(new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForTransactionToMatchOn, 0, 0))
