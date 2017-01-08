@@ -85,10 +85,8 @@ public class ExpenseParser implements Parser {
         int month = Integer.parseInt(dateTokens[1]);
         int day = Integer.parseInt(dateTokens[2]);
 
-        String timeChunk = dateTimeTokens[1];
-        String[] timeTokens = timeChunk.split(":");
-        int hourOfDay = Integer.parseInt(timeTokens[0]);
-        int minutesOfHour = Integer.parseInt(timeTokens[1]);
+        int hourOfDay = 0;
+        int minutesOfHour = 0;
 
         return new DateTime(year, month, day, hourOfDay, minutesOfHour);
     }
