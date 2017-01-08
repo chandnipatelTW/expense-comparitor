@@ -115,7 +115,7 @@ public class TransactionMatcherTest {
         TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivities, expenses);
         transactionMatcher.process();
 
-        List<Expense> unmatchedExpenses =  transactionMatcher.getUnmatchedExpenses(expenses);
+        List<Expense> unmatchedExpenses =  transactionMatcher.getUnmatchedExpenses();
         assertThat(unmatchedExpenses.size(), is(1));
 
         Expense unmatchedExpense = unmatchedExpenses.get(0);

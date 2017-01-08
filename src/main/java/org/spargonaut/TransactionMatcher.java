@@ -13,6 +13,7 @@ public class TransactionMatcher {
     private final List<Expense> expenses;
     private List<CreditCardActivity> creditCardActivities;
     private List<CreditCardActivity> unmatchedCreditCardActivies;
+    private List<Expense> unmatchedExpenses;
     private List<MatchedTransaction> matchedTransactions;
 
     public TransactionMatcher(List<CreditCardActivity> creditCardActivities, List<Expense> expenses) {
@@ -23,6 +24,7 @@ public class TransactionMatcher {
     public void process() {
         createMatchedTransactions();
         createUnmatchedCreditCardActivies();
+        createUnmatchedExpenses();
     }
 
     public List<MatchedTransaction> getMatchedTransactions() {
@@ -31,6 +33,10 @@ public class TransactionMatcher {
 
     public List<CreditCardActivity> getUnmatchedCreditCardActivies() {
         return this.unmatchedCreditCardActivies;
+    }
+
+    public List<Expense> getUnmatchedExpenses() {
+        return this.unmatchedExpenses;
     }
 
     private List<MatchedTransaction> createMatchedTransactions() {
@@ -85,8 +91,8 @@ public class TransactionMatcher {
         return unmatchedCreditCardActivies;
     }
 
-    public List<Expense> getUnmatchedExpenses(List<Expense> expenses) {
-        List<Expense> unmatchedExpenses = new ArrayList<>();
+    private List<Expense> createUnmatchedExpenses() {
+        this.unmatchedExpenses = new ArrayList<>();
 
         for (Expense expense : expenses) {
             boolean isMatched = false;
