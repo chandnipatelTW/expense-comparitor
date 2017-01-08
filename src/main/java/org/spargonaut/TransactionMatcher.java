@@ -22,10 +22,15 @@ public class TransactionMatcher {
 
     public void process() {
         createMatchedTransactions();
+        createUnmatchedCreditCardActivies();
     }
 
     public List<MatchedTransaction> getMatchedTransactions() {
         return this.matchedTransactions;
+    }
+
+    public List<CreditCardActivity> getUnmatchedCreditCardActivies() {
+        return this.unmatchedCreditCardActivies;
     }
 
     private List<MatchedTransaction> createMatchedTransactions() {
@@ -60,7 +65,7 @@ public class TransactionMatcher {
         return expenseAmount == positiveCreditCardActivityAmount && isWithinDateTolerance;
     }
 
-    public List<CreditCardActivity> getUnmatchedCreditCardActivies() {
+    private List<CreditCardActivity> createUnmatchedCreditCardActivies() {
         this.unmatchedCreditCardActivies = new ArrayList<>();
 
         for (CreditCardActivity creditCardActivity : creditCardActivities) {
