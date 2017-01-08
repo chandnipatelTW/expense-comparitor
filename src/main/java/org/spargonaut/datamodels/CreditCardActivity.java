@@ -8,7 +8,7 @@ import org.joda.time.DateTime;
 import java.math.BigDecimal;
 
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"postDate"})
 @AllArgsConstructor
 public class CreditCardActivity {
 
