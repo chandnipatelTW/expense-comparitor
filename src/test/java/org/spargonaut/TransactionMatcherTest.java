@@ -17,23 +17,23 @@ import static org.junit.Assert.assertThat;
 
 public class TransactionMatcherTest {
 
+    private final int yearToMatchOn = 2016;
+    private final int monthOfYearToMatchOn = 12;
+    private final double amountToMatchOn = 3.38;
+    private final String descriptionToMatchOn = "this is a description for a matched amount";
+
     @Test
     public void shouldCreateATransactionMatch_whenACreditCardActivityHasTheSameAmountAndTransactionDateAsAnExpenseEntry() {
-        int yearToMatchOn = 2016;
-        int monthOfYearToMatchOn = 12;
 
         int dayOfMonthForPostDate = 30;
         int dayOfMonthForTransactionDateToMatchOn = 31;
         int dayOfMonthForAnotherTransactionDate = 28;
 
-        DateTime postDateToMatchOn = new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForPostDate, 0, 0);
-        DateTime transactionDateToMatchOn = new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForTransactionDateToMatchOn, 0, 0);
-        DateTime transactionDateOfDifferentCreditCardActivity = new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForAnotherTransactionDate, 0, 0);
+        DateTime postDateToMatchOn = getDateTimeForDay(dayOfMonthForPostDate);
+        DateTime transactionDateToMatchOn = getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn);
+        DateTime transactionDateOfDifferentCreditCardActivity = getDateTimeForDay(dayOfMonthForAnotherTransactionDate);
 
-        String descriptionToMatchOn = "this is a description for a matched amount";
-        double amountToMatchOn = 3.38;
         double amountToMatchOnForCreditCardActivityOne = amountToMatchOn * -1;
-        double amountForCreditCardActivityTwo = 5.56;
 
         CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder()
                 .setAmount(amountToMatchOnForCreditCardActivityOne)
@@ -43,9 +43,7 @@ public class TransactionMatcherTest {
                 .setType(ActivityType.SALE)
                 .build();
 
-        CreditCardActivity creditCardActivityTwo = new CreditCardActivityBuilder()
-                .setAmount(amountForCreditCardActivityTwo)
-                .build();
+        CreditCardActivity creditCardActivityTwo = new CreditCardActivityBuilder().build();
 
         CreditCardActivity creditCardActivityThree = new CreditCardActivityBuilder()
                 .setAmount(amountToMatchOnForCreditCardActivityOne)
@@ -75,8 +73,8 @@ public class TransactionMatcherTest {
         CreditCardActivity expectedCreditCardActivityMatch = new CreditCardActivityBuilder()
                 .setAmount(amountToMatchOnForCreditCardActivityOne)
                 .setDescription(descriptionToMatchOn)
-                .setPostDate(new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForPostDate, 0, 0))
-                .setTransactionDate(new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForTransactionDateToMatchOn, 0, 0))
+                .setPostDate(getDateTimeForDay(dayOfMonthForPostDate))
+                .setTransactionDate(getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn))
                 .build();
 
         MatchedTransaction matchedTransaction = matchedTransactions.get(0);
@@ -165,21 +163,16 @@ public class TransactionMatcherTest {
 
     @Test
     public void shouldCreateATransactionMatch_whenExpenseDateEqualsOneDayBeforeTransactionDate() {
-        int yearToMatchOn = 2016;
-        int monthOfYearToMatchOn = 12;
-
         int dayOfMonthForPostDate = 23;
         int dayOfMonthForExpenseDateToMatchOn = 24;
         int dayOfMonthForTransactionDateToMatchOn = 25;
         int dayOfMonthForAnotherTransactionDate = 20;
 
-        DateTime postDate = new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForPostDate, 0, 0);
-        DateTime expenseDateToMatchOn = new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForExpenseDateToMatchOn, 0, 0);
-        DateTime transactionDateToMatchOn = new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForTransactionDateToMatchOn, 0, 0);
-        DateTime transactionDateOfDifferentCreditCardActivity = new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForAnotherTransactionDate, 0, 0);
+        DateTime postDate = getDateTimeForDay(dayOfMonthForPostDate);
+        DateTime expenseDateToMatchOn = getDateTimeForDay(dayOfMonthForExpenseDateToMatchOn);
+        DateTime transactionDateToMatchOn = getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn);
+        DateTime transactionDateOfDifferentCreditCardActivity = getDateTimeForDay(dayOfMonthForAnotherTransactionDate);
 
-        String descriptionToMatchOn = "this is a description for a matched amount";
-        double amountToMatchOn = 3.38;
         double amountToMatchOnForCreditCardActivityOne = amountToMatchOn * -1;
         double amountForCreditCardActivityTwo = 5.56;
 
@@ -221,8 +214,8 @@ public class TransactionMatcherTest {
         CreditCardActivity expectedCreditCardActivityMatch = new CreditCardActivityBuilder()
                 .setAmount(amountToMatchOnForCreditCardActivityOne)
                 .setDescription(descriptionToMatchOn)
-                .setPostDate(new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForPostDate, 0, 0))
-                .setTransactionDate(new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForTransactionDateToMatchOn, 0, 0))
+                .setPostDate(getDateTimeForDay(dayOfMonthForPostDate))
+                .setTransactionDate(getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn))
                 .build();
 
         MatchedTransaction matchedTransaction = matchedTransactions.get(0);
@@ -241,21 +234,16 @@ public class TransactionMatcherTest {
 
     @Test
     public void shouldCreateATransactionMatch_whenExpenseDateEqualsOneDayAfterTransactionDate() {
-        int yearToMatchOn = 2016;
-        int monthOfYearToMatchOn = 12;
-
         int dayOfMonthForPostDate = 23;
         int dayOfMonthForExpenseDateToMatchOn = 26;
         int dayOfMonthForTransactionDateToMatchOn = 25;
         int dayOfMonthForAnotherTransactionDate = 20;
 
-        DateTime postDate = new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForPostDate, 0, 0);
-        DateTime expenseDateToMatchOn = new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForExpenseDateToMatchOn, 0, 0);
-        DateTime transactionDateToMatchOn = new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForTransactionDateToMatchOn, 0, 0);
-        DateTime transactionDateOfDifferentCreditCardActivity = new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForAnotherTransactionDate, 0, 0);
+        DateTime postDate = getDateTimeForDay(dayOfMonthForPostDate);
+        DateTime expenseDateToMatchOn = getDateTimeForDay(dayOfMonthForExpenseDateToMatchOn);
+        DateTime transactionDateToMatchOn = getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn);
+        DateTime transactionDateOfDifferentCreditCardActivity = getDateTimeForDay(dayOfMonthForAnotherTransactionDate);
 
-        String descriptionToMatchOn = "this is a description for a matched amount";
-        double amountToMatchOn = 3.38;
         double amountToMatchOnForCreditCardActivityOne = amountToMatchOn * -1;
         double amountForCreditCardActivityTwo = 5.56;
 
@@ -297,8 +285,8 @@ public class TransactionMatcherTest {
         CreditCardActivity expectedCreditCardActivityMatch = new CreditCardActivityBuilder()
                 .setAmount(amountToMatchOnForCreditCardActivityOne)
                 .setDescription(descriptionToMatchOn)
-                .setPostDate(new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForPostDate, 0, 0))
-                .setTransactionDate(new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForTransactionDateToMatchOn, 0, 0))
+                .setPostDate(getDateTimeForDay(dayOfMonthForPostDate))
+                .setTransactionDate(getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn))
                 .build();
 
         MatchedTransaction matchedTransaction = matchedTransactions.get(0);
@@ -313,5 +301,9 @@ public class TransactionMatcherTest {
 
         Expense matchedExpense = matchedTransaction.getMatchedExpense();
         assertThat(matchedExpense.equals(expectedExpenseMatch), is(true));
+    }
+
+    private DateTime getDateTimeForDay(int dayOfMonthForPostDate) {
+        return new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForPostDate, 0, 0);
     }
 }
