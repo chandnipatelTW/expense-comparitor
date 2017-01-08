@@ -70,4 +70,23 @@ public class DataLoaderTest {
 
         assertThat(actualExpenseList.size(), is(4));
     }
+
+    @Test
+    public void shouldOnlyLoadUniqueChargesFromSeparateFiles() {
+        CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder().build();
+        CreditCardActivity creditCardActivityTwo = new CreditCardActivityBuilder().build();
+        List<CreditCardActivity> creditCardActivitiesFromMockFileOne = Arrays.asList(creditCardActivityOne, creditCardActivityTwo);
+
+        CreditCardActivity creditCardActivityThree = new CreditCardActivityBuilder().build();
+        List<CreditCardActivity> creditCardActivitiesFromMockFileTwo = Arrays.asList(creditCardActivityThree, creditCardActivityTwo);
+
+        ChargeParser mockParser = mock(ChargeParser.class);
+        when(mockParser.parseFile(mockFileOne)).thenReturn(creditCardActivitiesFromMockFileOne);
+        when(mockParser.parseFile(mockFileTwo)).thenReturn(creditCardActivitiesFromMockFileTwo);
+
+        DataLoader dataLoader = new DataLoader(mockCsvFileLoader);
+        List<CreditCardActivity> actualExpenseList = dataLoader.loadCharges(testDirectoryName, mockParser);
+
+        assertThat(actualExpenseList.size(), is(3));
+    }
 }

@@ -32,7 +32,12 @@ public class DataLoader {
 
         List<CreditCardActivity> things = new ArrayList<>();
         for (File csvFile : csvFilesNames) {
-            things.addAll(parser.parseFile(csvFile));
+            List<CreditCardActivity> creditCardActivities = parser.parseFile(csvFile);
+            for (CreditCardActivity creditCardActivity : creditCardActivities) {
+                if (!things.contains(creditCardActivity)) {
+                    things.add(creditCardActivity);
+                }
+            }
         }
         return things;
     }
