@@ -41,9 +41,11 @@ public class TransactionMatcher {
 
         DateTime creditCardActivityTransactionDate = creditCardActivity.getTransactionDate();
         DateTime dateBeforeCreditCardActivityTransactionDate = creditCardActivityTransactionDate.minusDays(1);
+        DateTime dateAfterCreditCardActivityTransactionDate = creditCardActivityTransactionDate.plusDays(1);
 
         boolean isWithinDateTolerance = (expenseDate.equals(creditCardActivityTransactionDate) ||
-                                         expenseDate.equals(dateBeforeCreditCardActivityTransactionDate));
+                                         expenseDate.equals(dateBeforeCreditCardActivityTransactionDate) ||
+                                         expenseDate.equals(dateAfterCreditCardActivityTransactionDate));
 
         return expenseAmount == positiveCreditCardActivityAmount && isWithinDateTolerance;
     }
