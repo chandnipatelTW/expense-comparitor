@@ -23,22 +23,25 @@ public class TransactionMatcher {
 
         for (Expense expense : expenses) {
             for (CreditCardActivity creditCardActivity : creditCardActivities) {
-
-                BigDecimal creditCardActivityAmount = creditCardActivity.getAmount();
-                double positiveCreditCardActivityAmount = Math.abs(creditCardActivityAmount.doubleValue());
-                double expenseAmount = expense.getAmount().doubleValue();
-
-                DateTime expenseDate = expense.getTimestamp();
-                DateTime creditCardActivityTransactionDate = creditCardActivity.getTransactionDate();
-
-                if (expenseAmount == positiveCreditCardActivityAmount &&
-                        expenseDate.equals(creditCardActivityTransactionDate) ) {
+                if(isMatched(expense, creditCardActivity)) {
                     matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
                 }
             }
         }
 
         return matchedTransactions;
+    }
+
+    private boolean isMatched(Expense expense, CreditCardActivity creditCardActivity) {
+        BigDecimal creditCardActivityAmount = creditCardActivity.getAmount();
+        double positiveCreditCardActivityAmount = Math.abs(creditCardActivityAmount.doubleValue());
+        double expenseAmount = expense.getAmount().doubleValue();
+
+        DateTime expenseDate = expense.getTimestamp();
+        DateTime creditCardActivityTransactionDate = creditCardActivity.getTransactionDate();
+
+        return expenseAmount == positiveCreditCardActivityAmount &&
+                expenseDate.equals(creditCardActivityTransactionDate);
     }
 
     public List<CreditCardActivity> getUnmatchedCreditCardActivies() {
