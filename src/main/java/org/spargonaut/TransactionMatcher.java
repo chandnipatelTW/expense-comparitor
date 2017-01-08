@@ -24,7 +24,6 @@ public class TransactionMatcher {
     public void process() {
         createMatchedTransactions();
         createUnmatchedCreditCardActivies();
-        createUnmatchedExpenses();
     }
 
     public List<MatchedTransaction> getMatchedTransactions() {
@@ -39,18 +38,23 @@ public class TransactionMatcher {
         return this.unmatchedExpenses;
     }
 
-    private List<MatchedTransaction> createMatchedTransactions() {
-        matchedTransactions = new ArrayList<>();
+    private void createMatchedTransactions() {
+        this.matchedTransactions = new ArrayList<>();
+        this.unmatchedExpenses = new ArrayList<>();
 
         for (Expense expense : this.expenses) {
+            boolean expenseIsMatched = false;
             for (CreditCardActivity creditCardActivity : creditCardActivities) {
                 if(isMatched(expense, creditCardActivity)) {
+                    expenseIsMatched = true;
                     matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
                 }
             }
-        }
 
-        return matchedTransactions;
+            if (!expenseIsMatched) {
+                unmatchedExpenses.add(expense);
+            }
+        }
     }
 
     private boolean isMatched(Expense expense, CreditCardActivity creditCardActivity) {
@@ -71,7 +75,7 @@ public class TransactionMatcher {
         return expenseAmount == positiveCreditCardActivityAmount && isWithinDateTolerance;
     }
 
-    private List<CreditCardActivity> createUnmatchedCreditCardActivies() {
+    private void createUnmatchedCreditCardActivies() {
         this.unmatchedCreditCardActivies = new ArrayList<>();
 
         for (CreditCardActivity creditCardActivity : creditCardActivities) {
@@ -87,26 +91,5 @@ public class TransactionMatcher {
                 unmatchedCreditCardActivies.add(creditCardActivity);
             }
         }
-
-        return unmatchedCreditCardActivies;
-    }
-
-    private List<Expense> createUnmatchedExpenses() {
-        this.unmatchedExpenses = new ArrayList<>();
-
-        for (Expense expense : expenses) {
-            boolean isMatched = false;
-            for (MatchedTransaction matchedTransaction : matchedTransactions) {
-                Expense matchedExpense = matchedTransaction.getMatchedExpense();
-                if (expense.equals(matchedExpense)) {
-                    isMatched = true;
-                }
-            }
-
-            if (!isMatched) {
-                unmatchedExpenses.add(expense);
-            }
-        }
-        return unmatchedExpenses;
     }
 }
