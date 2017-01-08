@@ -1,5 +1,6 @@
 package org.spargonaut;
 
+import org.joda.time.DateTime;
 import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
 import org.spargonaut.datamodels.MatchedTransaction;
@@ -22,10 +23,16 @@ public class TransactionMatcher {
 
         for (Expense expense : expenses) {
             for (CreditCardActivity creditCardActivity : creditCardActivities) {
+
                 BigDecimal creditCardActivityAmount = creditCardActivity.getAmount();
                 double positiveCreditCardActivityAmount = Math.abs(creditCardActivityAmount.doubleValue());
                 double expenseAmount = expense.getAmount().doubleValue();
-                if (expenseAmount == positiveCreditCardActivityAmount) {
+
+                DateTime expenseDate = expense.getTimestamp();
+                DateTime creditCardActivityTransactionDate = creditCardActivity.getTransactionDate();
+
+                if (expenseAmount == positiveCreditCardActivityAmount &&
+                        expenseDate.equals(creditCardActivityTransactionDate) ) {
                     matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
                 }
             }
