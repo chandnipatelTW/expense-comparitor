@@ -23,7 +23,6 @@ public class TransactionMatcher {
 
     public void process() {
         createMatchedTransactions();
-        createUnmatchedCreditCardActivies();
     }
 
     public List<MatchedTransaction> getMatchedTransactions() {
@@ -41,6 +40,7 @@ public class TransactionMatcher {
     private void createMatchedTransactions() {
         this.matchedTransactions = new ArrayList<>();
         this.unmatchedExpenses = new ArrayList<>();
+        this.unmatchedCreditCardActivies = new ArrayList<>(this.creditCardActivities);
 
         for (Expense expense : this.expenses) {
             boolean expenseIsMatched = false;
@@ -48,6 +48,11 @@ public class TransactionMatcher {
                 if(isMatched(expense, creditCardActivity)) {
                     expenseIsMatched = true;
                     matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
+
+                    if (this.unmatchedCreditCardActivies.contains(creditCardActivity)) {
+                        int indexOfCreditCardActivity = this.unmatchedCreditCardActivies.indexOf(creditCardActivity);
+                        this.unmatchedCreditCardActivies.remove(indexOfCreditCardActivity);
+                    }
                 }
             }
 
@@ -73,23 +78,5 @@ public class TransactionMatcher {
                                          expenseDate.equals(dateAfterCreditCardActivityTransactionDate));
 
         return expenseAmount == positiveCreditCardActivityAmount && isWithinDateTolerance;
-    }
-
-    private void createUnmatchedCreditCardActivies() {
-        this.unmatchedCreditCardActivies = new ArrayList<>();
-
-        for (CreditCardActivity creditCardActivity : creditCardActivities) {
-            boolean isMatched = false;
-            for (MatchedTransaction matchedTransaction : matchedTransactions) {
-                CreditCardActivity matchedCreditCardActivity = matchedTransaction.getMatchedCreditCardActivity();
-                if (creditCardActivity.equals(matchedCreditCardActivity)) {
-                    isMatched = true;
-                }
-            }
-
-            if (!isMatched) {
-                unmatchedCreditCardActivies.add(creditCardActivity);
-            }
-        }
     }
 }
