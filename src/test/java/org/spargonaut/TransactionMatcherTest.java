@@ -43,7 +43,10 @@ public class TransactionMatcherTest {
                 .setAmount(amountForCreditCardActivityTwo)
                 .build();
 
+        String merchant = "some merchant";
         Expense expenseOne = new ExpenseBuilder()
+                .setMerchant(merchant)
+                .setTimestamp(transactionDateToMatchOn)
                 .setAmount(amountToMatchOn)
                 .build();
 
@@ -67,6 +70,8 @@ public class TransactionMatcherTest {
         assertThat(matchedCreditCardActivity.equals(expectedCreditCardActivityMatch), is(true));
 
         Expense expectedExpenseMatch = new ExpenseBuilder()
+                .setMerchant(merchant)
+                .setTimestamp(transactionDateToMatchOn)
                 .setAmount(amountToMatchOn)
                 .build();
 
