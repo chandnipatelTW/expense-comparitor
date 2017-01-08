@@ -10,18 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionMatcher {
+    private final List<Expense> expenses;
     private List<CreditCardActivity> creditCardActivities;
     private List<CreditCardActivity> unmatchedCreditCardActivies;
     private List<MatchedTransaction> matchedTransactions;
 
-    public TransactionMatcher(List<CreditCardActivity> creditCardActivities) {
+    public TransactionMatcher(List<CreditCardActivity> creditCardActivities, List<Expense> expenses) {
         this.creditCardActivities = creditCardActivities;
+        this.expenses = expenses;
     }
 
-    public List<MatchedTransaction> createMatchedTransactionsWithExpenses(List<Expense> expenses) {
+    public List<MatchedTransaction> createMatchedTransactionsWithExpenses() {
         matchedTransactions = new ArrayList<>();
 
-        for (Expense expense : expenses) {
+        for (Expense expense : this.expenses) {
             for (CreditCardActivity creditCardActivity : creditCardActivities) {
                 if(isMatched(expense, creditCardActivity)) {
                     matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
