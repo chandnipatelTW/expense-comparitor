@@ -57,7 +57,6 @@ public class TransactionMatcherTest {
                 .setAmount(amountToMatchOnForCreditCardActivityOne)
                 .setTransactionDate(getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn))
                 .setDescription(creditCardActivityToMatch.getDescription())
-                .setPostDate(creditCardActivityToMatch.getPostDate())
                 .build();
 
         MatchedTransaction matchedTransaction = matchedTransactions.get(0);
@@ -152,7 +151,6 @@ public class TransactionMatcherTest {
         CreditCardActivity expectedCreditCardActivityMatch = new CreditCardActivityBuilder()
                 .setAmount(amountToMatchOnForCreditCardActivityOne)
                 .setDescription(descriptionToMatchOn)
-                .setPostDate(creditCardActivityOne.getPostDate())
                 .setTransactionDate(creditCardActivityOne.getTransactionDate())
                 .build();
 
@@ -202,7 +200,6 @@ public class TransactionMatcherTest {
         CreditCardActivity expectedCreditCardActivityMatch = new CreditCardActivityBuilder()
                 .setAmount(amountToMatchOnForCreditCardActivityOne)
                 .setDescription(descriptionToMatchOn)
-                .setPostDate(creditCardActivityOne.getPostDate())
                 .setTransactionDate(creditCardActivityOne.getTransactionDate())
                 .build();
 

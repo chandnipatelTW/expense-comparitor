@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.spargonaut.datamodels.testbuilders.CreditCardActivityBuilder;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class CreditCardActivityTest {
 
@@ -17,13 +17,11 @@ public class CreditCardActivityTest {
         int transactionDay = 29;
         int hourOfDay = 0;
         int minuteOfHour = 0;
-        int postDayOfMonth = 30;
         String description = "some sort of description";
         double amount = 2.25;
         CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder()
                 .setType(activityType)
                 .setTransactionDate(new DateTime(transactionYear, transactionMonth, transactionDay, hourOfDay, minuteOfHour))
-                .setPostDate(new DateTime(transactionYear, transactionMonth, postDayOfMonth, hourOfDay, minuteOfHour))
                 .setDescription(description)
                 .setAmount(amount)
                 .build();
@@ -32,7 +30,6 @@ public class CreditCardActivityTest {
         CreditCardActivity creditCardActivityTwo = new CreditCardActivityBuilder()
                 .setType(activityType)
                 .setTransactionDate(new DateTime(transactionYear, transactionMonth, transactionDay, hourOfDay, minuteOfHour))
-                .setPostDate(new DateTime(transactionYear, transactionMonth, postDayOfMonth, hourOfDay, minuteOfHour))
                 .setDescription(description)
                 .setAmount(amount)
                 .build();
