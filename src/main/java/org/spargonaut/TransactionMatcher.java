@@ -38,10 +38,14 @@ public class TransactionMatcher {
         double expenseAmount = expense.getAmount().doubleValue();
 
         DateTime expenseDate = expense.getTimestamp();
-        DateTime creditCardActivityTransactionDate = creditCardActivity.getTransactionDate();
 
-        return expenseAmount == positiveCreditCardActivityAmount &&
-                expenseDate.equals(creditCardActivityTransactionDate);
+        DateTime creditCardActivityTransactionDate = creditCardActivity.getTransactionDate();
+        DateTime dateBeforeCreditCardActivityTransactionDate = creditCardActivityTransactionDate.minusDays(1);
+
+        boolean isWithinDateTolerance = (expenseDate.equals(creditCardActivityTransactionDate) ||
+                                         expenseDate.equals(dateBeforeCreditCardActivityTransactionDate));
+
+        return expenseAmount == positiveCreditCardActivityAmount && isWithinDateTolerance;
     }
 
     public List<CreditCardActivity> getUnmatchedCreditCardActivies() {
