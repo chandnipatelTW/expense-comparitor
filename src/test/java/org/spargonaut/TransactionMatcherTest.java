@@ -105,12 +105,12 @@ public class TransactionMatcherTest {
 
     @Test
     public void shouldCreateAListOfExpensesThatAreUnmatched() {
-        CreditCardActivity creditCardActivity = new CreditCardActivityBuilder().build();
         Expense expense = new ExpenseBuilder().build();
 
         List<Expense> expenses = Arrays.asList(expense);
-        TransactionMatcher transactionMatcher = new TransactionMatcher(Arrays.asList(creditCardActivity));
+        List<CreditCardActivity> creditCardActivities = Arrays.asList(new CreditCardActivityBuilder().build());
 
+        TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivities);
         transactionMatcher.createMatchedTransactionsWithExpenses(expenses);
 
         List<Expense> unmatchedExpenses =  transactionMatcher.getUnmatchedExpenses(expenses);
