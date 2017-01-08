@@ -76,19 +76,11 @@ public class TransactionMatcherTest {
 
     @Test
     public void shouldRejectATransactionMatch_whenACreditCardActivityHasADifferentAmountAsAnExpenseEntry() {
-        double amountForCreditCardActivity = 5.56;
-        CreditCardActivity creditCardActivity = new CreditCardActivityBuilder()
-                .setAmount(amountForCreditCardActivity)
-                .build();
 
-        double amountForExpense = 4.45;
-        Expense expense = new ExpenseBuilder()
-                .setAmount(amountForExpense)
-                .build();
+        List<Expense> expenses = Arrays.asList(new ExpenseBuilder().build());
+        List<CreditCardActivity> creditCardActivities = Arrays.asList(new CreditCardActivityBuilder().build());
 
-        List<Expense> expenses = Arrays.asList(expense);
-
-        TransactionMatcher transactionMatcher = new TransactionMatcher(Arrays.asList(creditCardActivity));
+        TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivities);
         List<MatchedTransaction> matchedTransactions = transactionMatcher.createMatchedTransactionsWithExpenses(expenses);
 
         assertThat(matchedTransactions.size(), is(0));
@@ -96,23 +88,15 @@ public class TransactionMatcherTest {
 
     @Test
     public void shouldCreateAListOfCreditCardActivitiesThatHaveNotBeenMatched() {
-        double amountForCreditCardActivity = 5.56;
-        CreditCardActivity creditCardActivity = new CreditCardActivityBuilder()
-                .setAmount(amountForCreditCardActivity)
-                .build();
+        CreditCardActivity creditCardActivity = new CreditCardActivityBuilder().build();
 
-        double amountForExpense = 4.45;
-        Expense expense = new ExpenseBuilder()
-                .setAmount(amountForExpense)
-                .build();
+        List<Expense> expenses = Arrays.asList(new ExpenseBuilder().build());
+        List<CreditCardActivity> creditCardActivities = Arrays.asList(creditCardActivity);
 
-        List<Expense> expenses = Arrays.asList(expense);
-
-        TransactionMatcher transactionMatcher = new TransactionMatcher(Arrays.asList(creditCardActivity));
+        TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivities);
         transactionMatcher.createMatchedTransactionsWithExpenses(expenses);
 
         List<CreditCardActivity> unmatchedCreditCardActivities =  transactionMatcher.getUnmatchedCreditCardActivies();
-
         assertThat(unmatchedCreditCardActivities.size(), is(1));
 
         CreditCardActivity unmatchedCreditCardActivity = unmatchedCreditCardActivities.get(0);
@@ -130,7 +114,6 @@ public class TransactionMatcherTest {
         transactionMatcher.createMatchedTransactionsWithExpenses(expenses);
 
         List<Expense> unmatchedExpenses =  transactionMatcher.getUnmatchedExpenses(expenses);
-
         assertThat(unmatchedExpenses.size(), is(1));
 
         Expense unmatchedExpense = unmatchedExpenses.get(0);
@@ -189,7 +172,6 @@ public class TransactionMatcherTest {
 
     @Test
     public void shouldCreateATransactionMatch_whenExpenseDateEqualsOneDayAfterTransactionDate() {
-        int dayOfMonthForPostDate = 23;
         int dayOfMonthForExpenseDateToMatchOn = 26;
         int dayOfMonthForTransactionDateToMatchOn = 25;
 
