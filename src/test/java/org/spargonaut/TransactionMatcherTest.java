@@ -121,19 +121,12 @@ public class TransactionMatcherTest {
 
     @Test
     public void shouldCreateAListOfExpensesThatAreUnmatched() {
-        double amountForCreditCardActivity = 5.56;
-        CreditCardActivity creditCardActivity = new CreditCardActivityBuilder()
-                .setAmount(amountForCreditCardActivity)
-                .build();
-
-        double amountForExpense = 4.45;
-        Expense expense = new ExpenseBuilder()
-                .setAmount(amountForExpense)
-                .build();
+        CreditCardActivity creditCardActivity = new CreditCardActivityBuilder().build();
+        Expense expense = new ExpenseBuilder().build();
 
         List<Expense> expenses = Arrays.asList(expense);
-
         TransactionMatcher transactionMatcher = new TransactionMatcher(Arrays.asList(creditCardActivity));
+
         transactionMatcher.createMatchedTransactionsWithExpenses(expenses);
 
         List<Expense> unmatchedExpenses =  transactionMatcher.getUnmatchedExpenses(expenses);
@@ -146,35 +139,16 @@ public class TransactionMatcherTest {
 
     @Test
     public void shouldCreateATransactionMatch_whenExpenseDateEqualsOneDayBeforeTransactionDate() {
-        int dayOfMonthForPostDate = 23;
         int dayOfMonthForExpenseDateToMatchOn = 24;
         int dayOfMonthForTransactionDateToMatchOn = 25;
-        int dayOfMonthForAnotherTransactionDate = 20;
 
-        DateTime postDate = getDateTimeForDay(dayOfMonthForPostDate);
         DateTime expenseDateToMatchOn = getDateTimeForDay(dayOfMonthForExpenseDateToMatchOn);
         DateTime transactionDateToMatchOn = getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn);
-        DateTime transactionDateOfDifferentCreditCardActivity = getDateTimeForDay(dayOfMonthForAnotherTransactionDate);
-
-        double amountForCreditCardActivityTwo = 5.56;
 
         CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder()
                 .setAmount(amountToMatchOnForCreditCardActivityOne)
                 .setDescription(descriptionToMatchOn)
-                .setPostDate(postDate)
                 .setTransactionDate(transactionDateToMatchOn)
-                .setType(ActivityType.SALE)
-                .build();
-
-        CreditCardActivity creditCardActivityTwo = new CreditCardActivityBuilder()
-                .setAmount(amountForCreditCardActivityTwo)
-                .build();
-
-        CreditCardActivity creditCardActivityThree = new CreditCardActivityBuilder()
-                .setAmount(amountToMatchOnForCreditCardActivityOne)
-                .setDescription(descriptionToMatchOn)
-                .setPostDate(postDate)
-                .setTransactionDate(transactionDateOfDifferentCreditCardActivity)
                 .setType(ActivityType.SALE)
                 .build();
 
@@ -184,7 +158,7 @@ public class TransactionMatcherTest {
                 .setAmount(amountToMatchOn)
                 .build();
 
-        List<CreditCardActivity> creditCardActivitiesForTesting = Arrays.asList(creditCardActivityTwo, creditCardActivityOne, creditCardActivityThree);
+        List<CreditCardActivity> creditCardActivitiesForTesting = Arrays.asList(new CreditCardActivityBuilder().build(), creditCardActivityOne, new CreditCardActivityBuilder().build());
         TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivitiesForTesting);
 
         List<Expense> expenses = Arrays.asList(expenseOne);
@@ -195,8 +169,8 @@ public class TransactionMatcherTest {
         CreditCardActivity expectedCreditCardActivityMatch = new CreditCardActivityBuilder()
                 .setAmount(amountToMatchOnForCreditCardActivityOne)
                 .setDescription(descriptionToMatchOn)
-                .setPostDate(getDateTimeForDay(dayOfMonthForPostDate))
-                .setTransactionDate(getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn))
+                .setPostDate(creditCardActivityOne.getPostDate())
+                .setTransactionDate(creditCardActivityOne.getTransactionDate())
                 .build();
 
         MatchedTransaction matchedTransaction = matchedTransactions.get(0);
