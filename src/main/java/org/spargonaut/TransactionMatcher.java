@@ -20,7 +20,15 @@ public class TransactionMatcher {
         this.expenses = expenses;
     }
 
-    public List<MatchedTransaction> createMatchedTransactionsWithExpenses() {
+    public void process() {
+        createMatchedTransactions();
+    }
+
+    public List<MatchedTransaction> getMatchedTransactions() {
+        return this.matchedTransactions;
+    }
+
+    private List<MatchedTransaction> createMatchedTransactions() {
         matchedTransactions = new ArrayList<>();
 
         for (Expense expense : this.expenses) {
