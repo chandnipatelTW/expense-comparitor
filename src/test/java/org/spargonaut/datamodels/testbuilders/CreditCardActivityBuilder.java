@@ -10,11 +10,11 @@ import java.util.Random;
 
 public class CreditCardActivityBuilder {
 
-    Random randomizer = new Random();
+    private Random randomizer = new Random();
 
     private ActivityType type = ActivityType.SALE;
-    private DateTime transactionDate = new DateTime(2016, 12, 15, 0, 0);
-    private DateTime postDate = new DateTime(2017, 1, 1, 0, 0);
+    private DateTime transactionDate = DateTime.now();
+    private DateTime postDate = DateTime.now().minusDays(randomizer.nextInt());
     private String description = RandomStringUtils.random(20);
     private BigDecimal amount = new BigDecimal(randomizer.nextDouble());
 
@@ -36,7 +36,6 @@ public class CreditCardActivityBuilder {
         this.postDate = postDate;
         return this;
     }
-
 
     public CreditCardActivityBuilder setDescription(String description) {
         this.description = description;
