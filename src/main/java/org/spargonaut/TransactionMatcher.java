@@ -21,10 +21,6 @@ public class TransactionMatcher {
         this.expenses = expenses;
     }
 
-    public void process() {
-        createMatchedTransactions();
-    }
-
     public List<MatchedTransaction> getMatchedTransactions() {
         return this.matchedTransactions;
     }
@@ -37,7 +33,7 @@ public class TransactionMatcher {
         return this.unmatchedExpenses;
     }
 
-    private void createMatchedTransactions() {
+    public void processTransactions() {
         this.matchedTransactions = new ArrayList<>();
         this.unmatchedExpenses = new ArrayList<>(this.expenses);
         this.unmatchedCreditCardActivies = new ArrayList<>(this.creditCardActivities);
