@@ -15,9 +15,10 @@ public class MatchedTransactionPrinter {
     }
 
     private static void printMatchedTransaction (CreditCardActivity creditCardActivity, Expense expense) {
-        System.out.format("               %-50s %-15s %10s\nmatched with:  %-50s %-15s %10s\n\n",
+        System.out.format("               %-50s %-15s %-15s %10s\nmatched with:  %-50s %-31s %10s\n\n",
                 creditCardActivity.getDescription(),
                 creditCardActivity.getTransactionDate().toLocalDate(),
+                creditCardActivity.getPostDate().toLocalDate(),
                 creditCardActivity.getAmount(),
                 expense.getMerchant(),
                 expense.getTimestamp().toLocalDate(),
