@@ -46,6 +46,14 @@ public class TransactionMatcher {
                 unmatchedExpenses.remove(matchedExpense);
             }
         }
+
+        for (MatchedTransaction matchedTransaction : this.closelyMatchedTransactions) {
+            Expense matchedExpense = matchedTransaction.getMatchedExpense();
+            if (unmatchedExpenses.contains(matchedExpense)) {
+                unmatchedExpenses.remove(matchedExpense);
+            }
+        }
+
         return unmatchedExpenses;
     }
 

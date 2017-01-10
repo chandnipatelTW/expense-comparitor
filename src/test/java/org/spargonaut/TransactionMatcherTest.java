@@ -139,6 +139,41 @@ public class TransactionMatcherTest {
     }
 
     @Test
+    public void shouldCreateAListOfExpensesThatRemainAfterProcessingCloseMatches() {
+        int dayOfMonthForTransactionDateToMatchOn = 31;
+        int dayOfMonthForExpenseDateToMatchOn = 30;
+        DateTime transactionDateToMatchCloselyOn = getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn);
+        DateTime expenseDateToMatchCloselyOn = getDateTimeForDay(dayOfMonthForExpenseDateToMatchOn);
+
+        CreditCardActivity creditCardActivityToMatch = new CreditCardActivityBuilder()
+                .setAmount(amountToMatchOnForCreditCardActivityOne)
+                .setDescription(descriptionToMatchOn)
+                .setTransactionDate(transactionDateToMatchCloselyOn)
+                .setType(ActivityType.SALE)
+                .build();
+
+        List<CreditCardActivity> creditCardActivities = Arrays.asList(creditCardActivityToMatch, new CreditCardActivityBuilder().build());
+
+        Expense expenseToMatch = new ExpenseBuilder()
+                .setMerchant(merchantToMatch)
+                .setTimestamp(expenseDateToMatchCloselyOn)
+                .setAmount(amountToMatchOn)
+                .build();
+
+        Expense unmatched = new ExpenseBuilder().build();
+        List<Expense> expenses = Arrays.asList(unmatched, expenseToMatch);
+
+        TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivities, expenses);
+        transactionMatcher.processTransactions();
+
+        List<Expense> unmatchedExpenses =  transactionMatcher.getUnmatchedExpenses();
+        assertThat(unmatchedExpenses.size(), is(1));
+
+        Expense expectedUnmatchedExpense = unmatchedExpenses.get(0);
+        assertThat(expectedUnmatchedExpense, is(unmatched));
+    }
+
+    @Test
     public void shouldCreateAListOfExpensesThatAreMatchedExactly() {
         int dayOfMonthForExpenseDateToMatchOn = 25;
         int dayOfMonthForTransactionDateToMatchOn = 25;
