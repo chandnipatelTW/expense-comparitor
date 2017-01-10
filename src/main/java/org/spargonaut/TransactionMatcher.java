@@ -15,6 +15,8 @@ public class TransactionMatcher {
     private List<CreditCardActivity> unmatchedCreditCardActivies;
     private List<Expense> unmatchedExpenses;
     private List<MatchedTransaction> matchedTransactions;
+    private List<MatchedTransaction> exactMatchedTransactions;
+    private List<MatchedTransaction> closelyMatchedTransactions;
 
     public TransactionMatcher(List<CreditCardActivity> creditCardActivities, List<Expense> expenses) {
         this.creditCardActivities = creditCardActivities;
@@ -38,26 +40,62 @@ public class TransactionMatcher {
         this.unmatchedExpenses = new ArrayList<>(this.expenses);
         this.unmatchedCreditCardActivies = new ArrayList<>(this.creditCardActivities);
 
+        this.exactMatchedTransactions = createExactMatchedTransactions();
+        this.closelyMatchedTransactions = createCloselyMatchedTransactions();
+    }
+
+    private List<MatchedTransaction> createCloselyMatchedTransactions() {
+        List<CreditCardActivity> remainingCreditCardActivities = new ArrayList<>();
+        for (CreditCardActivity creditCardActivity : creditCardActivities) {
+            if (!exactMatchedTransactions.contains(creditCardActivity)) {
+                remainingCreditCardActivities.add(creditCardActivity);
+            }
+        }
+
+        List<MatchedTransaction> closelyMatchedTransactions = new ArrayList<>();
         for (Expense expense : this.expenses) {
-            for (CreditCardActivity creditCardActivity : creditCardActivities) {
-                if(isMatched(expense, creditCardActivity)) {
-                    matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
-
-                    if (this.unmatchedCreditCardActivies.contains(creditCardActivity)) {
-                        int indexOfCreditCardActivity = this.unmatchedCreditCardActivies.indexOf(creditCardActivity);
-                        this.unmatchedCreditCardActivies.remove(indexOfCreditCardActivity);
-                    }
-
-                    if (this.unmatchedExpenses.contains(expense)) {
-                        int indexOfExpense = this.unmatchedExpenses.indexOf(expense);
-                        this.unmatchedExpenses.remove(indexOfExpense);
-                    }
+            for (CreditCardActivity creditCardActivity : remainingCreditCardActivities) {
+                if(isMatchedClosely(expense, creditCardActivity)) {
+                    MatchedTransaction matchedTransaction = new MatchedTransaction(creditCardActivity, expense);
+                    closelyMatchedTransactions.add(matchedTransaction);
                 }
             }
         }
+        return closelyMatchedTransactions;
     }
 
-    private boolean isMatched(Expense expense, CreditCardActivity creditCardActivity) {
+    private boolean isMatchedClosely(Expense expense, CreditCardActivity creditCardActivity) {
+        BigDecimal creditCardActivityAmount = creditCardActivity.getAmount();
+        double positiveCreditCardActivityAmount = Math.abs(creditCardActivityAmount.doubleValue());
+        double expenseAmount = expense.getAmount().doubleValue();
+
+        DateTime expenseDate = expense.getTimestamp();
+
+        DateTime transactionDate = creditCardActivity.getTransactionDate();
+
+        DateTime dayBeforeTransactionDate = transactionDate.minusDays(1);
+        DateTime dayAfterTransactionDate = transactionDate.plusDays(1);
+
+        boolean dateIsWithinTolerance = expenseDate.equals(dayBeforeTransactionDate) || expenseDate.equals(dayAfterTransactionDate);
+
+        return expenseAmount == positiveCreditCardActivityAmount && dateIsWithinTolerance;
+    }
+
+    private List<MatchedTransaction> createExactMatchedTransactions() {
+        List<MatchedTransaction> exactMatchedTransactions = new ArrayList<>();
+        for (Expense expense : this.expenses) {
+            for (CreditCardActivity creditCardActivity : creditCardActivities) {
+                if(isMatchedExactly(expense, creditCardActivity)) {
+                    MatchedTransaction matchedTransaction = new MatchedTransaction(creditCardActivity, expense);
+                    exactMatchedTransactions.add(matchedTransaction);
+                    matchedTransactions.add(matchedTransaction);
+                }
+            }
+        }
+        return exactMatchedTransactions;
+    }
+
+    private boolean isMatchedExactly(Expense expense, CreditCardActivity creditCardActivity) {
         BigDecimal creditCardActivityAmount = creditCardActivity.getAmount();
         double positiveCreditCardActivityAmount = Math.abs(creditCardActivityAmount.doubleValue());
         double expenseAmount = expense.getAmount().doubleValue();
@@ -65,13 +103,14 @@ public class TransactionMatcher {
         DateTime expenseDate = expense.getTimestamp();
 
         DateTime creditCardActivityTransactionDate = creditCardActivity.getTransactionDate();
-        DateTime dateBeforeCreditCardActivityTransactionDate = creditCardActivityTransactionDate.minusDays(1);
-        DateTime dateAfterCreditCardActivityTransactionDate = creditCardActivityTransactionDate.plusDays(1);
+        return expenseAmount == positiveCreditCardActivityAmount && expenseDate.equals(creditCardActivityTransactionDate);
+    }
 
-        boolean isWithinDateTolerance = (expenseDate.equals(creditCardActivityTransactionDate) ||
-                                         expenseDate.equals(dateBeforeCreditCardActivityTransactionDate) ||
-                                         expenseDate.equals(dateAfterCreditCardActivityTransactionDate));
+    public List<MatchedTransaction> getExactMatchedTransactions() {
+        return exactMatchedTransactions;
+    }
 
-        return expenseAmount == positiveCreditCardActivityAmount && isWithinDateTolerance;
+    public List<MatchedTransaction> getCloselyMatchedTransactions() {
+        return closelyMatchedTransactions;
     }
 }

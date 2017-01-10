@@ -123,7 +123,66 @@ public class TransactionMatcherTest {
     }
 
     @Test
-    public void shouldCreateATransactionMatch_whenExpenseDateEqualsOneDayBeforeTransactionDate() {
+    public void shouldCreateAListOfExpensesThatAreMatchedExactly() {
+        int dayOfMonthForExpenseDateToMatchOn = 25;
+        int dayOfMonthForTransactionDateToMatchOn = 25;
+        int dayOfMonthForTransactionDateToNotMatchOn = 24;
+
+        DateTime expenseDateToMatchOn = getDateTimeForDay(dayOfMonthForExpenseDateToMatchOn);
+        DateTime transactionDateToMatchOn = getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn);
+        DateTime transactionDateAfterMatchDate = getDateTimeForDay(dayOfMonthForTransactionDateToNotMatchOn);
+
+        CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder()
+                .setAmount(amountToMatchOnForCreditCardActivityOne)
+                .setDescription(descriptionToMatchOn)
+                .setTransactionDate(transactionDateToMatchOn)
+                .setType(ActivityType.SALE)
+                .build();
+
+        CreditCardActivity creditCardActivityTwo = new CreditCardActivityBuilder()
+                .setAmount(amountToMatchOnForCreditCardActivityOne)
+                .setDescription(descriptionToMatchOn)
+                .setTransactionDate(transactionDateAfterMatchDate)
+                .setType(ActivityType.SALE)
+                .build();
+
+        Expense expenseOne = new ExpenseBuilder()
+                .setMerchant(merchantToMatch)
+                .setTimestamp(expenseDateToMatchOn)
+                .setAmount(amountToMatchOn)
+                .build();
+
+        List<CreditCardActivity> creditCardActivitiesForTesting = Arrays.asList(creditCardActivityOne, creditCardActivityTwo, new CreditCardActivityBuilder().build());
+        List<Expense> expenses = Arrays.asList(expenseOne);
+
+        TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivitiesForTesting, expenses);
+        transactionMatcher.processTransactions();
+
+        List<MatchedTransaction> matchedTransactions = transactionMatcher.getExactMatchedTransactions();
+        assertThat(matchedTransactions.size(), is(1));
+
+        CreditCardActivity expectedCreditCardActivityMatch = new CreditCardActivityBuilder()
+                .setAmount(amountToMatchOnForCreditCardActivityOne)
+                .setDescription(descriptionToMatchOn)
+                .setTransactionDate(creditCardActivityOne.getTransactionDate())
+                .build();
+
+        MatchedTransaction matchedTransaction = matchedTransactions.get(0);
+        CreditCardActivity matchedCreditCardActivity = matchedTransaction.getMatchedCreditCardActivity();
+        assertThat(matchedCreditCardActivity.equals(expectedCreditCardActivityMatch), is(true));
+
+        Expense expectedExpenseMatch = new ExpenseBuilder()
+                .setMerchant(merchantToMatch)
+                .setTimestamp(expenseDateToMatchOn)
+                .setAmount(amountToMatchOn)
+                .build();
+
+        Expense matchedExpense = matchedTransaction.getMatchedExpense();
+        assertThat(matchedExpense.equals(expectedExpenseMatch), is(true));
+    }
+
+    @Test
+    public void shouldCreateAListOfCloseTransactionMatches_whenExpenseDateEqualsOneDayBeforeTransactionDate() {
         int dayOfMonthForExpenseDateToMatchOn = 24;
         int dayOfMonthForTransactionDateToMatchOn = 25;
 
@@ -149,7 +208,7 @@ public class TransactionMatcherTest {
         TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivitiesForTesting, expenses);
         transactionMatcher.processTransactions();
 
-        List<MatchedTransaction> matchedTransactions = transactionMatcher.getMatchedTransactions();
+        List<MatchedTransaction> matchedTransactions = transactionMatcher.getCloselyMatchedTransactions();
         assertThat(matchedTransactions.size(), is(1));
 
         CreditCardActivity expectedCreditCardActivityMatch = new CreditCardActivityBuilder()
@@ -199,7 +258,7 @@ public class TransactionMatcherTest {
         TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivitiesForTesting, expenses);
         transactionMatcher.processTransactions();
 
-        List<MatchedTransaction> matchedTransactions = transactionMatcher.getMatchedTransactions();
+        List<MatchedTransaction> matchedTransactions = transactionMatcher.getCloselyMatchedTransactions();
         assertThat(matchedTransactions.size(), is(1));
 
         CreditCardActivity expectedCreditCardActivityMatch = new CreditCardActivityBuilder()
