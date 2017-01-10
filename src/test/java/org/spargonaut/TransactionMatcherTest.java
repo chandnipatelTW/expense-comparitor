@@ -106,11 +106,27 @@ public class TransactionMatcherTest {
     }
 
     @Test
-    public void shouldCreateAListOfExpensesThatAreUnmatched() {
-        Expense expense = new ExpenseBuilder().build();
+    public void shouldCreateAListOfExpensesThatRemainAfterProcessingExactMatches() {
+        int dayOfMonthForTransactionDateToMatchOn = 31;
+        DateTime transactionDateToMatchOn = getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn);
 
-        List<Expense> expenses = Arrays.asList(expense);
-        List<CreditCardActivity> creditCardActivities = Arrays.asList(new CreditCardActivityBuilder().build());
+        CreditCardActivity creditCardActivityToMatch = new CreditCardActivityBuilder()
+                .setAmount(amountToMatchOnForCreditCardActivityOne)
+                .setDescription(descriptionToMatchOn)
+                .setTransactionDate(transactionDateToMatchOn)
+                .setType(ActivityType.SALE)
+                .build();
+
+        List<CreditCardActivity> creditCardActivities = Arrays.asList(creditCardActivityToMatch, new CreditCardActivityBuilder().build());
+
+        Expense expenseToMatch = new ExpenseBuilder()
+                .setMerchant(merchantToMatch)
+                .setTimestamp(transactionDateToMatchOn)
+                .setAmount(amountToMatchOn)
+                .build();
+
+        Expense unmatched = new ExpenseBuilder().build();
+        List<Expense> expenses = Arrays.asList(unmatched, expenseToMatch);
 
         TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivities, expenses);
         transactionMatcher.processTransactions();
@@ -118,8 +134,8 @@ public class TransactionMatcherTest {
         List<Expense> unmatchedExpenses =  transactionMatcher.getUnmatchedExpenses();
         assertThat(unmatchedExpenses.size(), is(1));
 
-        Expense unmatchedExpense = unmatchedExpenses.get(0);
-        assertThat(unmatchedExpense, is(expense));
+        Expense expectedUnmatchedExpense = unmatchedExpenses.get(0);
+        assertThat(expectedUnmatchedExpense, is(unmatched));
     }
 
     @Test

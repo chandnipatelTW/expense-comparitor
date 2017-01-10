@@ -31,11 +31,22 @@ public class TransactionMatcher {
     }
 
     public void processTransactions() {
-        this.unmatchedExpenses = new ArrayList<>(this.expenses);
         this.unmatchedCreditCardActivies = new ArrayList<>(this.creditCardActivities);
 
         this.exactMatchedTransactions = createExactMatchedTransactions();
         this.closelyMatchedTransactions = createCloselyMatchedTransactions();
+        this.unmatchedExpenses = collectUnmatchedExpenses();
+    }
+
+    private List<Expense> collectUnmatchedExpenses() {
+        List<Expense> unmatchedExpenses = new ArrayList<>(this.expenses);
+        for (MatchedTransaction matchedTransaction : this.exactMatchedTransactions) {
+            Expense matchedExpense = matchedTransaction.getMatchedExpense();
+            if (unmatchedExpenses.contains(matchedExpense)) {
+                unmatchedExpenses.remove(matchedExpense);
+            }
+        }
+        return unmatchedExpenses;
     }
 
     private List<MatchedTransaction> createCloselyMatchedTransactions() {
