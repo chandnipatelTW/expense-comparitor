@@ -14,17 +14,12 @@ public class TransactionMatcher {
     private List<CreditCardActivity> creditCardActivities;
     private List<CreditCardActivity> unmatchedCreditCardActivies;
     private List<Expense> unmatchedExpenses;
-    private List<MatchedTransaction> matchedTransactions;
     private List<MatchedTransaction> exactMatchedTransactions;
     private List<MatchedTransaction> closelyMatchedTransactions;
 
     public TransactionMatcher(List<CreditCardActivity> creditCardActivities, List<Expense> expenses) {
         this.creditCardActivities = creditCardActivities;
         this.expenses = expenses;
-    }
-
-    public List<MatchedTransaction> getMatchedTransactions() {
-        return this.matchedTransactions;
     }
 
     public List<CreditCardActivity> getUnmatchedCreditCardActivies() {
@@ -36,7 +31,6 @@ public class TransactionMatcher {
     }
 
     public void processTransactions() {
-        this.matchedTransactions = new ArrayList<>();
         this.unmatchedExpenses = new ArrayList<>(this.expenses);
         this.unmatchedCreditCardActivies = new ArrayList<>(this.creditCardActivities);
 
@@ -88,7 +82,6 @@ public class TransactionMatcher {
                 if(isMatchedExactly(expense, creditCardActivity)) {
                     MatchedTransaction matchedTransaction = new MatchedTransaction(creditCardActivity, expense);
                     exactMatchedTransactions.add(matchedTransaction);
-                    matchedTransactions.add(matchedTransaction);
                 }
             }
         }

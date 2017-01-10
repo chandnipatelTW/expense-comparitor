@@ -25,7 +25,7 @@ public class TransactionMatcherTest {
     private final String merchantToMatch = "some merchant";
 
     @Test
-    public void shouldCreateATransactionMatch_whenACreditCardActivityHasTheSameAmountAndTransactionDateAsAnExpenseEntry() {
+    public void shouldCreateAnExactTransactionMatch_whenACreditCardActivityHasTheSameAmountAndTransactionDateAsAnExpenseEntry() {
 
         int dayOfMonthForTransactionDateToMatchOn = 31;
         DateTime transactionDateToMatchOn = getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn);
@@ -52,7 +52,7 @@ public class TransactionMatcherTest {
         TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivities, expenses);
         transactionMatcher.processTransactions();
 
-        List<MatchedTransaction> matchedTransactions = transactionMatcher.getMatchedTransactions();
+        List<MatchedTransaction> matchedTransactions = transactionMatcher.getExactMatchedTransactions();
         assertThat(matchedTransactions.size(), is(1));
 
         CreditCardActivity expectedCreditCardActivityMatch = new CreditCardActivityBuilder()
@@ -84,7 +84,7 @@ public class TransactionMatcherTest {
         TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivities, expenses);
         transactionMatcher.processTransactions();
 
-        List<MatchedTransaction> matchedTransactions = transactionMatcher.getMatchedTransactions();
+        List<MatchedTransaction> matchedTransactions = transactionMatcher.getExactMatchedTransactions();
         assertThat(matchedTransactions.size(), is(0));
     }
 
