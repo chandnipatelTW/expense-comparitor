@@ -89,11 +89,28 @@ public class TransactionMatcherTest {
     }
 
     @Test
-    public void shouldCreateAListOfCreditCardActivitiesThatHaveNotBeenMatched() {
-        CreditCardActivity creditCardActivity = new CreditCardActivityBuilder().build();
+    public void shouldCreateAListOfCreditCardActivitiesThatRemainAfterProcessingExactMatches() {
+        int dayOfMonthForTransactionDateToMatchOn = 31;
+        DateTime transactionDateToMatchOn = getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn);
 
-        List<Expense> expenses = Arrays.asList(new ExpenseBuilder().build());
-        List<CreditCardActivity> creditCardActivities = Arrays.asList(creditCardActivity);
+        CreditCardActivity creditCardActivityToMatch = new CreditCardActivityBuilder()
+                .setAmount(amountToMatchOnForCreditCardActivityOne)
+                .setDescription(descriptionToMatchOn)
+                .setTransactionDate(transactionDateToMatchOn)
+                .setType(ActivityType.SALE)
+                .build();
+
+        CreditCardActivity unmatchedCreditCardActivity = new CreditCardActivityBuilder().build();
+        List<CreditCardActivity> creditCardActivities = Arrays.asList(creditCardActivityToMatch, unmatchedCreditCardActivity);
+
+        Expense expenseToMatch = new ExpenseBuilder()
+                .setMerchant(merchantToMatch)
+                .setTimestamp(transactionDateToMatchOn)
+                .setAmount(amountToMatchOn)
+                .build();
+
+        Expense unmatched = new ExpenseBuilder().build();
+        List<Expense> expenses = Arrays.asList(unmatched, expenseToMatch);
 
         TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivities, expenses);
         transactionMatcher.processTransactions();
@@ -101,8 +118,8 @@ public class TransactionMatcherTest {
         List<CreditCardActivity> unmatchedCreditCardActivities =  transactionMatcher.getUnmatchedCreditCardActivies();
         assertThat(unmatchedCreditCardActivities.size(), is(1));
 
-        CreditCardActivity unmatchedCreditCardActivity = unmatchedCreditCardActivities.get(0);
-        assertThat(unmatchedCreditCardActivity, is(creditCardActivity));
+        CreditCardActivity expectedUnmatchedCreditCardActivity = unmatchedCreditCardActivities.get(0);
+        assertThat(expectedUnmatchedCreditCardActivity, is(unmatchedCreditCardActivity));
     }
 
     @Test

@@ -36,6 +36,19 @@ public class TransactionMatcher {
         this.exactMatchedTransactions = createExactMatchedTransactions();
         this.closelyMatchedTransactions = createCloselyMatchedTransactions();
         this.unmatchedExpenses = collectUnmatchedExpenses();
+        this.unmatchedCreditCardActivies = collectUnmatchedCreditCardActivities();
+    }
+
+    private List<CreditCardActivity> collectUnmatchedCreditCardActivities() {
+        List<CreditCardActivity> unmamtchedCreditCardActivities = new ArrayList<>(this.creditCardActivities);
+        for (MatchedTransaction matchedTransaction : this.exactMatchedTransactions) {
+            CreditCardActivity creditCardActivity = matchedTransaction.getMatchedCreditCardActivity();
+            if (unmamtchedCreditCardActivities.contains(creditCardActivity)) {
+                unmamtchedCreditCardActivities.remove(creditCardActivity);
+            }
+        }
+
+        return unmamtchedCreditCardActivities;
     }
 
     private List<Expense> collectUnmatchedExpenses() {
