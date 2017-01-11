@@ -42,9 +42,16 @@ public class TransactionMatcher {
     private List<CreditCardActivity> collectUnmatchedCreditCardActivities() {
         List<CreditCardActivity> unmamtchedCreditCardActivities = new ArrayList<>(this.creditCardActivities);
         for (MatchedTransaction matchedTransaction : this.exactMatchedTransactions) {
-            CreditCardActivity creditCardActivity = matchedTransaction.getMatchedCreditCardActivity();
-            if (unmamtchedCreditCardActivities.contains(creditCardActivity)) {
-                unmamtchedCreditCardActivities.remove(creditCardActivity);
+            CreditCardActivity matchedCreditCardActivity = matchedTransaction.getMatchedCreditCardActivity();
+            if (unmamtchedCreditCardActivities.contains(matchedCreditCardActivity)) {
+                unmamtchedCreditCardActivities.remove(matchedCreditCardActivity);
+            }
+        }
+
+        for (MatchedTransaction matchedTransaction : this.closelyMatchedTransactions) {
+            CreditCardActivity matchedCreditCardActivity = matchedTransaction.getMatchedCreditCardActivity();
+            if (unmamtchedCreditCardActivities.contains(matchedCreditCardActivity)) {
+                unmamtchedCreditCardActivities.remove(matchedCreditCardActivity);
             }
         }
 

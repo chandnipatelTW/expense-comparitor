@@ -123,6 +123,42 @@ public class TransactionMatcherTest {
     }
 
     @Test
+    public void shouldCreateAListOfCreditCardActivitiesThatRemainAfterProcessingCloseMatches() {
+        int dayOfMonthForTransactionDateToMatchOn = 25;
+        int dayOfMonthForExpenseDateToMatchOn = 26;
+        DateTime transactionDateToMatchOn = getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn);
+        DateTime expenseDateToMatchOn = getDateTimeForDay(dayOfMonthForExpenseDateToMatchOn);
+
+        CreditCardActivity creditCardActivityToMatch = new CreditCardActivityBuilder()
+                .setAmount(amountToMatchOnForCreditCardActivityOne)
+                .setDescription(descriptionToMatchOn)
+                .setTransactionDate(transactionDateToMatchOn)
+                .setType(ActivityType.SALE)
+                .build();
+
+        CreditCardActivity unmatchedCreditCardActivity = new CreditCardActivityBuilder().build();
+        List<CreditCardActivity> creditCardActivities = Arrays.asList(creditCardActivityToMatch, unmatchedCreditCardActivity);
+
+        Expense expenseToMatch = new ExpenseBuilder()
+                .setMerchant(merchantToMatch)
+                .setTimestamp(expenseDateToMatchOn)
+                .setAmount(amountToMatchOn)
+                .build();
+
+        Expense unmatched = new ExpenseBuilder().build();
+        List<Expense> expenses = Arrays.asList(unmatched, expenseToMatch);
+
+        TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivities, expenses);
+        transactionMatcher.processTransactions();
+
+        List<CreditCardActivity> unmatchedCreditCardActivities =  transactionMatcher.getUnmatchedCreditCardActivies();
+        assertThat(unmatchedCreditCardActivities.size(), is(1));
+
+        CreditCardActivity expectedUnmatchedCreditCardActivity = unmatchedCreditCardActivities.get(0);
+        assertThat(expectedUnmatchedCreditCardActivity, is(unmatchedCreditCardActivity));
+    }
+
+    @Test
     public void shouldCreateAListOfExpensesThatRemainAfterProcessingExactMatches() {
         int dayOfMonthForTransactionDateToMatchOn = 31;
         DateTime transactionDateToMatchOn = getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn);
