@@ -31,8 +31,6 @@ public class TransactionMatcher {
     }
 
     public void processTransactions() {
-        this.unmatchedCreditCardActivies = new ArrayList<>(this.creditCardActivities);
-
         this.exactMatchedTransactions = createExactMatchedTransactions();
         this.closelyMatchedTransactions = createCloselyMatchedTransactions();
         this.unmatchedExpenses = collectUnmatchedExpenses();
@@ -78,16 +76,27 @@ public class TransactionMatcher {
     }
 
     private List<MatchedTransaction> createCloselyMatchedTransactions() {
-        List<CreditCardActivity> remainingCreditCardActivities = new ArrayList<>();
-        for (CreditCardActivity creditCardActivity : creditCardActivities) {
-            if (!exactMatchedTransactions.contains(creditCardActivity)) {
-                remainingCreditCardActivities.add(creditCardActivity);
+        // collect the unmatched Credit Card Activities
+        List<CreditCardActivity> unmatchedCreditCardActivities = new ArrayList<>(this.creditCardActivities);
+        for (MatchedTransaction matchedTransaction : this.exactMatchedTransactions) {
+            CreditCardActivity matchedCreditCardActivity = matchedTransaction.getMatchedCreditCardActivity();
+            if (unmatchedCreditCardActivities.contains(matchedCreditCardActivity)) {
+                unmatchedCreditCardActivities.remove(matchedCreditCardActivity);
+            }
+        }
+
+        // collect the unmatched Expenses
+        List<Expense> unmatchedExpenses = new ArrayList<>(this.expenses);
+        for (MatchedTransaction matchedTransaction : this.exactMatchedTransactions) {
+            Expense matchedExpense = matchedTransaction.getMatchedExpense();
+            if (unmatchedExpenses.contains(matchedExpense)) {
+                unmatchedExpenses.remove(matchedExpense);
             }
         }
 
         List<MatchedTransaction> closelyMatchedTransactions = new ArrayList<>();
-        for (Expense expense : this.expenses) {
-            for (CreditCardActivity creditCardActivity : remainingCreditCardActivities) {
+        for (Expense expense : unmatchedExpenses) {
+            for (CreditCardActivity creditCardActivity : unmatchedCreditCardActivities) {
                 if(isMatchedClosely(expense, creditCardActivity)) {
                     MatchedTransaction matchedTransaction = new MatchedTransaction(creditCardActivity, expense);
                     closelyMatchedTransactions.add(matchedTransaction);

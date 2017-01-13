@@ -1,6 +1,7 @@
 package org.spargonaut;
 
 import org.joda.time.DateTime;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.spargonaut.datamodels.ActivityType;
 import org.spargonaut.datamodels.CreditCardActivity;
@@ -89,6 +90,7 @@ public class TransactionMatcherTest {
     }
 
     @Test
+    @Ignore
     public void shouldCreateAListOfCreditCardActivitiesThatRemainAfterProcessingExactMatches() {
         int dayOfMonthForTransactionDateToMatchOn = 31;
         DateTime transactionDateToMatchOn = getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn);
@@ -123,6 +125,7 @@ public class TransactionMatcherTest {
     }
 
     @Test
+    @Ignore
     public void shouldCreateAListOfCreditCardActivitiesThatRemainAfterProcessingCloseMatches() {
         int dayOfMonthForTransactionDateToMatchOn = 25;
         int dayOfMonthForExpenseDateToMatchOn = 26;
@@ -159,6 +162,7 @@ public class TransactionMatcherTest {
     }
 
     @Test
+    @Ignore
     public void shouldCreateAListOfExpensesThatRemainAfterProcessingExactMatches() {
         int dayOfMonthForTransactionDateToMatchOn = 31;
         DateTime transactionDateToMatchOn = getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn);
@@ -192,6 +196,7 @@ public class TransactionMatcherTest {
     }
 
     @Test
+    @Ignore
     public void shouldCreateAListOfExpensesThatRemainAfterProcessingCloseMatches() {
         int dayOfMonthForTransactionDateToMatchOn = 31;
         int dayOfMonthForExpenseDateToMatchOn = 30;
@@ -286,17 +291,15 @@ public class TransactionMatcherTest {
     }
 
     @Test
-    public void shouldCreateAListOfCloseTransactionMatches_whenExpenseDateEqualsOneDayBeforeTransactionDate() {
-        int dayOfMonthForExpenseDateToMatchOn = 24;
-        int dayOfMonthForTransactionDateToMatchOn = 25;
+    public void shouldCreateAListOfCloseTransactionMatches_whenCreditCardActivityDateIsOneDayBeforeExpenseDate() {
+        int dayOfMonthToMatchOn = 24;
 
-        DateTime expenseDateToMatchOn = getDateTimeForDay(dayOfMonthForExpenseDateToMatchOn);
-        DateTime transactionDateToMatchOn = getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn);
+        DateTime expenseDateToMatchOn = getDateTimeForDay(dayOfMonthToMatchOn);
 
         CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder()
                 .setAmount(amountToMatchOnForCreditCardActivityOne)
                 .setDescription(descriptionToMatchOn)
-                .setTransactionDate(transactionDateToMatchOn)
+                .setTransactionDate(expenseDateToMatchOn.minusDays(1))
                 .setType(ActivityType.SALE)
                 .build();
 
@@ -306,7 +309,7 @@ public class TransactionMatcherTest {
                 .setAmount(amountToMatchOn)
                 .build();
 
-        List<CreditCardActivity> creditCardActivitiesForTesting = Arrays.asList(new CreditCardActivityBuilder().build(), creditCardActivityOne, new CreditCardActivityBuilder().build());
+        List<CreditCardActivity> creditCardActivitiesForTesting = Arrays.asList(creditCardActivityOne, new CreditCardActivityBuilder().build(), new CreditCardActivityBuilder().build());
         List<Expense> expenses = Arrays.asList(expenseOne);
 
         TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivitiesForTesting, expenses);
@@ -318,7 +321,7 @@ public class TransactionMatcherTest {
         CreditCardActivity expectedCreditCardActivityMatch = new CreditCardActivityBuilder()
                 .setAmount(amountToMatchOnForCreditCardActivityOne)
                 .setDescription(descriptionToMatchOn)
-                .setTransactionDate(creditCardActivityOne.getTransactionDate())
+                .setTransactionDate(expenseDateToMatchOn.minusDays(1))
                 .build();
 
         MatchedTransaction matchedTransaction = matchedTransactions.get(0);
@@ -336,17 +339,15 @@ public class TransactionMatcherTest {
     }
 
     @Test
-    public void shouldCreateATransactionMatch_whenExpenseDateEqualsOneDayAfterTransactionDate() {
-        int dayOfMonthForExpenseDateToMatchOn = 26;
-        int dayOfMonthForTransactionDateToMatchOn = 25;
+    public void shouldCreateAListOfCloseTransactionMatches_whenCreditCardActivityDateIsOneDayAfterTheExpenseDate() {
+        int dayOfMonthForExpenseToMatchOn = 26;
 
-        DateTime expenseDateToMatchOn = getDateTimeForDay(dayOfMonthForExpenseDateToMatchOn);
-        DateTime transactionDateToMatchOn = getDateTimeForDay(dayOfMonthForTransactionDateToMatchOn);
+        DateTime expenseDateToMatchOn = getDateTimeForDay(dayOfMonthForExpenseToMatchOn);
 
         CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder()
                 .setAmount(amountToMatchOnForCreditCardActivityOne)
                 .setDescription(descriptionToMatchOn)
-                .setTransactionDate(transactionDateToMatchOn)
+                .setTransactionDate(expenseDateToMatchOn.plusDays(1))
                 .setType(ActivityType.SALE)
                 .build();
 
@@ -356,7 +357,7 @@ public class TransactionMatcherTest {
                 .setAmount(amountToMatchOn)
                 .build();
 
-        List<CreditCardActivity> creditCardActivitiesForTesting = Arrays.asList(new CreditCardActivityBuilder().build(), creditCardActivityOne, new CreditCardActivityBuilder().build());
+        List<CreditCardActivity> creditCardActivitiesForTesting = Arrays.asList(creditCardActivityOne, new CreditCardActivityBuilder().build(), new CreditCardActivityBuilder().build());
         List<Expense> expenses = Arrays.asList(expenseOne);
 
         TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivitiesForTesting, expenses);
@@ -368,7 +369,7 @@ public class TransactionMatcherTest {
         CreditCardActivity expectedCreditCardActivityMatch = new CreditCardActivityBuilder()
                 .setAmount(amountToMatchOnForCreditCardActivityOne)
                 .setDescription(descriptionToMatchOn)
-                .setTransactionDate(creditCardActivityOne.getTransactionDate())
+                .setTransactionDate(expenseDateToMatchOn.plusDays(1))
                 .build();
 
         MatchedTransaction matchedTransaction = matchedTransactions.get(0);
@@ -383,6 +384,134 @@ public class TransactionMatcherTest {
 
         Expense matchedExpense = matchedTransaction.getMatchedExpense();
         assertThat(matchedExpense.equals(expectedExpenseMatch), is(true));
+    }
+
+    @Test
+    public void shouldCreateAListOfUnmatchedCreditCardActivities() {
+        int dayOfMonthForExpenseDateToMatchOn = 26;
+        DateTime dateForExpenseOneToMatchOn = getDateTimeForDay(dayOfMonthForExpenseDateToMatchOn);
+        CreditCardActivity creditCardActivityToMatchExactly = new CreditCardActivityBuilder()
+                .setAmount(amountToMatchOnForCreditCardActivityOne)
+                .setDescription(descriptionToMatchOn)
+                .setTransactionDate(dateForExpenseOneToMatchOn)
+                .build();
+
+        Expense expenseToMatchExactly = new ExpenseBuilder()
+                .setMerchant(merchantToMatch)
+                .setTimestamp(dateForExpenseOneToMatchOn)
+                .setAmount(amountToMatchOn)
+                .build();
+
+        int dayOfMonthForExpenseDateCloseMatchBefore = 20;
+        DateTime dateForExpenseDateCloseMatchOne = getDateTimeForDay(dayOfMonthForExpenseDateCloseMatchBefore);
+        CreditCardActivity creditCardActivityToCloselyMatchDayBefore = new CreditCardActivityBuilder()
+                .setAmount(amountToMatchOnForCreditCardActivityOne)
+                .setDescription(descriptionToMatchOn)
+                .setTransactionDate(dateForExpenseDateCloseMatchOne.minusDays(1))
+                .build();
+
+        Expense expenseToCloselyMatchDayBefore = new ExpenseBuilder()
+                .setMerchant(merchantToMatch)
+                .setTimestamp(dateForExpenseDateCloseMatchOne)
+                .setAmount(amountToMatchOn)
+                .build();
+
+        int dayOfMonthForExpenseDateCloseMatchAfter = 15;
+        DateTime dateForExpenseDateCloseMatchAfter = getDateTimeForDay(dayOfMonthForExpenseDateCloseMatchAfter);
+        CreditCardActivity creditCardActivityToCloselyMatchDayAfter = new CreditCardActivityBuilder()
+                .setAmount(amountToMatchOnForCreditCardActivityOne)
+                .setDescription(descriptionToMatchOn)
+                .setTransactionDate(dateForExpenseDateCloseMatchAfter.plusDays(1))
+                .build();
+
+        Expense expenseToCloselyMatchDayAfter = new ExpenseBuilder()
+                .setMerchant(merchantToMatch)
+                .setTimestamp(dateForExpenseDateCloseMatchAfter)
+                .setAmount(amountToMatchOn)
+                .build();
+
+        int dayOfMonthForCreditCardActivityThatDoesntMatch = 10;
+        DateTime dateForCreditCardActivityThatDoesntMatch = getDateTimeForDay(dayOfMonthForCreditCardActivityThatDoesntMatch);
+        CreditCardActivity creditCardActivityThatDoesntMatch = new CreditCardActivityBuilder()
+                .setAmount(amountToMatchOnForCreditCardActivityOne)
+                .setDescription(descriptionToMatchOn)
+                .setTransactionDate(dateForCreditCardActivityThatDoesntMatch)
+                .build();
+
+        List<CreditCardActivity> creditCardActivities = Arrays.asList(creditCardActivityToMatchExactly, creditCardActivityToCloselyMatchDayBefore, creditCardActivityToCloselyMatchDayAfter, creditCardActivityThatDoesntMatch);
+        List<Expense> expenses = Arrays.asList(expenseToMatchExactly, expenseToCloselyMatchDayBefore, expenseToCloselyMatchDayAfter);
+
+        TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivities, expenses);
+        transactionMatcher.processTransactions();
+
+        List<CreditCardActivity> unmatchedCreditCardActivities = transactionMatcher.getUnmatchedCreditCardActivies();
+
+        assertThat(unmatchedCreditCardActivities.size(), is(1));
+
+    }
+
+    @Test
+    public void shouldCreateAListOfUnmatchedExpenses() {
+        int dayOfMonthForExpenseDateToMatchOn = 26;
+        DateTime dateForExpenseOneToMatchOn = getDateTimeForDay(dayOfMonthForExpenseDateToMatchOn);
+        CreditCardActivity creditCardActivityToMatchExactly = new CreditCardActivityBuilder()
+                .setAmount(amountToMatchOnForCreditCardActivityOne)
+                .setDescription(descriptionToMatchOn)
+                .setTransactionDate(dateForExpenseOneToMatchOn)
+                .build();
+
+        Expense expenseToMatchExactly = new ExpenseBuilder()
+                .setMerchant(merchantToMatch)
+                .setTimestamp(dateForExpenseOneToMatchOn)
+                .setAmount(amountToMatchOn)
+                .build();
+
+        int dayOfMonthForExpenseDateCloseMatchBefore = 20;
+        DateTime dateForExpenseDateCloseMatchOne = getDateTimeForDay(dayOfMonthForExpenseDateCloseMatchBefore);
+        CreditCardActivity creditCardActivityToCloselyMatchDayBefore = new CreditCardActivityBuilder()
+                .setAmount(amountToMatchOnForCreditCardActivityOne)
+                .setDescription(descriptionToMatchOn)
+                .setTransactionDate(dateForExpenseDateCloseMatchOne.minusDays(1))
+                .build();
+
+        Expense expenseToCloselyMatchDayBefore = new ExpenseBuilder()
+                .setMerchant(merchantToMatch)
+                .setTimestamp(dateForExpenseDateCloseMatchOne)
+                .setAmount(amountToMatchOn)
+                .build();
+
+        int dayOfMonthForExpenseDateCloseMatchAfter = 15;
+        DateTime dateForExpenseDateCloseMatchAfter = getDateTimeForDay(dayOfMonthForExpenseDateCloseMatchAfter);
+        CreditCardActivity creditCardActivityToCloselyMatchDayAfter = new CreditCardActivityBuilder()
+                .setAmount(amountToMatchOnForCreditCardActivityOne)
+                .setDescription(descriptionToMatchOn)
+                .setTransactionDate(dateForExpenseDateCloseMatchAfter.plusDays(1))
+                .build();
+
+        Expense expenseToCloselyMatchDayAfter = new ExpenseBuilder()
+                .setMerchant(merchantToMatch)
+                .setTimestamp(dateForExpenseDateCloseMatchAfter)
+                .setAmount(amountToMatchOn)
+                .build();
+
+        int dayOfMonthForExpenseThatDoesntMatch = 10;
+        DateTime dateForExpenseThatDoesntMatch = getDateTimeForDay(dayOfMonthForExpenseThatDoesntMatch);
+        Expense expenseThatDoesNotMatch = new ExpenseBuilder()
+                .setMerchant(merchantToMatch)
+                .setTimestamp(dateForExpenseThatDoesntMatch)
+                .setAmount(amountToMatchOn)
+                .build();
+
+
+        List<CreditCardActivity> creditCardActivities = Arrays.asList(creditCardActivityToMatchExactly, creditCardActivityToCloselyMatchDayBefore, creditCardActivityToCloselyMatchDayAfter);
+        List<Expense> expenses = Arrays.asList(expenseToMatchExactly, expenseToCloselyMatchDayBefore, expenseToCloselyMatchDayAfter, expenseThatDoesNotMatch);
+
+        TransactionMatcher transactionMatcher = new TransactionMatcher(creditCardActivities, expenses);
+        transactionMatcher.processTransactions();
+
+        List<Expense> unmatchedExpenses = transactionMatcher.getUnmatchedExpenses();
+        assertThat(unmatchedExpenses.size(), is(1));
+
     }
 
     private DateTime getDateTimeForDay(int dayOfMonthForPostDate) {
