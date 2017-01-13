@@ -28,7 +28,7 @@ public class ChargeParser {
             if (isHeaderLine(chargeLine)) { continue; }
             String[] chargeTokens = chargeLine.split(chargeDelimiter);
             DateTime transactionDate = createDateTimeFrom(chargeTokens[1]);
-            DateTime postDate = createDateTimeFrom(chargeTokens[1]);
+            DateTime postDate = createDateTimeFrom(chargeTokens[2]);
 
             BigDecimal amount = new BigDecimal(chargeTokens[4]);
             amount = amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);

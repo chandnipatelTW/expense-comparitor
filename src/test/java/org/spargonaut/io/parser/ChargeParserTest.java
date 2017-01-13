@@ -38,7 +38,7 @@ public class ChargeParserTest {
         ChargeParser chargeParser = new ChargeParser(mockCSVFileReader);
 
         DateTime expectedTransactionDate = new DateTime(2016, 12, 10, 0, 0);
-        DateTime expectedPostDate = new DateTime(2016, 12, 10, 0, 0);
+        DateTime expectedPostDate = new DateTime(2016, 12, 11, 0, 0);
         BigDecimal expectedAmount = new BigDecimal(-18.09);
         expectedAmount = expectedAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 
