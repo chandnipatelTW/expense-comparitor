@@ -38,21 +38,19 @@ public class TransactionMatcher {
     }
 
     private List<CreditCardActivity> collectUnmatchedCreditCardActivities() {
-        List<CreditCardActivity> unmamtchedCreditCardActivities = new ArrayList<>(this.creditCardActivities);
-        for (MatchedTransaction matchedTransaction : this.exactMatchedTransactions) {
+        List<CreditCardActivity> unmatchedCreditCardActivities = cleanOutMatchedCreditCardActivities(this.creditCardActivities, this.exactMatchedTransactions);
+        unmatchedCreditCardActivities = cleanOutMatchedCreditCardActivities(unmatchedCreditCardActivities, this.closelyMatchedTransactions);
+        return unmatchedCreditCardActivities;
+    }
+
+    private List<CreditCardActivity> cleanOutMatchedCreditCardActivities(List<CreditCardActivity> creditCardActivities, List<MatchedTransaction> matchedTransactions) {
+        List<CreditCardActivity> unmamtchedCreditCardActivities = new ArrayList<>(creditCardActivities);
+        for (MatchedTransaction matchedTransaction : matchedTransactions) {
             CreditCardActivity matchedCreditCardActivity = matchedTransaction.getMatchedCreditCardActivity();
             if (unmamtchedCreditCardActivities.contains(matchedCreditCardActivity)) {
                 unmamtchedCreditCardActivities.remove(matchedCreditCardActivity);
             }
         }
-
-        for (MatchedTransaction matchedTransaction : this.closelyMatchedTransactions) {
-            CreditCardActivity matchedCreditCardActivity = matchedTransaction.getMatchedCreditCardActivity();
-            if (unmamtchedCreditCardActivities.contains(matchedCreditCardActivity)) {
-                unmamtchedCreditCardActivities.remove(matchedCreditCardActivity);
-            }
-        }
-
         return unmamtchedCreditCardActivities;
     }
 
@@ -77,13 +75,7 @@ public class TransactionMatcher {
 
     private List<MatchedTransaction> createCloselyMatchedTransactions() {
         // collect the unmatched Credit Card Activities
-        List<CreditCardActivity> unmatchedCreditCardActivities = new ArrayList<>(this.creditCardActivities);
-        for (MatchedTransaction matchedTransaction : this.exactMatchedTransactions) {
-            CreditCardActivity matchedCreditCardActivity = matchedTransaction.getMatchedCreditCardActivity();
-            if (unmatchedCreditCardActivities.contains(matchedCreditCardActivity)) {
-                unmatchedCreditCardActivities.remove(matchedCreditCardActivity);
-            }
-        }
+        List<CreditCardActivity> unmatchedCreditCardActivities = cleanOutMatchedCreditCardActivities(this.creditCardActivities, this.exactMatchedTransactions);
 
         // collect the unmatched Expenses
         List<Expense> unmatchedExpenses = new ArrayList<>(this.expenses);
