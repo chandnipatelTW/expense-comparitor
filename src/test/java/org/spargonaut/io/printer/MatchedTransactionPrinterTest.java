@@ -91,7 +91,8 @@ public class MatchedTransactionPrinterTest {
 
         MatchedTransactionPrinter.printMatchedTransactions (matchedTransactions);
 
-        String expectedOutput = "               A credit card transaction description              2017-01-01      2017-01-02           -3.49\n" +
+        String expectedOutput = "transactions (2) ------------------------------------------------------------------\n" +
+                                "               A credit card transaction description              2017-01-01      2017-01-02           -3.49\n" +
                                 "matched with:  An expense merchant                                2017-02-03                            3.49\n\n" +
                                 "               Another credit card transaction description        2017-04-05      2017-04-06           -5.68\n" +
                                 "matched with:  Another expense merchant                           2017-06-07                            5.68\n\n";
