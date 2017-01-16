@@ -6,8 +6,8 @@ import org.spargonaut.datamodels.Expense;
 
 import java.math.BigDecimal;
 
-public class CloseDateMatcher {
-    public static boolean isMatch(Expense expense, CreditCardActivity creditCardActivity) {
+public class CloseDateMatcher implements TransactionMatcher {
+    public boolean isMatch(Expense expense, CreditCardActivity creditCardActivity) {
         BigDecimal creditCardActivityAmount = creditCardActivity.getAmount();
         double positiveCreditCardActivityAmount = Math.abs(creditCardActivityAmount.doubleValue());
         double expenseAmount = expense.getAmount().doubleValue();

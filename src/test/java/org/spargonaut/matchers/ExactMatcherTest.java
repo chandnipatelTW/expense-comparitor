@@ -39,6 +39,7 @@ public class ExactMatcherTest {
                 .setAmount(amountToMatchOn)
                 .build();
 
-        assertThat(ExactMatcher.isMatch(expenseToMatch, creditCardActivityToMatch), is(true));
+        ExactMatcher matcher = new ExactMatcher();
+        assertThat(matcher.isMatch(expenseToMatch, creditCardActivityToMatch), is(true));
     }
 }

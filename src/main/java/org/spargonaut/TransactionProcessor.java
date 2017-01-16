@@ -57,10 +57,11 @@ public class TransactionProcessor {
     }
 
     private List<MatchedTransaction> createExactMatchedTransactions(List<CreditCardActivity> creditCardActivities, List<Expense> expenses) {
+        ExactMatcher matcher = new ExactMatcher();
         List<MatchedTransaction> matchedTransactions = new ArrayList<>();
         for (Expense expense : expenses) {
             for (CreditCardActivity creditCardActivity : creditCardActivities) {
-                if(ExactMatcher.isMatch(expense, creditCardActivity)) {
+                if(matcher.isMatch(expense, creditCardActivity)) {
                     matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
                 }
             }
@@ -69,10 +70,11 @@ public class TransactionProcessor {
     }
 
     private List<MatchedTransaction> createCloselyMatchedTransactions(List<CreditCardActivity> creditCardActivities, List<Expense> expenses) {
+        CloseDateMatcher matcher = new CloseDateMatcher();
         List<MatchedTransaction> matchedTransactions = new ArrayList<>();
         for (Expense expense : expenses) {
             for (CreditCardActivity creditCardActivity : creditCardActivities) {
-                if(CloseDateMatcher.isMatch(expense, creditCardActivity)) {
+                if(matcher.isMatch(expense, creditCardActivity)) {
                     matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
                 }
             }

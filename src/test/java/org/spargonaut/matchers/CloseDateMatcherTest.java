@@ -38,7 +38,8 @@ public class CloseDateMatcherTest {
                 .setAmount(amountToMatchOn)
                 .build();
 
-        assertThat(CloseDateMatcher.isMatch(expense, creditCardActivity), is(true));
+        CloseDateMatcher matcher = new CloseDateMatcher();
+        assertThat(matcher.isMatch(expense, creditCardActivity), is(true));
     }
 
     @Test
@@ -66,7 +67,8 @@ public class CloseDateMatcherTest {
                 .setAmount(amountToMatchOn)
                 .build();
 
-        assertThat(CloseDateMatcher.isMatch(expense, creditCardActivity), is(true));
+        CloseDateMatcher matcher = new CloseDateMatcher();
+        assertThat(matcher.isMatch(expense, creditCardActivity), is(true));
     }
 
 }
