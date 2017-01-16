@@ -59,7 +59,8 @@ public class ExpensePrinterTest {
         List<Expense> expenses = Arrays.asList(expenseOne, expenseTwo);
         ExpensePrinter.printExpensesAsHumanReadable(expenses);
 
-        String expectedOutput = "2016-12-12      Uber                                18.68\n" +
+        String expectedOutput = "expenses (2) -------------------------------------------\n" +
+                                "2016-12-12      Uber                                18.68\n" +
                                 "2016-12-12      American Airlines                  747.20\n";
 
         assertThat(outputCapture.toString(), is(expectedOutput));
