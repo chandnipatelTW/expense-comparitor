@@ -50,16 +50,15 @@ public class TransactionMatcher {
     }
 
     private List<MatchedTransaction> createExactMatchedTransactions(List<CreditCardActivity> creditCardActivities, List<Expense> expenses) {
-        List<MatchedTransaction> exactMatchedTransactions = new ArrayList<>();
+        List<MatchedTransaction> matchedTransactions = new ArrayList<>();
         for (Expense expense : expenses) {
             for (CreditCardActivity creditCardActivity : creditCardActivities) {
                 if(isMatchedExactly(expense, creditCardActivity)) {
-                    MatchedTransaction matchedTransaction = new MatchedTransaction(creditCardActivity, expense);
-                    exactMatchedTransactions.add(matchedTransaction);
+                    matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
                 }
             }
         }
-        return exactMatchedTransactions;
+        return matchedTransactions;
     }
 
     private boolean isMatchedExactly(Expense expense, CreditCardActivity creditCardActivity) {
@@ -74,16 +73,15 @@ public class TransactionMatcher {
     }
 
     private List<MatchedTransaction> createCloselyMatchedTransactions(List<CreditCardActivity> creditCardActivities, List<Expense> expenses) {
-        List<MatchedTransaction> closelyMatchedTransactions = new ArrayList<>();
+        List<MatchedTransaction> matchedTransactions = new ArrayList<>();
         for (Expense expense : expenses) {
             for (CreditCardActivity creditCardActivity : creditCardActivities) {
                 if(isMatchedClosely(expense, creditCardActivity)) {
-                    MatchedTransaction matchedTransaction = new MatchedTransaction(creditCardActivity, expense);
-                    closelyMatchedTransactions.add(matchedTransaction);
+                    matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
                 }
             }
         }
-        return closelyMatchedTransactions;
+        return matchedTransactions;
     }
 
     private List<CreditCardActivity> cleanOutUnmatchedCreditCardActivities(List<CreditCardActivity> creditCardActivities, List<MatchedTransaction> matchedTransactions) {
