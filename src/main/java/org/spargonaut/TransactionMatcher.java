@@ -58,6 +58,22 @@ public class TransactionMatcher {
         return exactMatchedTransactions;
     }
 
+    private List<MatchedTransaction> createCloselyMatchedTransactions() {
+        List<CreditCardActivity> unmatchedCreditCardActivities = cleanOutUnmatchedCreditCardActivities(this.creditCardActivities, this.exactMatchedTransactions);
+        List<Expense> unmatchedExpenses = cleanOutUnmatchedExpenses(this.expenses, this.exactMatchedTransactions);
+
+        List<MatchedTransaction> closelyMatchedTransactions = new ArrayList<>();
+        for (Expense expense : unmatchedExpenses) {
+            for (CreditCardActivity creditCardActivity : unmatchedCreditCardActivities) {
+                if(isMatchedClosely(expense, creditCardActivity)) {
+                    MatchedTransaction matchedTransaction = new MatchedTransaction(creditCardActivity, expense);
+                    closelyMatchedTransactions.add(matchedTransaction);
+                }
+            }
+        }
+        return closelyMatchedTransactions;
+    }
+
     private List<CreditCardActivity> collectUnmatchedCreditCardActivities() {
         List<CreditCardActivity> unmatchedCreditCardActivities = cleanOutUnmatchedCreditCardActivities(this.creditCardActivities, this.exactMatchedTransactions);
         unmatchedCreditCardActivities = cleanOutUnmatchedCreditCardActivities(unmatchedCreditCardActivities, this.closelyMatchedTransactions);
@@ -90,22 +106,6 @@ public class TransactionMatcher {
             }
         }
         return unmatchedExpenses;
-    }
-
-    private List<MatchedTransaction> createCloselyMatchedTransactions() {
-        List<CreditCardActivity> unmatchedCreditCardActivities = cleanOutUnmatchedCreditCardActivities(this.creditCardActivities, this.exactMatchedTransactions);
-        List<Expense> unmatchedExpenses = cleanOutUnmatchedExpenses(this.expenses, this.exactMatchedTransactions);
-
-        List<MatchedTransaction> closelyMatchedTransactions = new ArrayList<>();
-        for (Expense expense : unmatchedExpenses) {
-            for (CreditCardActivity creditCardActivity : unmatchedCreditCardActivities) {
-                if(isMatchedClosely(expense, creditCardActivity)) {
-                    MatchedTransaction matchedTransaction = new MatchedTransaction(creditCardActivity, expense);
-                    closelyMatchedTransactions.add(matchedTransaction);
-                }
-            }
-        }
-        return closelyMatchedTransactions;
     }
 
     private boolean isMatchedClosely(Expense expense, CreditCardActivity creditCardActivity) {
