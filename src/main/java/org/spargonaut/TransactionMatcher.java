@@ -38,12 +38,12 @@ public class TransactionMatcher {
     }
 
     private List<CreditCardActivity> collectUnmatchedCreditCardActivities() {
-        List<CreditCardActivity> unmatchedCreditCardActivities = cleanOutMatchedCreditCardActivities(this.creditCardActivities, this.exactMatchedTransactions);
-        unmatchedCreditCardActivities = cleanOutMatchedCreditCardActivities(unmatchedCreditCardActivities, this.closelyMatchedTransactions);
+        List<CreditCardActivity> unmatchedCreditCardActivities = cleanOutUnmatchedCreditCardActivities(this.creditCardActivities, this.exactMatchedTransactions);
+        unmatchedCreditCardActivities = cleanOutUnmatchedCreditCardActivities(unmatchedCreditCardActivities, this.closelyMatchedTransactions);
         return unmatchedCreditCardActivities;
     }
 
-    private List<CreditCardActivity> cleanOutMatchedCreditCardActivities(List<CreditCardActivity> creditCardActivities, List<MatchedTransaction> matchedTransactions) {
+    private List<CreditCardActivity> cleanOutUnmatchedCreditCardActivities(List<CreditCardActivity> creditCardActivities, List<MatchedTransaction> matchedTransactions) {
         List<CreditCardActivity> unmamtchedCreditCardActivities = new ArrayList<>(creditCardActivities);
         for (MatchedTransaction matchedTransaction : matchedTransactions) {
             CreditCardActivity matchedCreditCardActivity = matchedTransaction.getMatchedCreditCardActivity();
@@ -72,7 +72,7 @@ public class TransactionMatcher {
     }
 
     private List<MatchedTransaction> createCloselyMatchedTransactions() {
-        List<CreditCardActivity> unmatchedCreditCardActivities = cleanOutMatchedCreditCardActivities(this.creditCardActivities, this.exactMatchedTransactions);
+        List<CreditCardActivity> unmatchedCreditCardActivities = cleanOutUnmatchedCreditCardActivities(this.creditCardActivities, this.exactMatchedTransactions);
         List<Expense> unmatchedExpenses = cleanOutUnmatchedExpenses(this.expenses, this.exactMatchedTransactions);
 
         List<MatchedTransaction> closelyMatchedTransactions = new ArrayList<>();
