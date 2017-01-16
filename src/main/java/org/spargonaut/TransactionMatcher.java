@@ -4,6 +4,8 @@ import org.joda.time.DateTime;
 import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
 import org.spargonaut.datamodels.MatchedTransaction;
+import org.spargonaut.matchers.CloseDateMatcher;
+import org.spargonaut.matchers.ExactMatcher;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -58,7 +60,7 @@ public class TransactionMatcher {
         List<MatchedTransaction> matchedTransactions = new ArrayList<>();
         for (Expense expense : expenses) {
             for (CreditCardActivity creditCardActivity : creditCardActivities) {
-                if(isMatchedExactly(expense, creditCardActivity)) {
+                if(ExactMatcher.isMatch(expense, creditCardActivity)) {
                     matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
                 }
             }
@@ -66,22 +68,11 @@ public class TransactionMatcher {
         return matchedTransactions;
     }
 
-    private boolean isMatchedExactly(Expense expense, CreditCardActivity creditCardActivity) {
-        BigDecimal creditCardActivityAmount = creditCardActivity.getAmount();
-        double positiveCreditCardActivityAmount = Math.abs(creditCardActivityAmount.doubleValue());
-        double expenseAmount = expense.getAmount().doubleValue();
-
-        DateTime expenseDate = expense.getTimestamp();
-
-        DateTime creditCardActivityTransactionDate = creditCardActivity.getTransactionDate();
-        return expenseAmount == positiveCreditCardActivityAmount && expenseDate.equals(creditCardActivityTransactionDate);
-    }
-
     private List<MatchedTransaction> createCloselyMatchedTransactions(List<CreditCardActivity> creditCardActivities, List<Expense> expenses) {
         List<MatchedTransaction> matchedTransactions = new ArrayList<>();
         for (Expense expense : expenses) {
             for (CreditCardActivity creditCardActivity : creditCardActivities) {
-                if(isMatchedClosely(expense, creditCardActivity)) {
+                if(CloseDateMatcher.isMatch(expense, creditCardActivity)) {
                     matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
                 }
             }
