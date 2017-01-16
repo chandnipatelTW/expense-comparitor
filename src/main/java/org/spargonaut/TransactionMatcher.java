@@ -30,6 +30,14 @@ public class TransactionMatcher {
         return this.unmatchedExpenses;
     }
 
+    public List<MatchedTransaction> getExactMatchedTransactions() {
+        return exactMatchedTransactions;
+    }
+
+    public List<MatchedTransaction> getCloselyMatchedTransactions() {
+        return closelyMatchedTransactions;
+    }
+
     public void processTransactions() {
         this.exactMatchedTransactions = createExactMatchedTransactions();
         this.closelyMatchedTransactions = createCloselyMatchedTransactions();
@@ -126,13 +134,5 @@ public class TransactionMatcher {
 
         DateTime creditCardActivityTransactionDate = creditCardActivity.getTransactionDate();
         return expenseAmount == positiveCreditCardActivityAmount && expenseDate.equals(creditCardActivityTransactionDate);
-    }
-
-    public List<MatchedTransaction> getExactMatchedTransactions() {
-        return exactMatchedTransactions;
-    }
-
-    public List<MatchedTransaction> getCloselyMatchedTransactions() {
-        return closelyMatchedTransactions;
     }
 }
