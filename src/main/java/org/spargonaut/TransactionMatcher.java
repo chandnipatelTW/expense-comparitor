@@ -58,6 +58,17 @@ public class TransactionMatcher {
         return exactMatchedTransactions;
     }
 
+    private boolean isMatchedExactly(Expense expense, CreditCardActivity creditCardActivity) {
+        BigDecimal creditCardActivityAmount = creditCardActivity.getAmount();
+        double positiveCreditCardActivityAmount = Math.abs(creditCardActivityAmount.doubleValue());
+        double expenseAmount = expense.getAmount().doubleValue();
+
+        DateTime expenseDate = expense.getTimestamp();
+
+        DateTime creditCardActivityTransactionDate = creditCardActivity.getTransactionDate();
+        return expenseAmount == positiveCreditCardActivityAmount && expenseDate.equals(creditCardActivityTransactionDate);
+    }
+
     private List<MatchedTransaction> createCloselyMatchedTransactions() {
         List<CreditCardActivity> unmatchedCreditCardActivities = cleanOutUnmatchedCreditCardActivities(this.creditCardActivities, this.exactMatchedTransactions);
         List<Expense> unmatchedExpenses = cleanOutUnmatchedExpenses(this.expenses, this.exactMatchedTransactions);
@@ -123,16 +134,5 @@ public class TransactionMatcher {
         boolean dateIsWithinTolerance = expenseDate.equals(dayBeforeTransactionDate) || expenseDate.equals(dayAfterTransactionDate);
 
         return expenseAmount == positiveCreditCardActivityAmount && dateIsWithinTolerance;
-    }
-
-    private boolean isMatchedExactly(Expense expense, CreditCardActivity creditCardActivity) {
-        BigDecimal creditCardActivityAmount = creditCardActivity.getAmount();
-        double positiveCreditCardActivityAmount = Math.abs(creditCardActivityAmount.doubleValue());
-        double expenseAmount = expense.getAmount().doubleValue();
-
-        DateTime expenseDate = expense.getTimestamp();
-
-        DateTime creditCardActivityTransactionDate = creditCardActivity.getTransactionDate();
-        return expenseAmount == positiveCreditCardActivityAmount && expenseDate.equals(creditCardActivityTransactionDate);
     }
 }
