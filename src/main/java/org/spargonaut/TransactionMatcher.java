@@ -45,12 +45,12 @@ public class TransactionMatcher {
         matchedTransactionLists.add(exactMatchedTransactions);
 
         List<CreditCardActivity> unmatchedCreditCardActivities = collectUnmatchedCreditCardActivities(this.creditCardActivities, matchedTransactionLists);
-        List<Expense> unmatchedExpenses = cleanOutUnmatchedExpenses(this.expenses, this.exactMatchedTransactions);
+        List<Expense> unmatchedExpenses = collectUnmatchedExpenses(this.expenses, matchedTransactionLists);
 
         this.closelyMatchedTransactions = createCloselyMatchedTransactions(unmatchedCreditCardActivities, unmatchedExpenses);
         matchedTransactionLists.add(this.closelyMatchedTransactions);
 
-        this.unmatchedExpenses = collectUnmatchedExpenses();
+        this.unmatchedExpenses = collectUnmatchedExpenses(this.expenses, matchedTransactionLists);
         this.unmatchedCreditCardActivies = collectUnmatchedCreditCardActivities(this.creditCardActivities, matchedTransactionLists);
     }
 
@@ -102,20 +102,16 @@ public class TransactionMatcher {
         return unmamtchedCreditCardActivities;
     }
 
-    private List<Expense> cleanOutUnmatchedExpenses(List<Expense> expenses, List<MatchedTransaction> matchedTransactions) {
+    private List<Expense> collectUnmatchedExpenses(List<Expense> expenses, List<List<MatchedTransaction>> matchedTransactionLists) {
         List<Expense> unmatchedExpenses = new ArrayList<>(expenses);
-        for (MatchedTransaction matchedTransaction : matchedTransactions) {
-            Expense matchedExpense = matchedTransaction.getMatchedExpense();
-            if (unmatchedExpenses.contains(matchedExpense)) {
-                unmatchedExpenses.remove(matchedExpense);
+        for (List<MatchedTransaction> matchedTransactions : matchedTransactionLists) {
+            for (MatchedTransaction matchedTransaction : matchedTransactions) {
+                Expense matchedExpense = matchedTransaction.getMatchedExpense();
+                if (unmatchedExpenses.contains(matchedExpense)) {
+                    unmatchedExpenses.remove(matchedExpense);
+                }
             }
         }
-        return unmatchedExpenses;
-    }
-
-    private List<Expense> collectUnmatchedExpenses() {
-        List<Expense> unmatchedExpenses = cleanOutUnmatchedExpenses(this.expenses, this.exactMatchedTransactions);
-        unmatchedExpenses = cleanOutUnmatchedExpenses(unmatchedExpenses, this.closelyMatchedTransactions);
         return unmatchedExpenses;
     }
 
