@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TransactionMatcher {
+public class TransactionProcessor {
     private final List<Expense> expenses;
     private List<CreditCardActivity> creditCardActivities;
     private List<CreditCardActivity> unmatchedCreditCardActivies;
@@ -19,7 +19,7 @@ public class TransactionMatcher {
     private List<MatchedTransaction> exactMatchedTransactions;
     private List<MatchedTransaction> closelyMatchedTransactions;
 
-    public TransactionMatcher(List<CreditCardActivity> creditCardActivities, List<Expense> expenses) {
+    public TransactionProcessor(List<CreditCardActivity> creditCardActivities, List<Expense> expenses) {
         this.creditCardActivities = creditCardActivities;
         this.expenses = expenses;
     }
