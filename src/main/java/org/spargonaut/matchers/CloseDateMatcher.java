@@ -13,9 +13,11 @@ public class CloseDateMatcher {
         double expenseAmount = expense.getAmount().doubleValue();
 
         DateTime expenseDate = expense.getTimestamp();
-        DateTime dayAfterTransactionDate = creditCardActivity.getTransactionDate().plusDays(1);
+        DateTime transactionDate = creditCardActivity.getTransactionDate();
+        DateTime dayAfterTransactionDate = transactionDate.plusDays(1);
+        DateTime dayBeforeTransactionDate = transactionDate.minusDays(1);
 
-        boolean dateIsWithinTolerance = expenseDate.equals(dayAfterTransactionDate);
+        boolean dateIsWithinTolerance = expenseDate.equals(dayAfterTransactionDate) || expenseDate.equals(dayBeforeTransactionDate);
 
         return expenseAmount == positiveCreditCardActivityAmount && dateIsWithinTolerance;
     }

@@ -41,4 +41,32 @@ public class CloseDateMatcherTest {
         assertThat(CloseDateMatcher.isMatch(expense, creditCardActivity), is(true));
     }
 
+    @Test
+    public void shouldCreateAListOfCloseTransactionMatches_whenCreditCardActivityDateIsOneDayAfterTheExpenseDate() {
+        int dayOfMonthForExpenseToMatchOn = 26;
+        int yearToMatchOn = 2016;
+        int monthOfYearToMatchOn = 12;
+        double amountToMatchOn = 3.38;
+        String descriptionToMatchOn = "this is a description for a matched amount";
+        double amountToMatchOnForCreditCardActivityOne = amountToMatchOn * -1;
+        String merchantToMatch = "some merchant";
+
+        DateTime expenseDateToMatchOn = new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForExpenseToMatchOn, 0, 0);
+
+        CreditCardActivity creditCardActivity = new CreditCardActivityBuilder()
+                .setAmount(amountToMatchOnForCreditCardActivityOne)
+                .setDescription(descriptionToMatchOn)
+                .setTransactionDate(expenseDateToMatchOn.plusDays(1))
+                .setType(ActivityType.SALE)
+                .build();
+
+        Expense expense = new ExpenseBuilder()
+                .setMerchant(merchantToMatch)
+                .setTimestamp(expenseDateToMatchOn)
+                .setAmount(amountToMatchOn)
+                .build();
+
+        assertThat(CloseDateMatcher.isMatch(expense, creditCardActivity), is(true));
+    }
+
 }
