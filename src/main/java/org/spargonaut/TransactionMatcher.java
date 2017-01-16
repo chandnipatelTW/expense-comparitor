@@ -45,6 +45,19 @@ public class TransactionMatcher {
         this.unmatchedCreditCardActivies = collectUnmatchedCreditCardActivities();
     }
 
+    private List<MatchedTransaction> createExactMatchedTransactions() {
+        List<MatchedTransaction> exactMatchedTransactions = new ArrayList<>();
+        for (Expense expense : this.expenses) {
+            for (CreditCardActivity creditCardActivity : creditCardActivities) {
+                if(isMatchedExactly(expense, creditCardActivity)) {
+                    MatchedTransaction matchedTransaction = new MatchedTransaction(creditCardActivity, expense);
+                    exactMatchedTransactions.add(matchedTransaction);
+                }
+            }
+        }
+        return exactMatchedTransactions;
+    }
+
     private List<CreditCardActivity> collectUnmatchedCreditCardActivities() {
         List<CreditCardActivity> unmatchedCreditCardActivities = cleanOutUnmatchedCreditCardActivities(this.creditCardActivities, this.exactMatchedTransactions);
         unmatchedCreditCardActivities = cleanOutUnmatchedCreditCardActivities(unmatchedCreditCardActivities, this.closelyMatchedTransactions);
@@ -110,19 +123,6 @@ public class TransactionMatcher {
         boolean dateIsWithinTolerance = expenseDate.equals(dayBeforeTransactionDate) || expenseDate.equals(dayAfterTransactionDate);
 
         return expenseAmount == positiveCreditCardActivityAmount && dateIsWithinTolerance;
-    }
-
-    private List<MatchedTransaction> createExactMatchedTransactions() {
-        List<MatchedTransaction> exactMatchedTransactions = new ArrayList<>();
-        for (Expense expense : this.expenses) {
-            for (CreditCardActivity creditCardActivity : creditCardActivities) {
-                if(isMatchedExactly(expense, creditCardActivity)) {
-                    MatchedTransaction matchedTransaction = new MatchedTransaction(creditCardActivity, expense);
-                    exactMatchedTransactions.add(matchedTransaction);
-                }
-            }
-        }
-        return exactMatchedTransactions;
     }
 
     private boolean isMatchedExactly(Expense expense, CreditCardActivity creditCardActivity) {
