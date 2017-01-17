@@ -3,8 +3,6 @@ package org.spargonaut;
 import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
 import org.spargonaut.datamodels.MatchedTransaction;
-import org.spargonaut.matchers.CloseDateMatcher;
-import org.spargonaut.matchers.ExactMatcher;
 import org.spargonaut.matchers.TransactionMatcher;
 
 import java.util.*;
@@ -28,25 +26,14 @@ public class TransactionProcessor {
         return collectUnmatchedExpenses(this.expenses, this.matchedTransactions.values());
     }
 
-    public List<MatchedTransaction> getExactMatchedTransactions() {
-        ExactMatcher exactMatcher = new ExactMatcher();
-        return matchedTransactions.get(exactMatcher.getType());
-    }
-
-    public List<MatchedTransaction> getCloselyMatchedTransactions() {
-        CloseDateMatcher closeDateMatcher = new CloseDateMatcher();
-        return matchedTransactions.get(closeDateMatcher.getType());
-    }
-
     public Map<String, List<MatchedTransaction>> getMatchedTransactions() {
-        return null;
+        return this.matchedTransactions;
     }
 
     public void processTransactions(List<TransactionMatcher> matchers) {
         for (TransactionMatcher matcher : matchers) {
             List<Expense> unmatchedExpenses = collectUnmatchedExpenses(this.expenses, this.matchedTransactions.values());
             List<CreditCardActivity> unmatchedCreditCardActivities = collectUnmatchedCreditCardActivities(this.creditCardActivities, this.matchedTransactions.values());
-
             List<MatchedTransaction> matchedTransactionList = createMatchedTransactions(unmatchedCreditCardActivities, unmatchedExpenses, matcher);
             this.matchedTransactions.put(matcher.getType(), matchedTransactionList);
         }

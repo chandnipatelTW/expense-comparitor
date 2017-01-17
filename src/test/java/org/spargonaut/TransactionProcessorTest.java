@@ -14,6 +14,7 @@ import org.spargonaut.matchers.TransactionMatcher;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -53,10 +54,14 @@ public class TransactionProcessorTest {
         List<Expense> expenses = Arrays.asList(expenseToMatch);
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivities, expenses);
-        List<TransactionMatcher> exactMatcherList = Arrays.asList(new ExactMatcher());
+        TransactionMatcher exactMatcher = new ExactMatcher();
+        List<TransactionMatcher> exactMatcherList = Arrays.asList(exactMatcher);
         transactionProcessor.processTransactions(exactMatcherList);
 
-        List<MatchedTransaction> matchedTransactions = transactionProcessor.getExactMatchedTransactions();
+        Map<String, List<MatchedTransaction>> matchedTransactionsMap = transactionProcessor.getMatchedTransactions();
+        List<MatchedTransaction> matchedTransactions = matchedTransactionsMap.get(exactMatcher.getType());
+
+
         assertThat(matchedTransactions.size(), is(1));
 
         CreditCardActivity expectedCreditCardActivityMatch = new CreditCardActivityBuilder()
@@ -113,10 +118,13 @@ public class TransactionProcessorTest {
         List<Expense> expenses = Arrays.asList(expenseOne);
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivitiesForTesting, expenses);
-        List<TransactionMatcher> exactMatcherList = Arrays.asList(new ExactMatcher());
+        TransactionMatcher exactMatcher = new ExactMatcher();
+        List<TransactionMatcher> exactMatcherList = Arrays.asList(exactMatcher);
         transactionProcessor.processTransactions(exactMatcherList);
 
-        List<MatchedTransaction> matchedTransactions = transactionProcessor.getExactMatchedTransactions();
+        Map<String, List<MatchedTransaction>> matchedTransactionsMap = transactionProcessor.getMatchedTransactions();
+        List<MatchedTransaction> matchedTransactions = matchedTransactionsMap.get(exactMatcher.getType());
+
         assertThat(matchedTransactions.size(), is(1));
 
         CreditCardActivity expectedCreditCardActivityMatch = new CreditCardActivityBuilder()
@@ -162,10 +170,13 @@ public class TransactionProcessorTest {
         List<Expense> expenses = Arrays.asList(expenseOne);
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivitiesForTesting, expenses);
-        List<TransactionMatcher> exactMatcherList = Arrays.asList(new CloseDateMatcher());
+        CloseDateMatcher closeDateMatcher = new CloseDateMatcher();
+        List<TransactionMatcher> exactMatcherList = Arrays.asList(closeDateMatcher);
         transactionProcessor.processTransactions(exactMatcherList);
 
-        List<MatchedTransaction> matchedTransactions = transactionProcessor.getCloselyMatchedTransactions();
+        Map<String, List<MatchedTransaction>> matchedTransactionsMap = transactionProcessor.getMatchedTransactions();
+        List<MatchedTransaction> matchedTransactions = matchedTransactionsMap.get(closeDateMatcher.getType());
+
         assertThat(matchedTransactions.size(), is(1));
 
         CreditCardActivity expectedCreditCardActivityMatch = new CreditCardActivityBuilder()
@@ -211,10 +222,13 @@ public class TransactionProcessorTest {
         List<Expense> expenses = Arrays.asList(expenseOne);
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivitiesForTesting, expenses);
-        List<TransactionMatcher> exactMatcherList = Arrays.asList(new CloseDateMatcher());
+        CloseDateMatcher closeDateMatcher = new CloseDateMatcher();
+        List<TransactionMatcher> exactMatcherList = Arrays.asList(closeDateMatcher);
         transactionProcessor.processTransactions(exactMatcherList);
 
-        List<MatchedTransaction> matchedTransactions = transactionProcessor.getCloselyMatchedTransactions();
+        Map<String, List<MatchedTransaction>> matchedTransactionsMap = transactionProcessor.getMatchedTransactions();
+        List<MatchedTransaction> matchedTransactions = matchedTransactionsMap.get(closeDateMatcher.getType());
+
         assertThat(matchedTransactions.size(), is(1));
 
         CreditCardActivity expectedCreditCardActivityMatch = new CreditCardActivityBuilder()
