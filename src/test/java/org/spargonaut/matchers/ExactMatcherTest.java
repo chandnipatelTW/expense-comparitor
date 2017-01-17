@@ -42,4 +42,10 @@ public class ExactMatcherTest {
         ExactMatcher matcher = new ExactMatcher();
         assertThat(matcher.isMatch(expenseToMatch, creditCardActivityToMatch), is(true));
     }
+
+    @Test
+    public void shouldIndicateItsTypeOfMatching() {
+        ExactMatcher exactMatcher = new ExactMatcher();
+        assertThat(exactMatcher.getType(), is("Exact Match"));
+    }
 }

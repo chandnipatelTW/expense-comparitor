@@ -17,4 +17,8 @@ public class ExactMatcher implements TransactionMatcher {
         DateTime creditCardActivityTransactionDate = creditCardActivity.getTransactionDate();
         return expenseAmount == positiveCreditCardActivityAmount && expenseDate.equals(creditCardActivityTransactionDate);
     }
+
+    public String getType() {
+        return "Exact Match";
+    }
 }

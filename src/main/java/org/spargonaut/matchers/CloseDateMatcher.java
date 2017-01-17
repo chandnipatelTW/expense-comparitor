@@ -21,4 +21,8 @@ public class CloseDateMatcher implements TransactionMatcher {
 
         return expenseAmount == positiveCreditCardActivityAmount && dateIsWithinTolerance;
     }
+
+    public String getType() {
+        return "Close Date match";
+    }
 }
