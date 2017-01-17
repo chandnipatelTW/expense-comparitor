@@ -8,6 +8,9 @@ import org.spargonaut.datamodels.Expense;
 import org.spargonaut.datamodels.MatchedTransaction;
 import org.spargonaut.datamodels.testbuilders.CreditCardActivityBuilder;
 import org.spargonaut.datamodels.testbuilders.ExpenseBuilder;
+import org.spargonaut.matchers.CloseDateMatcher;
+import org.spargonaut.matchers.ExactMatcher;
+import org.spargonaut.matchers.TransactionMatcher;
 
 import java.util.Arrays;
 import java.util.List;
@@ -50,7 +53,8 @@ public class TransactionProcessorTest {
         List<Expense> expenses = Arrays.asList(expenseToMatch);
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivities, expenses);
-        transactionProcessor.processTransactions();
+        List<TransactionMatcher> exactMatcherList = Arrays.asList(new ExactMatcher());
+        transactionProcessor.processTransactions(exactMatcherList);
 
         List<MatchedTransaction> matchedTransactions = transactionProcessor.getExactMatchedTransactions();
         assertThat(matchedTransactions.size(), is(1));
@@ -109,7 +113,8 @@ public class TransactionProcessorTest {
         List<Expense> expenses = Arrays.asList(expenseOne);
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivitiesForTesting, expenses);
-        transactionProcessor.processTransactions();
+        List<TransactionMatcher> exactMatcherList = Arrays.asList(new ExactMatcher());
+        transactionProcessor.processTransactions(exactMatcherList);
 
         List<MatchedTransaction> matchedTransactions = transactionProcessor.getExactMatchedTransactions();
         assertThat(matchedTransactions.size(), is(1));
@@ -157,7 +162,8 @@ public class TransactionProcessorTest {
         List<Expense> expenses = Arrays.asList(expenseOne);
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivitiesForTesting, expenses);
-        transactionProcessor.processTransactions();
+        List<TransactionMatcher> exactMatcherList = Arrays.asList(new CloseDateMatcher());
+        transactionProcessor.processTransactions(exactMatcherList);
 
         List<MatchedTransaction> matchedTransactions = transactionProcessor.getCloselyMatchedTransactions();
         assertThat(matchedTransactions.size(), is(1));
@@ -205,7 +211,8 @@ public class TransactionProcessorTest {
         List<Expense> expenses = Arrays.asList(expenseOne);
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivitiesForTesting, expenses);
-        transactionProcessor.processTransactions();
+        List<TransactionMatcher> exactMatcherList = Arrays.asList(new CloseDateMatcher());
+        transactionProcessor.processTransactions(exactMatcherList);
 
         List<MatchedTransaction> matchedTransactions = transactionProcessor.getCloselyMatchedTransactions();
         assertThat(matchedTransactions.size(), is(1));
@@ -286,7 +293,8 @@ public class TransactionProcessorTest {
         List<Expense> expenses = Arrays.asList(expenseToMatchExactly, expenseToCloselyMatchDayBefore, expenseToCloselyMatchDayAfter);
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivities, expenses);
-        transactionProcessor.processTransactions();
+        List<TransactionMatcher> exactMatcherList = Arrays.asList(new ExactMatcher(), new CloseDateMatcher());
+        transactionProcessor.processTransactions(exactMatcherList);
 
         List<CreditCardActivity> unmatchedCreditCardActivities = transactionProcessor.getUnmatchedCreditCardActivies();
 
@@ -351,7 +359,8 @@ public class TransactionProcessorTest {
         List<Expense> expenses = Arrays.asList(expenseToMatchExactly, expenseToCloselyMatchDayBefore, expenseToCloselyMatchDayAfter, expenseThatDoesNotMatch);
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivities, expenses);
-        transactionProcessor.processTransactions();
+        List<TransactionMatcher> exactMatcherList = Arrays.asList(new ExactMatcher(), new CloseDateMatcher());
+        transactionProcessor.processTransactions(exactMatcherList);
 
         List<Expense> unmatchedExpenses = transactionProcessor.getUnmatchedExpenses();
         assertThat(unmatchedExpenses.size(), is(1));

@@ -42,9 +42,7 @@ public class TransactionProcessor {
         return null;
     }
 
-    public void processTransactions() {
-        List<TransactionMatcher> matchers = Arrays.asList(new ExactMatcher(), new CloseDateMatcher());
-
+    public void processTransactions(List<TransactionMatcher> matchers) {
         for (TransactionMatcher matcher : matchers) {
             List<Expense> unmatchedExpenses = collectUnmatchedExpenses(this.expenses, this.matchedTransactions.values());
             List<CreditCardActivity> unmatchedCreditCardActivities = collectUnmatchedCreditCardActivities(this.creditCardActivities, this.matchedTransactions.values());
