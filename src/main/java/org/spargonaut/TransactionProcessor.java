@@ -1,13 +1,12 @@
 package org.spargonaut;
 
-import org.joda.time.DateTime;
 import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
 import org.spargonaut.datamodels.MatchedTransaction;
 import org.spargonaut.matchers.CloseDateMatcher;
 import org.spargonaut.matchers.ExactMatcher;
+import org.spargonaut.matchers.TransactionMatcher;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,34 +42,20 @@ public class TransactionProcessor {
     public void processTransactions() {
         List<List<MatchedTransaction>> matchedTransactionLists = new ArrayList<>();
 
-        this.exactMatchedTransactions = createExactMatchedTransactions(this.creditCardActivities, this.expenses);
+        this.exactMatchedTransactions = createMatchedTransactions(this.creditCardActivities, this.expenses, new ExactMatcher());
         matchedTransactionLists.add(exactMatchedTransactions);
 
         List<CreditCardActivity> unmatchedCreditCardActivities = collectUnmatchedCreditCardActivities(this.creditCardActivities, matchedTransactionLists);
         List<Expense> unmatchedExpenses = collectUnmatchedExpenses(this.expenses, matchedTransactionLists);
 
-        this.closelyMatchedTransactions = createCloselyMatchedTransactions(unmatchedCreditCardActivities, unmatchedExpenses);
+        this.closelyMatchedTransactions = createMatchedTransactions(unmatchedCreditCardActivities, unmatchedExpenses, new CloseDateMatcher());
         matchedTransactionLists.add(this.closelyMatchedTransactions);
 
         this.unmatchedExpenses = collectUnmatchedExpenses(this.expenses, matchedTransactionLists);
         this.unmatchedCreditCardActivies = collectUnmatchedCreditCardActivities(this.creditCardActivities, matchedTransactionLists);
     }
 
-    private List<MatchedTransaction> createExactMatchedTransactions(List<CreditCardActivity> creditCardActivities, List<Expense> expenses) {
-        ExactMatcher matcher = new ExactMatcher();
-        List<MatchedTransaction> matchedTransactions = new ArrayList<>();
-        for (Expense expense : expenses) {
-            for (CreditCardActivity creditCardActivity : creditCardActivities) {
-                if(matcher.isMatch(expense, creditCardActivity)) {
-                    matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
-                }
-            }
-        }
-        return matchedTransactions;
-    }
-
-    private List<MatchedTransaction> createCloselyMatchedTransactions(List<CreditCardActivity> creditCardActivities, List<Expense> expenses) {
-        CloseDateMatcher matcher = new CloseDateMatcher();
+    private List<MatchedTransaction> createMatchedTransactions(List<CreditCardActivity> creditCardActivities, List<Expense> expenses, TransactionMatcher matcher) {
         List<MatchedTransaction> matchedTransactions = new ArrayList<>();
         for (Expense expense : expenses) {
             for (CreditCardActivity creditCardActivity : creditCardActivities) {
@@ -106,22 +91,5 @@ public class TransactionProcessor {
             }
         }
         return unmatchedExpenses;
-    }
-
-    private boolean isMatchedClosely(Expense expense, CreditCardActivity creditCardActivity) {
-        BigDecimal creditCardActivityAmount = creditCardActivity.getAmount();
-        double positiveCreditCardActivityAmount = Math.abs(creditCardActivityAmount.doubleValue());
-        double expenseAmount = expense.getAmount().doubleValue();
-
-        DateTime expenseDate = expense.getTimestamp();
-
-        DateTime transactionDate = creditCardActivity.getTransactionDate();
-
-        DateTime dayBeforeTransactionDate = transactionDate.minusDays(1);
-        DateTime dayAfterTransactionDate = transactionDate.plusDays(1);
-
-        boolean dateIsWithinTolerance = expenseDate.equals(dayBeforeTransactionDate) || expenseDate.equals(dayAfterTransactionDate);
-
-        return expenseAmount == positiveCreditCardActivityAmount && dateIsWithinTolerance;
     }
 }
