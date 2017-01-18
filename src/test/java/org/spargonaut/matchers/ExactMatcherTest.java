@@ -46,6 +46,6 @@ public class ExactMatcherTest {
     @Test
     public void shouldIndicateItsTypeOfMatching() {
         ExactMatcher exactMatcher = new ExactMatcher();
-        assertThat(exactMatcher.getType(), is("Exact Match"));
+        assertThat(exactMatcher.getType(), is("Exact Amount, Exact Date"));
     }
 }

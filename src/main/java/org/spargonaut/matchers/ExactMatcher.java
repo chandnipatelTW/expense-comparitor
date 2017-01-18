@@ -19,6 +19,6 @@ public class ExactMatcher implements TransactionMatcher {
     }
 
     public String getType() {
-        return "Exact Match";
+        return "Exact Amount, Exact Date";
     }
 }
