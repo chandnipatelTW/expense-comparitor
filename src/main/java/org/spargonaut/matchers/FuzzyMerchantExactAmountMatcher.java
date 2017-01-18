@@ -29,6 +29,6 @@ public class FuzzyMerchantExactAmountMatcher implements TransactionMatcher {
 
     @Override
     public String getType() {
-        return "Exact Amount Close Merchant";
+        return "Exact Amount, Close Merchant";
     }
 }

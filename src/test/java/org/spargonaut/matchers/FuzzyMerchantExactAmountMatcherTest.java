@@ -41,4 +41,10 @@ public class FuzzyMerchantExactAmountMatcherTest {
         TransactionMatcher matcher = new FuzzyMerchantExactAmountMatcher();
         assertThat(matcher.isMatch(expense, creditCardActivity), is(true));
     }
+
+    @Test
+    public void shouldIndicateItsTypeOfMatching() {
+        FuzzyMerchantExactAmountMatcher fuzzyMerchantExactAmountMatcher = new FuzzyMerchantExactAmountMatcher();
+        assertThat(fuzzyMerchantExactAmountMatcher.getType(), is("Exact Amount, Close Merchant"));
+    }
 }
