@@ -5,6 +5,7 @@ plugins {
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 sourceSets {
@@ -26,6 +27,7 @@ configurations {
 dependencies {
     compile 'org.projectlombok:lombok:1.16.12'
     compile 'org.unitils.jodatime:unitils-jodatime:1.0.3'
+    compile 'org.apache.commons:commons-text:0.1-SNAPSHOT'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.springframework.boot:spring-boot:1.3.5.RELEASE'
