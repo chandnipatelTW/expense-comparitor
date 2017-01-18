@@ -8,7 +8,7 @@ import java.util.List;
 
 public class MatchedTransactionPrinter {
     public static void printMatchedTransactions (List<MatchedTransaction> matchedTransactions) {
-        System.out.format("transactions (%d) ------------------------------------------------------------------\n", matchedTransactions.size());
+        System.out.format(" transactions (%d) ------------------------------------------------------------------\n", matchedTransactions.size());
         for (MatchedTransaction matchedTransaction : matchedTransactions) {
             printMatchedTransaction(matchedTransaction.getMatchedCreditCardActivity(),
                     matchedTransaction.getMatchedExpense());

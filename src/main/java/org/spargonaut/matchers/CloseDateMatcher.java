@@ -23,6 +23,6 @@ public class CloseDateMatcher implements TransactionMatcher {
     }
 
     public String getType() {
-        return "Close Date match";
+        return "Exact Amount, Close Date";
     }
 }

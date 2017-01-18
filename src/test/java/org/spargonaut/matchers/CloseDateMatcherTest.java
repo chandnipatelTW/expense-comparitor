@@ -74,7 +74,7 @@ public class CloseDateMatcherTest {
     @Test
     public void shouldIndicateItsTypeOfMatching() {
         CloseDateMatcher closeDateMatcher = new CloseDateMatcher();
-        assertThat(closeDateMatcher.getType(), is("Close Date match"));
+        assertThat(closeDateMatcher.getType(), is("Exact Amount, Close Date"));
     }
 
 }
