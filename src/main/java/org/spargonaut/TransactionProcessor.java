@@ -43,12 +43,36 @@ public class TransactionProcessor {
         List<MatchedTransaction> matchedTransactions = new ArrayList<>();
         for (Expense expense : expenses) {
             for (CreditCardActivity creditCardActivity : creditCardActivities) {
-                if(matcher.isMatch(expense, creditCardActivity)) {
+                if(matcher.isMatch(expense, creditCardActivity) &&
+                        expenseIsNotPreviouslyMatched(expense, matchedTransactions) &&
+                        creditCardActivityIsNotPreviouslyMatched(creditCardActivity, matchedTransactions)) {
                     matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
                 }
             }
         }
         return matchedTransactions;
+    }
+
+    private boolean expenseIsNotPreviouslyMatched(Expense expense, List<MatchedTransaction> matchedTransactions) {
+        boolean isMatched = false;
+        for (MatchedTransaction matchedTransaction : matchedTransactions) {
+            Expense matchedExpense = matchedTransaction.getMatchedExpense();
+            if (matchedExpense.equals(expense)) {
+                isMatched = true;
+            }
+        }
+        return !isMatched;
+    }
+
+    private boolean creditCardActivityIsNotPreviouslyMatched(CreditCardActivity creditCardActivity, List<MatchedTransaction> matchedTransactions) {
+        boolean isMatched = false;
+        for (MatchedTransaction matchedTransaction : matchedTransactions) {
+            CreditCardActivity matchedCreditCardActivity = matchedTransaction.getMatchedCreditCardActivity();
+            if (matchedCreditCardActivity.equals(creditCardActivity)) {
+                isMatched = true;
+            }
+        }
+        return !isMatched;
     }
 
     private List<CreditCardActivity> collectUnmatchedCreditCardActivities(List<CreditCardActivity> creditCardActivities, Collection<List<MatchedTransaction>> matchedTransactionList) {

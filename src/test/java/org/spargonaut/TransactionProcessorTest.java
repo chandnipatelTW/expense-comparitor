@@ -10,6 +10,7 @@ import org.spargonaut.datamodels.testbuilders.CreditCardActivityBuilder;
 import org.spargonaut.datamodels.testbuilders.ExpenseBuilder;
 import org.spargonaut.matchers.CloseDateMatcher;
 import org.spargonaut.matchers.ExactMatcher;
+import org.spargonaut.matchers.FuzzyMerchantExactAmountMatcher;
 import org.spargonaut.matchers.TransactionMatcher;
 
 import java.util.Arrays;
@@ -381,7 +382,73 @@ public class TransactionProcessorTest {
 
     }
 
+    @Test
+    public void shouldOnlyCreateOneMatchWhenTwoMatchesAreClose() {
+        double amountForConfusingMatch = 747.20;
+
+        int transactionDateDayOfMonthForMatchOne = 25;
+        DateTime transactionDateForMatchOne = getDateTimeForDay(transactionDateDayOfMonthForMatchOne);
+        int postDateDayOfMonthForMatchOne = 27;
+        DateTime postDateForMatchOne = getDateTimeForDay(postDateDayOfMonthForMatchOne);
+
+        String merchantForMatchOne = "AMERICAN AIR0012102229772";
+        CreditCardActivity creditCardActivityMatchOne = new CreditCardActivityBuilder()
+                .setAmount(amountForConfusingMatch * -1)
+                .setDescription(merchantForMatchOne)
+                .setTransactionDate(transactionDateForMatchOne)
+                .setPostDate(postDateForMatchOne)
+                .build();
+
+        int expenseDayOfMonthForMatchOne = 27;
+        DateTime expenseDateForMatchOne = getDateTimeForDay(expenseDayOfMonthForMatchOne);
+        String merchantForExpenseMatchOne = "American Airlines";
+        Expense expenseMatchOne = new ExpenseBuilder()
+                .setAmount(amountForConfusingMatch)
+                .setMerchant(merchantForExpenseMatchOne)
+                .setTimestamp(expenseDateForMatchOne)
+                .build();
+
+        String merchantForMatchTwo = "AMERICAN AIR0012103968702";
+        int monthForMatchTwo = 12;
+        int transactionDateDayOfMonthForMatchTwo = 7;
+        DateTime transactionDateForMatchTwo = getDateTimeForMonthAndDay(transactionDateDayOfMonthForMatchTwo, monthForMatchTwo);
+        int postDateDayOfMonthForMatchTwo = 9;
+        DateTime postDateForMatchTwo = getDateTimeForMonthAndDay(postDateDayOfMonthForMatchTwo, monthForMatchTwo);
+
+        CreditCardActivity creditCardActivityMatchTwo = new CreditCardActivityBuilder()
+                .setAmount(amountForConfusingMatch * -1)
+                .setDescription(merchantForMatchTwo)
+                .setTransactionDate(transactionDateForMatchTwo)
+                .setPostDate(postDateForMatchTwo)
+                .build();
+
+        String merchantForExpenseMatchTwo = "American Airlines";
+        int expenseDayOfMonthForMatchTwo = 12;
+        DateTime expenseDateForMatchTwo = getDateTimeForMonthAndDay(expenseDayOfMonthForMatchTwo, monthForMatchTwo);
+        Expense expenseMatchTwo = new ExpenseBuilder()
+                .setAmount(amountForConfusingMatch)
+                .setMerchant(merchantForExpenseMatchTwo)
+                .setTimestamp(expenseDateForMatchTwo)
+                .build();
+
+        List<CreditCardActivity> creditCardActivities = Arrays.asList(creditCardActivityMatchOne, creditCardActivityMatchTwo);
+        List<Expense> expenses = Arrays.asList(expenseMatchOne, expenseMatchTwo);
+        TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivities, expenses);
+        FuzzyMerchantExactAmountMatcher fuzzyMatcher = new FuzzyMerchantExactAmountMatcher();
+        List<TransactionMatcher> matchers = Arrays.asList(fuzzyMatcher);
+        transactionProcessor.processTransactions(matchers);
+
+        Map<String, List<MatchedTransaction>> matches = transactionProcessor.getMatchedTransactions();
+        List<MatchedTransaction> fuzzyMatches = matches.get(fuzzyMatcher.getType());
+
+        assertThat(fuzzyMatches.size(), is(2));
+    }
+
+    private DateTime getDateTimeForMonthAndDay(int dayOfMonthForDate, int monthForDate) {
+        return new DateTime(yearToMatchOn, monthForDate, dayOfMonthForDate, 0, 0);
+    }
+
     private DateTime getDateTimeForDay(int dayOfMonthForPostDate) {
-        return new DateTime(yearToMatchOn, monthOfYearToMatchOn, dayOfMonthForPostDate, 0, 0);
+        return getDateTimeForMonthAndDay(dayOfMonthForPostDate, monthOfYearToMatchOn);
     }
 }
