@@ -47,4 +47,9 @@ public class CreditCardActivityBuilder {
         this.amount = formattedBigDecimal.setScale(2, BigDecimal.ROUND_HALF_EVEN);
         return this;
     }
+
+    public CreditCardActivityBuilder setBigDecimalAmount(BigDecimal amount) {
+        this.amount = amount;
+        return this;
+    }
 }

@@ -43,6 +43,11 @@ public class ExpenseBuilder {
         return this;
     }
 
+    public ExpenseBuilder setBigDecimalAmount(BigDecimal amount) {
+        this.amount = amount;
+        return this;
+    }
+
     public ExpenseBuilder setMcc(String mcc) {
         this.mcc = mcc;
         return this;
