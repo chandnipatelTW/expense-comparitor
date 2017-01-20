@@ -56,10 +56,7 @@ public class TransactionProcessor {
     private boolean expenseIsNotPreviouslyMatched(Expense expense, List<MatchedTransaction> matchedTransactions) {
         boolean isMatched = false;
         for (MatchedTransaction matchedTransaction : matchedTransactions) {
-            Expense matchedExpense = matchedTransaction.getMatchedExpense();
-            if (matchedExpense.equals(expense)) {
-                isMatched = true;
-            }
+            isMatched = matchedTransaction.containsExpense(expense);
         }
         return !isMatched;
     }
@@ -67,10 +64,7 @@ public class TransactionProcessor {
     private boolean creditCardActivityIsNotPreviouslyMatched(CreditCardActivity creditCardActivity, List<MatchedTransaction> matchedTransactions) {
         boolean isMatched = false;
         for (MatchedTransaction matchedTransaction : matchedTransactions) {
-            CreditCardActivity matchedCreditCardActivity = matchedTransaction.getMatchedCreditCardActivity();
-            if (matchedCreditCardActivity.equals(creditCardActivity)) {
-                isMatched = true;
-            }
+            isMatched = matchedTransaction.containsCreditCardActivity(creditCardActivity);
         }
         return !isMatched;
     }
