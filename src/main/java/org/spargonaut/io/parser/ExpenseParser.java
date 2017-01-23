@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExpenseParser implements Parser {
+public class ExpenseParser implements Parser<Expense> {
 
     private final CSVFileReader csvFileReader;
 

@@ -1,15 +1,12 @@
 package org.spargonaut.io;
 
-import org.spargonaut.datamodels.CreditCardActivity;
-import org.spargonaut.datamodels.Expense;
-import org.spargonaut.io.parser.ChargeParser;
 import org.spargonaut.io.parser.Parser;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataLoader {
+public class DataLoader<T> {
 
     private final CSVFileLoader csvFileLoader;
 
@@ -17,28 +14,18 @@ public class DataLoader {
         this.csvFileLoader = csvFilecsvFileLoader;
     }
 
-    public List<Expense> loadExpenses(String directoryName, Parser parser) {
+    public List<T> load(String directoryName, Parser parser) {
         List<File> csvFileNames = csvFileLoader.getFileNamesIn(directoryName);
 
-        List<Expense> things = new ArrayList<>();
+        List<T> things = new ArrayList<T>();
         for (File csvFile : csvFileNames) {
-            things.addAll(parser.parseFile(csvFile));
-        }
-        return  things;
-    }
-
-    public List<CreditCardActivity> loadCharges(String directoryName, ChargeParser parser) {
-        List<File> csvFilesNames = csvFileLoader.getFileNamesIn(directoryName);
-
-        List<CreditCardActivity> things = new ArrayList<>();
-        for (File csvFile : csvFilesNames) {
-            List<CreditCardActivity> creditCardActivities = parser.parseFile(csvFile);
-            for (CreditCardActivity creditCardActivity : creditCardActivities) {
-                if (!things.contains(creditCardActivity)) {
-                    things.add(creditCardActivity);
+            List<T> parsedThings = parser.parseFile(csvFile);
+            for (T parsedThing : parsedThings) {
+                if (!things.contains(parsedThing)) {
+                    things.add(parsedThing);
                 }
             }
         }
-        return things;
+        return  things;
     }
 }
