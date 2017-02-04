@@ -12,6 +12,7 @@ public class SummaryPrinter {
 
     public static void printSummary(Map<String, List<MatchedTransaction>> matchedTransactionMap,
                                     List<CreditCardActivity> creditCardActivities,
+                                    List<CreditCardActivity> ignoredCreditCardActivities,
                                     List<Expense> expenses,
                                     List<CreditCardActivity> unmatchedCreditCardActivity,
                                     List<Expense> unmatchedExpenses) {
@@ -51,14 +52,17 @@ public class SummaryPrinter {
         System.out.print("\n\nSUMMARY\n----------------------------------------------");
         System.out.format("\nTotal Matches:                              %d", totalMatchesCount);
         System.out.format("\nUnmatched Credit Card Activities:   %10s", unmatchedCreditCardActivity.size());
+        System.out.format("\nIgnored Credit Card Activities:     %10s", ignoredCreditCardActivities.size());
         System.out.format("\nUnmatched Expenses:                 %10s", unmatchedExpenses.size());
 
         System.out.println("");
 
-        System.out.format("\nTotal Matches plus unmatched CCAs:          %d", (totalMatchesCount + unmatchedCreditCardActivity.size()));
-        System.out.format("\nCredit Card Activities parsed:      %10s", creditCardActivities.size());
-        System.out.format("\nTotal Matches plus unmatched Expenses:      %d", (totalMatchesCount + unmatchedExpenses.size()));
-        System.out.format("\nExpenses parsed:                    %10s", expenses.size());
+        System.out.println("\n--(These numbers should match)--");
+        System.out.format("Total Matches plus unmatched CCAs:          %d\n", (totalMatchesCount + unmatchedCreditCardActivity.size()));
+        System.out.format("Credit Card Activities parsed:       %10s\n", creditCardActivities.size());
+        System.out.println("\n--(These numbers should match)--");
+        System.out.format("Total Matches plus unmatched Expenses:      %d\n", (totalMatchesCount + unmatchedExpenses.size()));
+        System.out.format("Expenses parsed:                     %10s\n", expenses.size());
 
     }
 }
