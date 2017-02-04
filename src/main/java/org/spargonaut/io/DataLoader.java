@@ -32,4 +32,17 @@ public class DataLoader<T> {
             }
         }
     }
+
+    public void ignore(String directoryNameOfFilesToIgnore, Parser parser) {
+        List<File> csvFileNames = csvFileLoader.getFileNamesIn(directoryNameOfFilesToIgnore);
+
+        for (File csvFile : csvFileNames) {
+            List<T> parsedThings = parser.parseFile(csvFile);
+            for (T parsedThing : parsedThings) {
+                if (things.contains(parsedThing)) {
+                    things.remove(parsedThing);
+                }
+            }
+        }
+    }
 }

@@ -92,4 +92,35 @@ public class DataLoaderTest {
 
         assertThat(actualExpenseList.size(), is(3));
     }
+
+    @Test
+    public void shouldRemoveChargesFromTheLoadedCharges() {
+        CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder().build();
+        CreditCardActivity creditCardActivityTwo = new CreditCardActivityBuilder().build();
+        CreditCardActivity creditCardActivityThree = new CreditCardActivityBuilder().build();
+        CreditCardActivity creditCardActivityFour = new CreditCardActivityBuilder().build();
+        List<CreditCardActivity> creditCardActivities = Arrays.asList(creditCardActivityOne, creditCardActivityTwo, creditCardActivityThree, creditCardActivityFour);
+
+        ChargeParser mockParserForCreditCardActivities = mock(ChargeParser.class);
+        when(mockParserForCreditCardActivities.parseFile(mockFileOne)).thenReturn(creditCardActivities);
+
+        DataLoader<CreditCardActivity> dataLoader = new DataLoader<>(mockCsvFileLoader);
+        dataLoader.load(testDirectoryName, mockParserForCreditCardActivities);
+
+
+        final String directoryNameOfFilesToIgnore = "./another-test-directory";
+        List<CreditCardActivity> creditCardActivitiesToIgnore = Arrays.asList(creditCardActivityTwo, creditCardActivityThree);
+
+        File mockFileOfChargesToIgnore = mock(File.class);
+        when(mockCsvFileLoader.getFileNamesIn(directoryNameOfFilesToIgnore)).thenReturn(Arrays.asList(mockFileOfChargesToIgnore));
+        ChargeParser mockParserForCreditCardActivitiesToIgnore = mock(ChargeParser.class);
+        when(mockParserForCreditCardActivitiesToIgnore.parseFile(mockFileOfChargesToIgnore)).thenReturn(creditCardActivitiesToIgnore);
+
+        dataLoader.ignore(directoryNameOfFilesToIgnore, mockParserForCreditCardActivitiesToIgnore);
+        List<CreditCardActivity> actualExpenseList = dataLoader.getLoadedFiles();
+
+        assertThat(actualExpenseList.size(), is(2));
+        assertThat(actualExpenseList.contains(creditCardActivityOne), is(true));
+        assertThat(actualExpenseList.contains(creditCardActivityFour), is(true));
+    }
 }
