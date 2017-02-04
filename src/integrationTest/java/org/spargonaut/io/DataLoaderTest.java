@@ -94,7 +94,7 @@ public class DataLoaderTest {
     }
 
     @Test
-    public void shouldRemoveChargesFromTheLoadedCharges() {
+    public void shouldRemoveChargesThatHaveBeenSpefiedToBeIgnoredFromTheLoadedCharges() {
         CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder().build();
         CreditCardActivity creditCardActivityTwo = new CreditCardActivityBuilder().build();
         CreditCardActivity creditCardActivityThree = new CreditCardActivityBuilder().build();
