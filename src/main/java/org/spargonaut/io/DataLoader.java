@@ -9,15 +9,20 @@ import java.util.List;
 public class DataLoader<T> {
 
     private final CSVFileLoader csvFileLoader;
+    private final List<T> things;
 
     public DataLoader(CSVFileLoader csvFilecsvFileLoader) {
         this.csvFileLoader = csvFilecsvFileLoader;
+        things = new ArrayList<T>();
     }
 
-    public List<T> load(String directoryName, Parser parser) {
+    public List<T> getLoadedFiles() {
+        return this.things;
+    }
+
+    public void load(String directoryName, Parser parser) {
         List<File> csvFileNames = csvFileLoader.getFileNamesIn(directoryName);
 
-        List<T> things = new ArrayList<T>();
         for (File csvFile : csvFileNames) {
             List<T> parsedThings = parser.parseFile(csvFile);
             for (T parsedThing : parsedThings) {
@@ -26,6 +31,5 @@ public class DataLoader<T> {
                 }
             }
         }
-        return  things;
     }
 }

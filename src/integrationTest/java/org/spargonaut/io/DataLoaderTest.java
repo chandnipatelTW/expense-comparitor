@@ -46,7 +46,8 @@ public class DataLoaderTest {
         when(mockParser.parseFile(mockFileTwo)).thenReturn(expensesFromMockFileTwo);
 
         DataLoader<Expense> dataLoader = new DataLoader<>(mockCsvFileLoader);
-        List<Expense> actualExpenseList = dataLoader.load(testDirectoryName, mockParser);
+        dataLoader.load(testDirectoryName, mockParser);
+        List<Expense> actualExpenseList = dataLoader.getLoadedFiles();
 
         assertThat(actualExpenseList.size(), is(4));
     }
@@ -66,7 +67,8 @@ public class DataLoaderTest {
         when(mockParser.parseFile(mockFileTwo)).thenReturn(creditCardActivitiesFromMockFileTwo);
 
         DataLoader<CreditCardActivity> dataLoader = new DataLoader<>(mockCsvFileLoader);
-        List<CreditCardActivity> actualExpenseList = dataLoader.load(testDirectoryName, mockParser);
+        dataLoader.load(testDirectoryName, mockParser);
+        List<CreditCardActivity> actualExpenseList = dataLoader.getLoadedFiles();
 
         assertThat(actualExpenseList.size(), is(4));
     }
@@ -85,7 +87,8 @@ public class DataLoaderTest {
         when(mockParser.parseFile(mockFileTwo)).thenReturn(creditCardActivitiesFromMockFileTwo);
 
         DataLoader<CreditCardActivity> dataLoader = new DataLoader<>(mockCsvFileLoader);
-        List<CreditCardActivity> actualExpenseList = dataLoader.load(testDirectoryName, mockParser);
+        dataLoader.load(testDirectoryName, mockParser);
+        List<CreditCardActivity> actualExpenseList = dataLoader.getLoadedFiles();
 
         assertThat(actualExpenseList.size(), is(3));
     }
