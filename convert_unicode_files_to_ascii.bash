@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-UNICODE_FILE_DIRECTORY="./unicode_expense_files"
-TARGET_DIRECTORY="./expense_files"
+UNICODE_FILE_DIRECTORY="./data/unicode_expense_files"
+TARGET_DIRECTORY="./data/expense_files"
 UNICODE_FILES=$(ls $UNICODE_FILE_DIRECTORY)
 
 for UNICODE_FILE in $UNICODE_FILES; do

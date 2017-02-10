@@ -65,6 +65,11 @@ task integrationTest(type: Test) {
     outputs.upToDateWhen { false }
 }
 
+task prepare(type: Exec) {
+    executable 'sh'
+    args '-c', './convert_unicode_files_to_ascii.bash'
+}
+
 check.dependsOn integrationTest
 integrationTest.mustRunAfter test
 
