@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'idea'
+    id 'jacoco'
 }
 
 repositories {
@@ -16,6 +17,19 @@ sourceSets {
         resources.srcDir file('src/integrationTest/resources')
         compileClasspath += sourceSets.main.compileClasspath
         compileClasspath += sourceSets.test.compileClasspath
+    }
+}
+
+jacoco {
+    toolVersion = "0.7.6.201602180812"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination "${buildDir}/jacocoHtml"
     }
 }
 
