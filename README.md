@@ -5,7 +5,14 @@ believe it.
 
 unfortunately, I can't pair with the world.
 
+
+
 to use this application, you'll need to do the following:
+
+open the file at: <root_project_directory>/src/main/java/org/spargonaut/Application.java
+uncomment the line that says: application.run();
+its usually found on line 25. ymmv.
+
 download your bank statements as a csv file.
 put them in the following directory:
 <root project directory>/data/credit_card_files/
