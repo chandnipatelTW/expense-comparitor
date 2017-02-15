@@ -13,10 +13,8 @@ public class ActivityTypeTest {
     public ExpectedException expectedException = ExpectedException.none();
 
     @Test
-    public void shouldParseTheActivityTypeFromAString() throws Exception {
-        String typeStringOne = "sale";
-        ActivityType activityType = ActivityType.fromString(typeStringOne);
-        assertThat(activityType, is(ActivityType.SALE));
+    public void shouldParseTheActivityTypeFromAStringForValidActivityTypes() throws Exception {
+        assertThat(ActivityType.fromString("sale"), is(ActivityType.SALE));
     }
 
     @Test(expected = IllegalArgumentException.class)
