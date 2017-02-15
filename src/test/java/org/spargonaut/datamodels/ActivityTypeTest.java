@@ -15,6 +15,8 @@ public class ActivityTypeTest {
     @Test
     public void shouldParseTheActivityTypeFromAStringForValidActivityTypes() throws Exception {
         assertThat(ActivityType.fromString("sale"), is(ActivityType.SALE));
+        assertThat(ActivityType.fromString("payment"), is(ActivityType.PAYMENT));
+        assertThat(ActivityType.fromString("fee"), is(ActivityType.FEE));
     }
 
     @Test(expected = IllegalArgumentException.class)

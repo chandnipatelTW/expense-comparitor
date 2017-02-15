@@ -2,7 +2,8 @@ package org.spargonaut.datamodels;
 
 public enum ActivityType {
     SALE("Sale"),
-    PAYMENT("Payment");
+    PAYMENT("Payment"),
+    FEE("Fee");
 
     private String value;
 
