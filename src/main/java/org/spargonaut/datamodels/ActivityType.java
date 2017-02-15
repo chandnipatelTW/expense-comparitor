@@ -20,6 +20,6 @@ public enum ActivityType {
                 return activityType;
             }
         }
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException("Failed parsing the Argument: ->" + typeString + "<-");
     }
 }

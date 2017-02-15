@@ -1,11 +1,16 @@
 package org.spargonaut.datamodels;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class ActivityTypeTest {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void shouldParseTheActivityTypeFromAString() throws Exception {
@@ -20,8 +25,16 @@ public class ActivityTypeTest {
         ActivityType.fromString(typeStringOne);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrownAnException_whenTheActivityStringIsNull() {
+        expectedException.expect(IllegalArgumentException.class);
         ActivityType.fromString(null);
+    }
+
+    @Test
+    public void shouldIndicateTheInvalidActivityType_whenThrowingInvalidArgumentException() {
+        String invalidActivityType = "Foo";
+        expectedException.expectMessage(invalidActivityType);
+        ActivityType.fromString(invalidActivityType);
     }
 }
