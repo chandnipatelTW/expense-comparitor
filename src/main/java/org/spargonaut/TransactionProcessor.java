@@ -7,7 +7,6 @@ import org.spargonaut.matchers.TransactionMatcher;
 
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class TransactionProcessor {
 
@@ -67,15 +66,13 @@ public class TransactionProcessor {
     private List<MatchedTransaction> createMatchedTransactions(List<CreditCardActivity> creditCardActivities, List<Expense> expenses, TransactionMatcher matcher) {
         List<MatchedTransaction> matchedTransactions = new ArrayList<>();
         for (Expense expense : expenses) {
-
-            CreditCardPredicate keepMatchedCreditCardActivities = new CreditCardPredicate(matcher, expense, matchedTransactions);
-
-            List<MatchedTransaction> collectionOfNewMatches = creditCardActivities.stream()
-                    .filter(keepMatchedCreditCardActivities)
-                    .map(creditCardActivity -> new MatchedTransaction(creditCardActivity, expense))
-                    .collect(Collectors.toCollection(ArrayList::new));
-
-            matchedTransactions.addAll(collectionOfNewMatches);
+            for (CreditCardActivity creditCardActivity : creditCardActivities) {
+                if(matcher.isMatch(expense, creditCardActivity) &&
+                        expenseIsNotPreviouslyMatched(expense, matchedTransactions) &&
+                        creditCardActivityIsNotPreviouslyMatched(creditCardActivity, matchedTransactions)) {
+                    matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
+                }
+            }
         }
         return matchedTransactions;
     }
