@@ -1,10 +1,7 @@
 i hate most readmes and most documention.
 they almost always lie.
 the code tells the truth.  always.
-believe it.
-
-unfortunately, I can't pair with the world.
-
+believe the code more than the documentation.
 
 
 to use this application, you'll need to do the following:
