@@ -6,11 +6,33 @@ import org.spargonaut.datamodels.MatchedTransaction;
 import org.spargonaut.matchers.TransactionMatcher;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class TransactionProcessor {
+
+    class CreditCardPredicate implements Predicate<CreditCardActivity> {
+
+        TransactionMatcher transactionMatcher;
+        private final Expense expense;
+        private final List<MatchedTransaction> matchedTransactions;
+
+        public CreditCardPredicate(TransactionMatcher transactionMatcher, Expense expense, List<MatchedTransaction> matchedTransactions) {
+            this.transactionMatcher = transactionMatcher;
+            this.expense = expense;
+            this.matchedTransactions = matchedTransactions;
+        }
+
+        @Override
+        public boolean test(CreditCardActivity creditCardActivity) {
+            boolean isMatched = transactionMatcher.isMatch(this.expense, creditCardActivity);
+            boolean expense = expenseIsNotPreviouslyMatched(this.expense, matchedTransactions);
+            boolean creditCardActivityIsNotPreviouslyMatched = creditCardActivityIsNotPreviouslyMatched(creditCardActivity, matchedTransactions);
+            return isMatched && expense && creditCardActivityIsNotPreviouslyMatched;
+        }
+    }
+
+
     private final List<Expense> expenses;
     private List<CreditCardActivity> creditCardActivities;
     private Map<String, List<MatchedTransaction>> matchedTransactions;
@@ -46,20 +68,12 @@ public class TransactionProcessor {
         List<MatchedTransaction> matchedTransactions = new ArrayList<>();
         for (Expense expense : expenses) {
 
-            List<MatchedTransaction> collectionOfNewMatches = creditCardActivities.stream().filter(new Predicate<CreditCardActivity>() {
-                @Override
-                public boolean test(CreditCardActivity creditCardActivity) {
-                    return matcher.isMatch(expense, creditCardActivity) &&
-                            expenseIsNotPreviouslyMatched(expense, matchedTransactions) &&
-                            creditCardActivityIsNotPreviouslyMatched(creditCardActivity, matchedTransactions);
-                }
-            }).map(new Function<CreditCardActivity, MatchedTransaction>() {
-                @Override
-                public MatchedTransaction apply(CreditCardActivity creditCardActivity) {
-                    MatchedTransaction matchedTransaction = new MatchedTransaction(creditCardActivity, expense);
-                    return matchedTransaction;
-                }
-            }).collect(Collectors.toCollection(ArrayList::new));
+            CreditCardPredicate keepMatchedCreditCardActivities = new CreditCardPredicate(matcher, expense, matchedTransactions);
+
+            List<MatchedTransaction> collectionOfNewMatches = creditCardActivities.stream()
+                    .filter(keepMatchedCreditCardActivities)
+                    .map(creditCardActivity -> new MatchedTransaction(creditCardActivity, expense))
+                    .collect(Collectors.toCollection(ArrayList::new));
 
             matchedTransactions.addAll(collectionOfNewMatches);
         }
