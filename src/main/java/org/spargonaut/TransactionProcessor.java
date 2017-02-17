@@ -70,16 +70,16 @@ public class TransactionProcessor {
     }
 
     private List<CreditCardActivity> collectUnmatchedCreditCardActivities(List<CreditCardActivity> creditCardActivities, Collection<List<MatchedTransaction>> matchedTransactionList) {
-        List<CreditCardActivity> unmamtchedCreditCardActivities = new ArrayList<>(creditCardActivities);
+        List<CreditCardActivity> unmatchedCreditCardActivities = new ArrayList<>(creditCardActivities);
         for (List<MatchedTransaction> matchedTransactions : matchedTransactionList) {
             for (MatchedTransaction matchedTransaction : matchedTransactions) {
                 CreditCardActivity matchedCreditCardActivity = matchedTransaction.getMatchedCreditCardActivity();
-                if (unmamtchedCreditCardActivities.contains(matchedCreditCardActivity)) {
-                    unmamtchedCreditCardActivities.remove(matchedCreditCardActivity);
+                if (unmatchedCreditCardActivities.contains(matchedCreditCardActivity)) {
+                    unmatchedCreditCardActivities.remove(matchedCreditCardActivity);
                 }
             }
         }
-        return unmamtchedCreditCardActivities;
+        return unmatchedCreditCardActivities;
     }
 
     private List<Expense> collectUnmatchedExpenses(List<Expense> expenses, Collection<List<MatchedTransaction>> matchedTransactionLists) {
