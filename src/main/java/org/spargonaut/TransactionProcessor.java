@@ -6,6 +6,9 @@ import org.spargonaut.datamodels.MatchedTransaction;
 import org.spargonaut.matchers.TransactionMatcher;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class TransactionProcessor {
     private final List<Expense> expenses;
@@ -42,13 +45,23 @@ public class TransactionProcessor {
     private List<MatchedTransaction> createMatchedTransactions(List<CreditCardActivity> creditCardActivities, List<Expense> expenses, TransactionMatcher matcher) {
         List<MatchedTransaction> matchedTransactions = new ArrayList<>();
         for (Expense expense : expenses) {
-            for (CreditCardActivity creditCardActivity : creditCardActivities) {
-                if(matcher.isMatch(expense, creditCardActivity) &&
-                        expenseIsNotPreviouslyMatched(expense, matchedTransactions) &&
-                        creditCardActivityIsNotPreviouslyMatched(creditCardActivity, matchedTransactions)) {
-                    matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
+
+            List<MatchedTransaction> collectionOfNewMatches = creditCardActivities.stream().filter(new Predicate<CreditCardActivity>() {
+                @Override
+                public boolean test(CreditCardActivity creditCardActivity) {
+                    return matcher.isMatch(expense, creditCardActivity) &&
+                            expenseIsNotPreviouslyMatched(expense, matchedTransactions) &&
+                            creditCardActivityIsNotPreviouslyMatched(creditCardActivity, matchedTransactions);
                 }
-            }
+            }).map(new Function<CreditCardActivity, MatchedTransaction>() {
+                @Override
+                public MatchedTransaction apply(CreditCardActivity creditCardActivity) {
+                    MatchedTransaction matchedTransaction = new MatchedTransaction(creditCardActivity, expense);
+                    return matchedTransaction;
+                }
+            }).collect(Collectors.toCollection(ArrayList::new));
+
+            matchedTransactions.addAll(collectionOfNewMatches);
         }
         return matchedTransactions;
     }
