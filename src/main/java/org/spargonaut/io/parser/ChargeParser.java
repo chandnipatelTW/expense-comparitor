@@ -25,7 +25,7 @@ public class ChargeParser implements Parser<CreditCardActivity> {
         List<CreditCardActivity> creditCardActivities = new ArrayList<>();
 
         for (String chargeLine : chargeLines) {
-            if (isHeaderLine(chargeLine)) { continue; }
+            if (isHeaderLine(chargeLine) || isCommentLine(chargeLine)) { continue; }
             String[] chargeTokens = chargeLine.split(chargeDelimiter);
             DateTime transactionDate = createDateTimeFrom(chargeTokens[1]);
             DateTime postDate = createDateTimeFrom(chargeTokens[2]);
@@ -43,6 +43,10 @@ public class ChargeParser implements Parser<CreditCardActivity> {
         }
 
         return creditCardActivities;
+    }
+
+    private boolean isCommentLine(String chargeLine) {
+        return chargeLine.startsWith("#");
     }
 
     private DateTime createDateTimeFrom(String chargeToken) {

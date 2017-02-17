@@ -26,7 +26,8 @@ public class ChargeParserTest {
     public void setUp() {
         String headerLine = "Type,Trans Date,Post Date,Description,Amount";
         String chargeLine = "Sale,12/10/2016,12/11/2016,UBER   *US DEC09 DFMHE,-18.09";
-        List<String> chargeStrings = Arrays.asList(headerLine, chargeLine);
+        String commentLine = "# this line is a comment because it starts with a hash";
+        List<String> chargeStrings = Arrays.asList(headerLine, chargeLine, commentLine);
 
         mockFile = mock(File.class);
         mockCSVFileReader = mock(CSVFileReader.class);
@@ -54,6 +55,13 @@ public class ChargeParserTest {
 
     @Test
     public void shouldIgnoreTheHeaderLineInTheCreditCardActivityFile() {
+        ChargeParser chargeParser = new ChargeParser(mockCSVFileReader);
+        List<CreditCardActivity> creditCardActivityList = chargeParser.parseFile(mockFile);
+        assertThat(creditCardActivityList.size(), is(1));
+    }
+
+    @Test
+    public void shouldIgnoreLinesThatStartWithHashSymbol() {
         ChargeParser chargeParser = new ChargeParser(mockCSVFileReader);
         List<CreditCardActivity> creditCardActivityList = chargeParser.parseFile(mockFile);
         assertThat(creditCardActivityList.size(), is(1));
