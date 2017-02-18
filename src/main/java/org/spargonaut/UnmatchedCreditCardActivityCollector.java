@@ -12,12 +12,14 @@ public class UnmatchedCreditCardActivityCollector {
     public List<CreditCardActivity> collect(List<CreditCardActivity> creditCardActivities, Collection<List<MatchedTransaction>> matchedTransactionList) {
         List<CreditCardActivity> unmatchedCreditCardActivities = new ArrayList<>(creditCardActivities);
         for (List<MatchedTransaction> matchedTransactions : matchedTransactionList) {
-            for (MatchedTransaction matchedTransaction : matchedTransactions) {
-                CreditCardActivity matchedCreditCardActivity = matchedTransaction.getMatchedCreditCardActivity();
-                if (unmatchedCreditCardActivities.contains(matchedCreditCardActivity)) {
-                    unmatchedCreditCardActivities.remove(matchedCreditCardActivity);
+            for (CreditCardActivity creditCardActivity : creditCardActivities) {
+                for (MatchedTransaction matchedTransaction : matchedTransactions) {
+                    if (matchedTransaction.containsCreditCardActivity(creditCardActivity)) {
+                        unmatchedCreditCardActivities.remove(creditCardActivity);
+                    }
                 }
             }
+
         }
         return unmatchedCreditCardActivities;
     }
