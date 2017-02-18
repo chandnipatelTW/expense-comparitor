@@ -3,6 +3,7 @@ package org.spargonaut;
 import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
 import org.spargonaut.datamodels.MatchedTransaction;
+import org.spargonaut.matchers.PreviousMatchDetector;
 import org.spargonaut.matchers.TransactionMatcher;
 import org.spargonaut.matchers.UnmatchedCollector;
 
@@ -73,11 +74,15 @@ public class TransactionProcessor {
 
     private List<MatchedTransaction> createMatchedTransactions(List<CreditCardActivity> creditCardActivities, List<Expense> expenses, TransactionMatcher matcher) {
         List<MatchedTransaction> matchedTransactions = new ArrayList<>();
+        PreviousMatchDetector previousMatchDetector = new PreviousMatchDetector();
+
         for (Expense expense : expenses) {
             for (CreditCardActivity creditCardActivity : creditCardActivities) {
-                if(matcher.isMatch(expense, creditCardActivity) &&
-                        expenseIsNotPreviouslyMatched(expense, matchedTransactions) &&
-                        creditCardActivityIsNotPreviouslyMatched(creditCardActivity, matchedTransactions)) {
+                boolean isMatch = matcher.isMatch(expense, creditCardActivity);
+                boolean creditCardActivityIsPreviouslyMatched = previousMatchDetector.isPreviouslyMatched(creditCardActivity, matchedTransactions);
+                boolean expenseIsPreviouslyMatched = previousMatchDetector.isPreviouslyMatched(expense, matchedTransactions);
+
+                if (isMatch && !creditCardActivityIsPreviouslyMatched && !expenseIsPreviouslyMatched) {
                     matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
                 }
             }
