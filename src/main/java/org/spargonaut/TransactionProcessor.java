@@ -43,7 +43,8 @@ public class TransactionProcessor {
     }
 
     public List<CreditCardActivity> getUnmatchedCreditCardActivies() {
-        return collectUnmatchedCreditCardActivities(this.creditCardActivities, this.matchedTransactions.values());
+        UnmatchedCreditCardActivityCollector unmatchedCreditCardActivityCollector = new UnmatchedCreditCardActivityCollector();
+        return unmatchedCreditCardActivityCollector.collect(this.creditCardActivities, this.matchedTransactions.values());
     }
 
     public List<Expense> getUnmatchedExpenses() {
@@ -55,9 +56,10 @@ public class TransactionProcessor {
     }
 
     public void processTransactions(List<TransactionMatcher> matchers) {
+        UnmatchedCreditCardActivityCollector unmatchedCreditCardActivityCollector = new UnmatchedCreditCardActivityCollector();
         for (TransactionMatcher matcher : matchers) {
             List<Expense> unmatchedExpenses = collectUnmatchedExpenses(this.expenses, this.matchedTransactions.values());
-            List<CreditCardActivity> unmatchedCreditCardActivities = collectUnmatchedCreditCardActivities(this.creditCardActivities, this.matchedTransactions.values());
+            List<CreditCardActivity> unmatchedCreditCardActivities = unmatchedCreditCardActivityCollector.collect(this.creditCardActivities, this.matchedTransactions.values());
             List<MatchedTransaction> matchedTransactionList = createMatchedTransactions(unmatchedCreditCardActivities, unmatchedExpenses, matcher);
             this.matchedTransactions.put(matcher.getType(), matchedTransactionList);
         }
@@ -91,19 +93,6 @@ public class TransactionProcessor {
             isMatched = matchedTransaction.containsCreditCardActivity(creditCardActivity);
         }
         return !isMatched;
-    }
-
-    private List<CreditCardActivity> collectUnmatchedCreditCardActivities(List<CreditCardActivity> creditCardActivities, Collection<List<MatchedTransaction>> matchedTransactionList) {
-        List<CreditCardActivity> unmatchedCreditCardActivities = new ArrayList<>(creditCardActivities);
-        for (List<MatchedTransaction> matchedTransactions : matchedTransactionList) {
-            for (MatchedTransaction matchedTransaction : matchedTransactions) {
-                CreditCardActivity matchedCreditCardActivity = matchedTransaction.getMatchedCreditCardActivity();
-                if (unmatchedCreditCardActivities.contains(matchedCreditCardActivity)) {
-                    unmatchedCreditCardActivities.remove(matchedCreditCardActivity);
-                }
-            }
-        }
-        return unmatchedCreditCardActivities;
     }
 
     private List<Expense> collectUnmatchedExpenses(List<Expense> expenses, Collection<List<MatchedTransaction>> matchedTransactionLists) {
