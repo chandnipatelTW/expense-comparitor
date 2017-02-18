@@ -11,10 +11,11 @@ public class UnmatchedExpenseCollector {
     public List<Expense> collect(List<Expense> expenses, Collection<List<MatchedTransaction>> matchedTransactionLists) {
         List<Expense> unmatchedExpenses = new ArrayList<>(expenses);
         for (List<MatchedTransaction> matchedTransactions : matchedTransactionLists) {
-            for (MatchedTransaction matchedTransaction : matchedTransactions) {
-                Expense matchedExpense = matchedTransaction.getMatchedExpense();
-                if (unmatchedExpenses.contains(matchedExpense)) {
-                    unmatchedExpenses.remove(matchedExpense);
+            for (Expense expense : expenses) {
+                for (MatchedTransaction matchedTransaction : matchedTransactions) {
+                    if (matchedTransaction.containsExpense(expense)) {
+                        unmatchedExpenses.remove(expense);
+                    }
                 }
             }
         }
