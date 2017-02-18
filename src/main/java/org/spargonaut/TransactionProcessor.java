@@ -4,8 +4,12 @@ import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
 import org.spargonaut.datamodels.MatchedTransaction;
 import org.spargonaut.matchers.TransactionMatcher;
+import org.spargonaut.matchers.UnmatchedExpenseCollector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 public class TransactionProcessor {
@@ -48,7 +52,8 @@ public class TransactionProcessor {
     }
 
     public List<Expense> getUnmatchedExpenses() {
-        return collectUnmatchedExpenses(this.expenses, this.matchedTransactions.values());
+        UnmatchedExpenseCollector unmatchedExpenseCollector = new UnmatchedExpenseCollector();
+        return unmatchedExpenseCollector.collect(this.expenses, this.matchedTransactions.values());
     }
 
     public Map<String, List<MatchedTransaction>> getMatchedTransactions() {
@@ -57,8 +62,9 @@ public class TransactionProcessor {
 
     public void processTransactions(List<TransactionMatcher> matchers) {
         UnmatchedCreditCardActivityCollector unmatchedCreditCardActivityCollector = new UnmatchedCreditCardActivityCollector();
+        UnmatchedExpenseCollector unmatchedExpenseCollector = new UnmatchedExpenseCollector();
         for (TransactionMatcher matcher : matchers) {
-            List<Expense> unmatchedExpenses = collectUnmatchedExpenses(this.expenses, this.matchedTransactions.values());
+            List<Expense> unmatchedExpenses = unmatchedExpenseCollector.collect(this.expenses, this.matchedTransactions.values());
             List<CreditCardActivity> unmatchedCreditCardActivities = unmatchedCreditCardActivityCollector.collect(this.creditCardActivities, this.matchedTransactions.values());
             List<MatchedTransaction> matchedTransactionList = createMatchedTransactions(unmatchedCreditCardActivities, unmatchedExpenses, matcher);
             this.matchedTransactions.put(matcher.getType(), matchedTransactionList);
@@ -82,7 +88,7 @@ public class TransactionProcessor {
     private boolean expenseIsNotPreviouslyMatched(Expense expense, List<MatchedTransaction> matchedTransactions) {
         boolean isMatched = false;
         for (MatchedTransaction matchedTransaction : matchedTransactions) {
-            isMatched = matchedTransaction.containsExpense(expense);
+            isMatched = matchedTransaction.containsExpense(expense) || isMatched;
         }
         return !isMatched;
     }
@@ -90,21 +96,8 @@ public class TransactionProcessor {
     private boolean creditCardActivityIsNotPreviouslyMatched(CreditCardActivity creditCardActivity, List<MatchedTransaction> matchedTransactions) {
         boolean isMatched = false;
         for (MatchedTransaction matchedTransaction : matchedTransactions) {
-            isMatched = matchedTransaction.containsCreditCardActivity(creditCardActivity);
+            isMatched = matchedTransaction.containsCreditCardActivity(creditCardActivity) || isMatched;
         }
         return !isMatched;
-    }
-
-    private List<Expense> collectUnmatchedExpenses(List<Expense> expenses, Collection<List<MatchedTransaction>> matchedTransactionLists) {
-        List<Expense> unmatchedExpenses = new ArrayList<>(expenses);
-        for (List<MatchedTransaction> matchedTransactions : matchedTransactionLists) {
-            for (MatchedTransaction matchedTransaction : matchedTransactions) {
-                Expense matchedExpense = matchedTransaction.getMatchedExpense();
-                if (unmatchedExpenses.contains(matchedExpense)) {
-                    unmatchedExpenses.remove(matchedExpense);
-                }
-            }
-        }
-        return unmatchedExpenses;
     }
 }
