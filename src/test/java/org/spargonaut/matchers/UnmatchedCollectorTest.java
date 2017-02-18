@@ -20,23 +20,15 @@ public class UnmatchedCollectorTest {
     @Test
     public void shouldCollectUnmatchedCreditCardactivities() {
         CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder().build();
-        MatchedTransaction matchedTransactionOne = new MatchedTransactionBuilder()
-                .fromCreditCardActivity(creditCardActivityOne)
-                .build();
-
         CreditCardActivity creditCardActivityTwo = new CreditCardActivityBuilder().build();
-        MatchedTransaction matchedTransactionTwo = new MatchedTransactionBuilder()
-                .fromCreditCardActivity(creditCardActivityTwo)
-                .build();
-
         CreditCardActivity creditCardActivityThree = new CreditCardActivityBuilder().build();
-        MatchedTransaction matchedTransactionThree = new MatchedTransactionBuilder()
-                .fromCreditCardActivity(creditCardActivityThree)
-                .build();
-
         CreditCardActivity creditCardActivityFour = new CreditCardActivityBuilder().build();
         CreditCardActivity creditCardActivityFive = new CreditCardActivityBuilder().build();
         CreditCardActivity creditCardActivitySix = new CreditCardActivityBuilder().build();
+
+        MatchedTransaction matchedTransactionOne = new MatchedTransactionBuilder().fromCreditCardActivity(creditCardActivityOne).build();
+        MatchedTransaction matchedTransactionTwo = new MatchedTransactionBuilder().fromCreditCardActivity(creditCardActivityTwo).build();
+        MatchedTransaction matchedTransactionThree = new MatchedTransactionBuilder().fromCreditCardActivity(creditCardActivityThree).build();
 
         List<CreditCardActivity> creditCardActivityList = Arrays.asList(creditCardActivityOne,
                 creditCardActivityTwo,
