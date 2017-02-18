@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Getter
 @EqualsAndHashCode(exclude = {"postDate"})
 @AllArgsConstructor
-public class CreditCardActivity {
+public class CreditCardActivity implements Transaction {
 
     private final ActivityType type;
     private final DateTime transactionDate;

@@ -22,7 +22,7 @@ public class MatchedTransactionTest {
                 .setMerchant(expenseToMatch.getMerchant())
                 .build();
 
-        boolean containsExpense = matchedTransaction.containsExpense(expenseToCompare);
+        boolean containsExpense = matchedTransaction.contains(expenseToCompare);
         assertThat(containsExpense, is(true));
     }
 
@@ -38,7 +38,7 @@ public class MatchedTransactionTest {
                 .setBigDecimalAmount(creditCardActivity.getAmount())
                 .build();
 
-        boolean containsCreditCardActivity = matchedTransaction.containsCreditCardActivity(creditCardActivityToCompare);
+        boolean containsCreditCardActivity = matchedTransaction.contains(creditCardActivityToCompare);
         assertThat(containsCreditCardActivity, is(true));
     }
 }

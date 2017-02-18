@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Getter
 @EqualsAndHashCode (of = {"timestamp", "merchant", "amount"})
 @AllArgsConstructor
-public class Expense {
+public class Expense implements Transaction {
     private final DateTime timestamp;
     private final String merchant;
     private final BigDecimal amount;
