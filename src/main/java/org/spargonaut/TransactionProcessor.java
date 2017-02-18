@@ -11,31 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 
 public class TransactionProcessor {
-
-    class CreditCardPredicate implements Predicate<CreditCardActivity> {
-
-        TransactionMatcher transactionMatcher;
-        private final Expense expense;
-        private final List<MatchedTransaction> matchedTransactions;
-
-        public CreditCardPredicate(TransactionMatcher transactionMatcher, Expense expense, List<MatchedTransaction> matchedTransactions) {
-            this.transactionMatcher = transactionMatcher;
-            this.expense = expense;
-            this.matchedTransactions = matchedTransactions;
-        }
-
-        @Override
-        public boolean test(CreditCardActivity creditCardActivity) {
-            boolean isMatched = transactionMatcher.isMatch(this.expense, creditCardActivity);
-            boolean expense = expenseIsNotPreviouslyMatched(this.expense, matchedTransactions);
-            boolean creditCardActivityIsNotPreviouslyMatched = creditCardActivityIsNotPreviouslyMatched(creditCardActivity, matchedTransactions);
-            return isMatched && expense && creditCardActivityIsNotPreviouslyMatched;
-        }
-    }
-
 
     private final List<Expense> expenses;
     private List<CreditCardActivity> creditCardActivities;
@@ -88,21 +65,5 @@ public class TransactionProcessor {
             }
         }
         return matchedTransactions;
-    }
-
-    private boolean expenseIsNotPreviouslyMatched(Expense expense, List<MatchedTransaction> matchedTransactions) {
-        boolean isMatched = false;
-        for (MatchedTransaction matchedTransaction : matchedTransactions) {
-            isMatched = matchedTransaction.contains(expense) || isMatched;
-        }
-        return !isMatched;
-    }
-
-    private boolean creditCardActivityIsNotPreviouslyMatched(CreditCardActivity creditCardActivity, List<MatchedTransaction> matchedTransactions) {
-        boolean isMatched = false;
-        for (MatchedTransaction matchedTransaction : matchedTransactions) {
-            isMatched = matchedTransaction.contains(creditCardActivity) || isMatched;
-        }
-        return !isMatched;
     }
 }
