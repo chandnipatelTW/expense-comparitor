@@ -17,63 +17,82 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class UnmatchedCollectorTest {
+
+    private final CreditCardActivity matchedCreditCardActivityOne = new CreditCardActivityBuilder().build();
+    private final CreditCardActivity matchedCreditCardActivityTwo = new CreditCardActivityBuilder().build();
+    private final CreditCardActivity matchedCreditCardActivityThree = new CreditCardActivityBuilder().build();
+    private final CreditCardActivity unmatchedCreditCardActivityFour = new CreditCardActivityBuilder().build();
+    private final CreditCardActivity unmatchedCreditCardActivityFive = new CreditCardActivityBuilder().build();
+    private final CreditCardActivity unmatchedCreditCardActivitySix = new CreditCardActivityBuilder().build();
+    private final Expense matchedExpenseOne = new ExpenseBuilder().build();
+    private final Expense matchedExpenseTwo = new ExpenseBuilder().build();
+    private final Expense matchedExpenseThree = new ExpenseBuilder().build();
+    private final Expense unmatchedExpenseFour = new ExpenseBuilder().build();
+    private final Expense unmatchedExpenseFive = new ExpenseBuilder().build();
+    private final Expense unmatchedExpenseSix = new ExpenseBuilder().build();
+
+    private final List<CreditCardActivity> creditCardActivityList = createCreditCardActivitiesList();
+    private final Map<String, List<MatchedTransaction>> matchedTransactionMap = createMatchedTransactionMap();
+    private final List<Expense> expenseList = createExpensesList();
+
     @Test
     public void shouldCollectUnmatchedCreditCardactivities() {
-        CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder().build();
-        CreditCardActivity creditCardActivityTwo = new CreditCardActivityBuilder().build();
-        CreditCardActivity creditCardActivityThree = new CreditCardActivityBuilder().build();
-        CreditCardActivity creditCardActivityFour = new CreditCardActivityBuilder().build();
-        CreditCardActivity creditCardActivityFive = new CreditCardActivityBuilder().build();
-        CreditCardActivity creditCardActivitySix = new CreditCardActivityBuilder().build();
-
-        MatchedTransaction matchedTransactionOne = new MatchedTransactionBuilder().withCreditCardActivity(creditCardActivityOne).build();
-        MatchedTransaction matchedTransactionTwo = new MatchedTransactionBuilder().withCreditCardActivity(creditCardActivityTwo).build();
-        MatchedTransaction matchedTransactionThree = new MatchedTransactionBuilder().withCreditCardActivity(creditCardActivityThree).build();
-
-        List<CreditCardActivity> creditCardActivityList = Arrays.asList(creditCardActivityOne,
-                creditCardActivityTwo,
-                creditCardActivityThree,
-                creditCardActivityFour,
-                creditCardActivityFive,
-                creditCardActivitySix);
-        List<MatchedTransaction> matchedTransactionList = Arrays.asList(matchedTransactionOne, matchedTransactionTwo, matchedTransactionThree);
-
-        Map<String, List<MatchedTransaction>> matchedTransactionMap = new HashMap<>();
-        matchedTransactionMap.put("someMatcher", matchedTransactionList);
 
         UnmatchedCollector<CreditCardActivity> unmatchedCollector = new UnmatchedCollector<>();
         List<CreditCardActivity> actualUnmatchedCreditCardActivities = unmatchedCollector.collect(creditCardActivityList, matchedTransactionMap.values());
 
         assertThat(actualUnmatchedCreditCardActivities.size(), is(3));
-        assertThat(actualUnmatchedCreditCardActivities.contains(creditCardActivityFour), is(true));
-        assertThat(actualUnmatchedCreditCardActivities.contains(creditCardActivityFive), is(true));
-        assertThat(actualUnmatchedCreditCardActivities.contains(creditCardActivitySix), is(true));
+        assertThat(actualUnmatchedCreditCardActivities.contains(unmatchedCreditCardActivityFour), is(true));
+        assertThat(actualUnmatchedCreditCardActivities.contains(unmatchedCreditCardActivityFive), is(true));
+        assertThat(actualUnmatchedCreditCardActivities.contains(unmatchedCreditCardActivitySix), is(true));
     }
 
     @Test
     public void shouldCollectUnmatchedExpenses() {
-        Expense expenseOne = new ExpenseBuilder().build();
-        Expense expenseTwo = new ExpenseBuilder().build();
-        Expense expenseThree = new ExpenseBuilder().build();
-        Expense expenseFour = new ExpenseBuilder().build();
-        Expense expenseFive = new ExpenseBuilder().build();
-        Expense expenseSix = new ExpenseBuilder().build();
-
-        List<Expense> expenseList = Arrays.asList(expenseOne, expenseTwo, expenseThree, expenseFour, expenseFive, expenseSix);
-
-        MatchedTransaction matchedTransactionOne = new MatchedTransactionBuilder().fromExpense(expenseOne).build();
-        MatchedTransaction matchedTransactionTwo = new MatchedTransactionBuilder().fromExpense(expenseTwo).build();
-        MatchedTransaction matchedTransactionThree = new MatchedTransactionBuilder().fromExpense(expenseThree).build();
-        List<MatchedTransaction> matchedTransactionList = Arrays.asList(matchedTransactionOne, matchedTransactionTwo, matchedTransactionThree);
-        Map<String, List<MatchedTransaction>> matchedTransactionMap = new HashMap<>();
-        matchedTransactionMap.put("some matcher", matchedTransactionList);
 
         UnmatchedCollector<Expense> unmatchedCollector = new UnmatchedCollector<>();
         List<Expense> actualUnmatchedExpenses = unmatchedCollector.collect(expenseList, matchedTransactionMap.values());
 
         assertThat(actualUnmatchedExpenses.size(), is(3));
-        assertThat(actualUnmatchedExpenses.contains(expenseFour), is(true));
-        assertThat(actualUnmatchedExpenses.contains(expenseFive), is(true));
-        assertThat(actualUnmatchedExpenses.contains(expenseSix), is(true));
+        assertThat(actualUnmatchedExpenses.contains(unmatchedExpenseFour), is(true));
+        assertThat(actualUnmatchedExpenses.contains(unmatchedExpenseFive), is(true));
+        assertThat(actualUnmatchedExpenses.contains(unmatchedExpenseSix), is(true));
+    }
+
+    private Map<String, List<MatchedTransaction>> createMatchedTransactionMap() {
+        MatchedTransaction matchedTransactionOne = new MatchedTransactionBuilder()
+                .withCreditCardActivity(matchedCreditCardActivityOne)
+                .withExpense(matchedExpenseOne)
+                .build();
+        MatchedTransaction matchedTransactionTwo = new MatchedTransactionBuilder()
+                .withCreditCardActivity(matchedCreditCardActivityTwo)
+                .withExpense(matchedExpenseTwo)
+                .build();
+        MatchedTransaction matchedTransactionThree = new MatchedTransactionBuilder()
+                .withCreditCardActivity(matchedCreditCardActivityThree)
+                .withExpense(matchedExpenseThree)
+                .build();
+        List<MatchedTransaction> matchedTransactionList = Arrays.asList(matchedTransactionOne, matchedTransactionTwo, matchedTransactionThree);
+        Map<String, List<MatchedTransaction>> matchedTransactionMap = new HashMap<>();
+        matchedTransactionMap.put("someMatcher", matchedTransactionList);
+        return matchedTransactionMap;
+    }
+
+    private List<CreditCardActivity> createCreditCardActivitiesList() {
+        return Arrays.asList(matchedCreditCardActivityOne,
+                matchedCreditCardActivityTwo,
+                matchedCreditCardActivityThree,
+                unmatchedCreditCardActivityFour,
+                unmatchedCreditCardActivityFive,
+                unmatchedCreditCardActivitySix);
+    }
+
+    private List<Expense> createExpensesList() {
+        return Arrays.asList(matchedExpenseOne,
+                matchedExpenseTwo,
+                matchedExpenseThree,
+                unmatchedExpenseFour,
+                unmatchedExpenseFive,
+                unmatchedExpenseSix);
     }
 }
