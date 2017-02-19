@@ -15,75 +15,55 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class PreviousMatchDetectorTest {
+
+    private final CreditCardActivity matchedCreditCardActivityOne = new CreditCardActivityBuilder().build();
+    private final CreditCardActivity matchedCreditCardActivityTwo = new CreditCardActivityBuilder().build();
+    private final CreditCardActivity matchedCreditCardActivityThree = new CreditCardActivityBuilder().build();
+    private final CreditCardActivity unmatchedCreditCardActivity = new CreditCardActivityBuilder().build();
+    private final Expense expenseOne = new ExpenseBuilder().build();
+    private final Expense expenseTwo = new ExpenseBuilder().build();
+    private final Expense expenseThree = new ExpenseBuilder().build();
+    private final Expense expenseFour = new ExpenseBuilder().build();
+    private final List<MatchedTransaction> matchedTransactionList = createMatchedTransactions();
+    private final PreviousMatchDetector previousMatchDetectorUnderTest = new PreviousMatchDetector();
+
     @Test
     public void shouldIndicateACreditCardActivityIsContainedInACollectionOfMatchedTransactions() {
-        CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder().build();
-        CreditCardActivity creditCardActivityTwo = new CreditCardActivityBuilder().build();
-        CreditCardActivity creditCardActivityThree = new CreditCardActivityBuilder().build();
-        CreditCardActivity creditCardActivityFour = new CreditCardActivityBuilder().build();
-
-        MatchedTransaction matchedTransactionOne = new MatchedTransactionBuilder().fromCreditCardActivity(creditCardActivityOne).build();
-        MatchedTransaction matchedTransactionTwo = new MatchedTransactionBuilder().fromCreditCardActivity(creditCardActivityTwo).build();
-        MatchedTransaction matchedTransactionThree = new MatchedTransactionBuilder().fromCreditCardActivity(creditCardActivityThree).build();
-
-        List<MatchedTransaction> matchedTransactionList = Arrays.asList(matchedTransactionOne, matchedTransactionTwo, matchedTransactionThree);
-
-        PreviousMatchDetector previousMatchDetector = new PreviousMatchDetector();
-        boolean isMatched = previousMatchDetector.isPreviouslyMatched(creditCardActivityOne, matchedTransactionList);
+        boolean isMatched = previousMatchDetectorUnderTest.isPreviouslyMatched(matchedCreditCardActivityOne, matchedTransactionList);
         assertThat(isMatched, is(true));
     }
 
     @Test
     public void shouldIndicateACreditCardActivityIsMissingFromTheCollectionOfMatchedTransactions() {
-        CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder().build();
-        CreditCardActivity creditCardActivityTwo = new CreditCardActivityBuilder().build();
-        CreditCardActivity creditCardActivityThree = new CreditCardActivityBuilder().build();
-        CreditCardActivity creditCardActivityFour = new CreditCardActivityBuilder().build();
-
-        MatchedTransaction matchedTransactionOne = new MatchedTransactionBuilder().fromCreditCardActivity(creditCardActivityOne).build();
-        MatchedTransaction matchedTransactionTwo = new MatchedTransactionBuilder().fromCreditCardActivity(creditCardActivityTwo).build();
-        MatchedTransaction matchedTransactionThree = new MatchedTransactionBuilder().fromCreditCardActivity(creditCardActivityThree).build();
-
-        List<MatchedTransaction> matchedTransactionList = Arrays.asList(matchedTransactionOne, matchedTransactionTwo, matchedTransactionThree);
-
-        PreviousMatchDetector previousMatchDetector = new PreviousMatchDetector();
-        boolean isMatched = previousMatchDetector.isPreviouslyMatched(creditCardActivityFour, matchedTransactionList);
+        boolean isMatched = previousMatchDetectorUnderTest.isPreviouslyMatched(unmatchedCreditCardActivity, matchedTransactionList);
         assertThat(isMatched, is(false));
     }
 
     @Test
     public void shouldIndicateAnExpenseIsContainedInACollectionOfMatchedTransactions() {
-        Expense expenseOne = new ExpenseBuilder().build();
-        Expense expenseTwo = new ExpenseBuilder().build();
-        Expense expenseThree = new ExpenseBuilder().build();
-        Expense expenseFour = new ExpenseBuilder().build();
-
-        MatchedTransaction matchedTransactionOne = new MatchedTransactionBuilder().fromExpense(expenseOne).build();
-        MatchedTransaction matchedTransactionTwo = new MatchedTransactionBuilder().fromExpense(expenseTwo).build();
-        MatchedTransaction matchedTransactionThree = new MatchedTransactionBuilder().fromExpense(expenseThree).build();
-
-        List<MatchedTransaction> matchedTransactionList = Arrays.asList(matchedTransactionOne, matchedTransactionTwo, matchedTransactionThree);
-
-        PreviousMatchDetector previousMatchDetector = new PreviousMatchDetector();
-        boolean isMatched = previousMatchDetector.isPreviouslyMatched(expenseOne, matchedTransactionList);
+        boolean isMatched = previousMatchDetectorUnderTest.isPreviouslyMatched(expenseOne, matchedTransactionList);
         assertThat(isMatched, is(true));
     }
 
     @Test
     public void shouldIndicateAnExpenseIsMissingFromTheCollectionOfMatchedTransactions() {
-        Expense expenseOne = new ExpenseBuilder().build();
-        Expense expenseTwo = new ExpenseBuilder().build();
-        Expense expenseThree = new ExpenseBuilder().build();
-        Expense expenseFour = new ExpenseBuilder().build();
-
-        MatchedTransaction matchedTransactionOne = new MatchedTransactionBuilder().fromExpense(expenseOne).build();
-        MatchedTransaction matchedTransactionTwo = new MatchedTransactionBuilder().fromExpense(expenseTwo).build();
-        MatchedTransaction matchedTransactionThree = new MatchedTransactionBuilder().fromExpense(expenseThree).build();
-
-        List<MatchedTransaction> matchedTransactionList = Arrays.asList(matchedTransactionOne, matchedTransactionTwo, matchedTransactionThree);
-
-        PreviousMatchDetector previousMatchDetector = new PreviousMatchDetector();
-        boolean isMatched = previousMatchDetector.isPreviouslyMatched(expenseFour, matchedTransactionList);
+        boolean isMatched = previousMatchDetectorUnderTest.isPreviouslyMatched(expenseFour, matchedTransactionList);
         assertThat(isMatched, is(false));
+    }
+
+    private List<MatchedTransaction> createMatchedTransactions() {
+        MatchedTransaction matchedTransactionOne = new MatchedTransactionBuilder()
+                .withCreditCardActivity(matchedCreditCardActivityOne)
+                .withExpense(expenseOne)
+                .build();
+        MatchedTransaction matchedTransactionTwo = new MatchedTransactionBuilder()
+                .withCreditCardActivity(matchedCreditCardActivityTwo)
+                .withExpense(expenseTwo)
+                .build();
+        MatchedTransaction matchedTransactionThree = new MatchedTransactionBuilder()
+                .withCreditCardActivity(matchedCreditCardActivityThree)
+                .withExpense(expenseThree)
+                .build();
+        return Arrays.asList(matchedTransactionOne, matchedTransactionTwo, matchedTransactionThree);
     }
 }

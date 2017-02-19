@@ -21,13 +21,20 @@ public class MatchedTransactionBuilder {
         return this;
     }
 
-    public MatchedTransactionBuilder fromCreditCardActivity(CreditCardActivity creditCardActivity) {
+    public MatchedTransactionBuilder withCreditCardActivity(CreditCardActivity creditCardActivity) {
        this.matchedCreditCardActivity = creditCardActivity;
-       matchedExpense = new ExpenseBuilder().build();
+
        return this;
     }
 
+    public MatchedTransactionBuilder withExpense(Expense matchedExpense) {
+       this.matchedExpense = matchedExpense;
+        return this;
+    }
+
     public MatchedTransaction build() {
+        this.matchedExpense = this.matchedExpense == null ? new ExpenseBuilder().build() : this.matchedExpense;
+        this.matchedCreditCardActivity = this.matchedCreditCardActivity == null ? new CreditCardActivityBuilder().build() : this.matchedCreditCardActivity;
         return new MatchedTransaction(matchedCreditCardActivity, matchedExpense);
     }
 }
