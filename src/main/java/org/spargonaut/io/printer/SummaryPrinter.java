@@ -30,7 +30,7 @@ public class SummaryPrinter {
         for (String matcherType : matcherTypes) {
             System.out.print("\n\n\n" + matcherType + " matched");
             List<MatchedTransaction> matchedTransactions = matchedTransactionMap.get(matcherType);
-            MatchedTransactionPrinter.printMatchedTransactions(matchedTransactions);
+            MatchedTransactionPrinter.printMatchedTransactions(new HashSet<>(matchedTransactions));
 
             int matchCount = matchedTransactions.size();
             totalMatchesCount += matchCount;

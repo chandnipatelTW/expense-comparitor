@@ -4,10 +4,10 @@ import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
 import org.spargonaut.datamodels.MatchedTransaction;
 
-import java.util.List;
+import java.util.Set;
 
 public class MatchedTransactionPrinter {
-    public static void printMatchedTransactions (List<MatchedTransaction> matchedTransactions) {
+    public static void printMatchedTransactions (Set<MatchedTransaction> matchedTransactions) {
         System.out.format(" transactions (%d) ------------------------------------------------------------------\n", matchedTransactions.size());
         for (MatchedTransaction matchedTransaction : matchedTransactions) {
             printMatchedTransaction(matchedTransaction.getMatchedCreditCardActivity(),

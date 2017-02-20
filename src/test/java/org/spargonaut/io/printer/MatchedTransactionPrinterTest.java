@@ -11,7 +11,8 @@ import org.spargonaut.datamodels.testbuilders.ExpenseBuilder;
 import org.springframework.boot.test.OutputCapture;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -23,6 +24,28 @@ public class MatchedTransactionPrinterTest {
 
     @Test
     public void shouldPrintAFormattedSetOfMatchedTransaction () {
+        Set<MatchedTransaction> matchedTransactions = createMatchedTransactions();
+        MatchedTransactionPrinter.printMatchedTransactions (matchedTransactions);
+
+        String expectedMatcheOne = "               A credit card transaction description              2017-01-01      2017-01-02           -3.49\n" +
+                                   "matched with:  An expense merchant                                2017-02-03                            3.49\n\n";
+
+        String expectedMatchTwo = "               Another credit card transaction description        2017-04-05      2017-04-06           -5.68\n" +
+                                   "matched with:  Another expense merchant                           2017-06-07                            5.68\n\n";
+
+        assertThat (outputCapture.toString().contains(expectedMatcheOne), is(true));
+        assertThat (outputCapture.toString().contains(expectedMatchTwo), is(true));
+    }
+
+    @Test
+    public void shouldPrintOutTheMatchedTransactionHeaderStringWithTheCountOfMatchedTransactions() {
+        Set<MatchedTransaction> matchedTransactions = createMatchedTransactions();
+        MatchedTransactionPrinter.printMatchedTransactions (matchedTransactions);
+        String expectedHeaderString = " transactions (2) ------------------------------------------------------------------\n";
+        assertThat (outputCapture.toString().contains(expectedHeaderString), is(true));
+    }
+
+    private Set<MatchedTransaction> createMatchedTransactions() {
         double matchedAmountOne = 3.49;
 
         int transactionYear = 2017;
@@ -34,7 +57,7 @@ public class MatchedTransactionPrinterTest {
 
         String transactionDescriptionOne = "A credit card transaction description";
         double matchedAmountOneForCreditCardActivityOne = matchedAmountOne * -1;
-        CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder ()
+        CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder()
                 .setAmount (matchedAmountOneForCreditCardActivityOne)
                 .setTransactionDate (activityTransactionDateOne)
                 .setPostDate(activityPostDateOne)
@@ -47,14 +70,13 @@ public class MatchedTransactionPrinterTest {
         DateTime expenseDateOne = new DateTime (transactionYear, expenseMonthOne, expenseDayOne, 0, 0);
 
         String merchantOne = "An expense merchant";
-        Expense expenseOne = new ExpenseBuilder ()
+        Expense expenseOne = new ExpenseBuilder()
                 .setAmount (matchedAmountOne)
                 .setTimestamp (expenseDateOne)
                 .setMerchant (merchantOne)
                 .build ();
 
         MatchedTransaction matchedTransactionOne = new MatchedTransaction (creditCardActivityOne, expenseOne);
-
 
         double matchedAmountTwo = 5.68;
         int transactionMonthTwo = 4;
@@ -72,7 +94,6 @@ public class MatchedTransactionPrinterTest {
                 .setDescription (transactionDescriptionTwo)
                 .build ();
 
-
         int expenseMonthTwo = 6;
         int expenseDayTwo = 7;
         DateTime expenseDateTwo = new DateTime (transactionYear, expenseMonthTwo, expenseDayTwo, 0, 0);
@@ -86,17 +107,6 @@ public class MatchedTransactionPrinterTest {
 
         MatchedTransaction matchedTransactionTwo = new MatchedTransaction (creditCardActivityTwo, expenseTwo);
 
-
-        List<MatchedTransaction> matchedTransactions = Arrays.asList (matchedTransactionOne, matchedTransactionTwo);
-
-        MatchedTransactionPrinter.printMatchedTransactions (matchedTransactions);
-
-        String expectedOutput = " transactions (2) ------------------------------------------------------------------\n" +
-                                "               A credit card transaction description              2017-01-01      2017-01-02           -3.49\n" +
-                                "matched with:  An expense merchant                                2017-02-03                            3.49\n\n" +
-                                "               Another credit card transaction description        2017-04-05      2017-04-06           -5.68\n" +
-                                "matched with:  Another expense merchant                           2017-06-07                            5.68\n\n";
-
-        assertThat (outputCapture.toString(), is(expectedOutput));
+        return new HashSet<>(Arrays.asList(matchedTransactionOne, matchedTransactionTwo));
     }
 }
