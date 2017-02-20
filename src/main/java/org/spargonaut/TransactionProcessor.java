@@ -39,12 +39,8 @@ public class TransactionProcessor {
     }
 
     public void processTransactions(List<TransactionMatcher> matchers) {
-        UnmatchedCollector<CreditCardActivity> unmatchedCreditCardActivityCollector = new UnmatchedCollector<>();
-        UnmatchedCollector<Expense> unmatchedExpenseCollector = new UnmatchedCollector<>();
         for (TransactionMatcher matcher : matchers) {
-            List<Expense> unmatchedExpenses = unmatchedExpenseCollector.collect(this.expenses, this.matchedTransactions.values());
-            List<CreditCardActivity> unmatchedCreditCardActivities = unmatchedCreditCardActivityCollector.collect(this.creditCardActivities, this.matchedTransactions.values());
-            List<MatchedTransaction> matchedTransactionList = createMatchedTransactions(unmatchedCreditCardActivities, unmatchedExpenses, matcher);
+            List<MatchedTransaction> matchedTransactionList = createMatchedTransactions(this.getUnmatchedCreditCardActivies(), this.getUnmatchedExpenses(), matcher);
             this.matchedTransactions.put(matcher.getType(), matchedTransactionList);
         }
     }
