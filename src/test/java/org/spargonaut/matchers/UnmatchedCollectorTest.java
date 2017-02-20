@@ -8,10 +8,7 @@ import org.spargonaut.datamodels.testbuilders.CreditCardActivityBuilder;
 import org.spargonaut.datamodels.testbuilders.ExpenseBuilder;
 import org.spargonaut.datamodels.testbuilders.MatchedTransactionBuilder;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -39,7 +36,7 @@ public class UnmatchedCollectorTest {
     public void shouldCollectUnmatchedCreditCardactivities() {
 
         UnmatchedCollector<CreditCardActivity> unmatchedCollector = new UnmatchedCollector<>();
-        List<CreditCardActivity> actualUnmatchedCreditCardActivities = unmatchedCollector.collect(creditCardActivityList, matchedTransactionMap.values());
+        Set<CreditCardActivity> actualUnmatchedCreditCardActivities = unmatchedCollector.collect(creditCardActivityList, matchedTransactionMap.values());
 
         assertThat(actualUnmatchedCreditCardActivities.size(), is(3));
         assertThat(actualUnmatchedCreditCardActivities.contains(unmatchedCreditCardActivityFour), is(true));
@@ -51,7 +48,7 @@ public class UnmatchedCollectorTest {
     public void shouldCollectUnmatchedExpenses() {
 
         UnmatchedCollector<Expense> unmatchedCollector = new UnmatchedCollector<>();
-        List<Expense> actualUnmatchedExpenses = unmatchedCollector.collect(expenseList, matchedTransactionMap.values());
+        Set<Expense> actualUnmatchedExpenses = unmatchedCollector.collect(expenseList, matchedTransactionMap.values());
 
         assertThat(actualUnmatchedExpenses.size(), is(3));
         assertThat(actualUnmatchedExpenses.contains(unmatchedExpenseFour), is(true));

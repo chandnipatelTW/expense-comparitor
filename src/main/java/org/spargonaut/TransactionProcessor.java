@@ -7,10 +7,7 @@ import org.spargonaut.matchers.PreviousMatchDetector;
 import org.spargonaut.matchers.TransactionMatcher;
 import org.spargonaut.matchers.UnmatchedCollector;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TransactionProcessor {
 
@@ -24,12 +21,12 @@ public class TransactionProcessor {
         this.matchedTransactions = new HashMap<>();
     }
 
-    public List<CreditCardActivity> getUnmatchedCreditCardActivies() {
+    public Set<CreditCardActivity> getUnmatchedCreditCardActivies() {
         UnmatchedCollector<CreditCardActivity> unmatchedCollector = new UnmatchedCollector<>();
         return unmatchedCollector.collect(this.creditCardActivities, this.matchedTransactions.values());
     }
 
-    public List<Expense> getUnmatchedExpenses() {
+    public Set<Expense> getUnmatchedExpenses() {
         UnmatchedCollector<Expense> unmatchedCollector = new UnmatchedCollector<>();
         return unmatchedCollector.collect(this.expenses, this.matchedTransactions.values());
     }

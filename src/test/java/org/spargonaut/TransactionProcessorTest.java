@@ -16,6 +16,7 @@ import org.spargonaut.matchers.TransactionMatcher;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -253,7 +254,7 @@ public class TransactionProcessorTest {
     }
 
     @Test
-    public void shouldCreateAListOfUnmatchedCreditCardActivities() {
+    public void shouldCreateASetOfUnmatchedCreditCardActivities() {
         int dayOfMonthForExpenseDateToMatchOn = 26;
         DateTime dateForExpenseOneToMatchOn = getDateTimeForDay(dayOfMonthForExpenseDateToMatchOn);
         CreditCardActivity creditCardActivityToMatchExactly = new CreditCardActivityBuilder()
@@ -311,14 +312,14 @@ public class TransactionProcessorTest {
         List<TransactionMatcher> exactMatcherList = Arrays.asList(new ExactMatcher(), new CloseDateMatcher());
         transactionProcessor.processTransactions(exactMatcherList);
 
-        List<CreditCardActivity> unmatchedCreditCardActivities = transactionProcessor.getUnmatchedCreditCardActivies();
+        Set<CreditCardActivity> unmatchedCreditCardActivities = transactionProcessor.getUnmatchedCreditCardActivies();
 
         assertThat(unmatchedCreditCardActivities.size(), is(1));
 
     }
 
     @Test
-    public void shouldCreateAListOfUnmatchedExpenses() {
+    public void shouldCreateASetOfUnmatchedExpenses() {
         int dayOfMonthForExpenseDateToMatchOn = 26;
         DateTime dateForExpenseOneToMatchOn = getDateTimeForDay(dayOfMonthForExpenseDateToMatchOn);
         CreditCardActivity creditCardActivityToMatchExactly = new CreditCardActivityBuilder()
@@ -377,7 +378,7 @@ public class TransactionProcessorTest {
         List<TransactionMatcher> exactMatcherList = Arrays.asList(new ExactMatcher(), new CloseDateMatcher());
         transactionProcessor.processTransactions(exactMatcherList);
 
-        List<Expense> unmatchedExpenses = transactionProcessor.getUnmatchedExpenses();
+        Set<Expense> unmatchedExpenses = transactionProcessor.getUnmatchedExpenses();
         assertThat(unmatchedExpenses.size(), is(1));
 
     }

@@ -15,8 +15,8 @@ public class SummaryPrinter {
                                     List<CreditCardActivity> creditCardActivities,
                                     List<CreditCardActivity> ignoredCreditCardActivities,
                                     List<Expense> expenses,
-                                    List<CreditCardActivity> unmatchedCreditCardActivity,
-                                    List<Expense> unmatchedExpenses) {
+                                    Set<CreditCardActivity> unmatchedCreditCardActivity,
+                                    Set<Expense> unmatchedExpenses) {
 
         System.out.print("\n\n\nParsed ");
         ChargePrinter.printChargesAsHumanReadable(new HashSet<>(creditCardActivities));
