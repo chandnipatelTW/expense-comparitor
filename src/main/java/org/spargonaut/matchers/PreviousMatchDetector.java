@@ -7,11 +7,12 @@ import java.util.List;
 
 public class PreviousMatchDetector {
     public boolean isPreviouslyMatched(Transaction transaction, List<MatchedTransaction> matchedTransactionList) {
-        for (MatchedTransaction matchedTransaction : matchedTransactionList) {
-            if (matchedTransaction.contains(transaction)) {
-                return true;
-            };
-        }
-        return false;
+        boolean transactionIsDetectedAsMatched = matchedTransactionList
+                .stream()
+                .filter(matchedTransaction -> matchedTransaction.contains(transaction))
+                .findAny()
+                .orElse(null)
+                != null;
+        return transactionIsDetectedAsMatched;
     }
 }
