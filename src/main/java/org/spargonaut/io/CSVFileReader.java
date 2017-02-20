@@ -3,13 +3,13 @@ package org.spargonaut.io;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CSVFileReader {
 
-    public List<String> readCsvFile(File creditCardFile) {
-        List<String> chargeLines = new ArrayList<>();
+    public Set<String> readCsvFile(File creditCardFile) {
+        Set<String> chargeLines = new HashSet<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(creditCardFile))) {
             String currentLine;

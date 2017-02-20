@@ -8,7 +8,7 @@ import org.spargonaut.io.CSVFileReader;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,7 +23,7 @@ public class ExpenseParserTest {
         String headerString = "Timestamp,Merchant,Amount,MCC,Category,Tag,Comment,Reimbursable,\"Original Currency\",\"Original Amount\",Receipt";
         String expenseString = "\"2016-12-12 00:00:00\",Uber,18.68,0,\"Local Transportation\",\"Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Delivery Assurance\",\"Uber DFW to office\",yes,USD,18.68,https://salesforce.expensify.com/verifyReceipt?action=verifyreceipt&transactionID=7871304959002483&amount=-1868&created=2016-12-12";
 
-        List<String> expenseStrings = Arrays.asList(headerString, expenseString);
+        Set<String> expenseStrings = new HashSet<>(Arrays.asList(headerString, expenseString));
 
         File mockFile = mock(File.class);
         CSVFileReader mockCSVFileReader = mock(CSVFileReader.class);
@@ -57,7 +57,7 @@ public class ExpenseParserTest {
         String headerString = "Timestamp,Merchant,Amount,MCC,Category,Tag,Comment,Reimbursable,\"Original Currency\",\"Original Amount\",Receipt";
         String expenseString = "\"2016-12-12 00:00:00\",Uber,18.68,0,\"Local Transportation\",\"Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Delivery Assurance\",\"Uber DFW to office\",yes,USD,18.68,https://salesforce.expensify.com/verifyReceipt?action=verifyreceipt&transactionID=7871304959002483&amount=-1868&created=2016-12-12";
 
-        List<String> expenseStrings = Arrays.asList(headerString, expenseString);
+        Set<String> expenseStrings = new HashSet<>(Arrays.asList(headerString, expenseString));
 
         File mockFile = mock(File.class);
         CSVFileReader mockCSVFileReader = mock(CSVFileReader.class);
@@ -74,7 +74,7 @@ public class ExpenseParserTest {
         String headerString = "Timestamp,Merchant,Amount,MCC,Category,Tag,Comment,Reimbursable,\"Original Currency\",\"Original Amount\",Receipt";
         String expenseString = "\"2016-12-12 00:00:00\",Uber,18.68,0,\"Local Transportation\",\"Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Delivery Assurance\",\"Uber DFW to office\",foo,USD,18.68,https://salesforce.expensify.com/verifyReceipt?action=verifyreceipt&transactionID=7871304959002483&amount=-1868&created=2016-12-12";
 
-        List<String> expenseStrings = Arrays.asList(headerString, expenseString);
+        Set<String> expenseStrings = new HashSet<>(Arrays.asList(headerString, expenseString));
 
         File mockFile = mock(File.class);
         CSVFileReader mockCSVFileReader = mock(CSVFileReader.class);
@@ -88,7 +88,7 @@ public class ExpenseParserTest {
     public void shouldKeepCommentsTogetherWhenTheyContainCommas() {
         String expenseString = "\"2016-12-09 00:00:00\",\"Taco Diner\",97.19,0,\"Business Meals\",\"Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Delivery Assurance\",\"Lunch for myself, Max, Blake, Charith, Timothy, Bryan\",yes,USD,97.19,https://salesforce.expensify.com/verifyReceipt?action=verifyreceipt&transactionID=7871304959002493&amount=-9719&created=2016-12-09";
 
-        List<String> expenseStrings = Arrays.asList(expenseString);
+        Set<String> expenseStrings = new HashSet<>(Arrays.asList(expenseString));
         File mockFile = mock(File.class);
         CSVFileReader mockCSVFileReader = mock(CSVFileReader.class);
         when(mockCSVFileReader.readCsvFile(mockFile)).thenReturn(expenseStrings);

@@ -7,7 +7,6 @@ import org.spargonaut.io.CSVFileReader;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class ExpenseParser implements Parser<Expense> {
@@ -21,7 +20,7 @@ public class ExpenseParser implements Parser<Expense> {
     public Set<Expense> parseFile(File expenseFile) {
         String expenseDelimiter = "\\|";
 
-        List<String> expenseLines = csvFileReader.readCsvFile(expenseFile);
+        Set<String> expenseLines = csvFileReader.readCsvFile(expenseFile);
         Set<Expense> expenses = new HashSet<>();
 
         for (String expenseLine : expenseLines) {

@@ -11,7 +11,7 @@ import org.spargonaut.io.CSVFileReader;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,7 +29,7 @@ public class ChargeParserTest {
         String headerLine = "Type,Trans Date,Post Date,Description,Amount";
         String chargeLine = "Sale,12/10/2016,12/11/2016,UBER   *US DEC09 DFMHE,-18.09";
         String commentLine = "# this line is a comment because it starts with a hash";
-        List<String> chargeStrings = Arrays.asList(headerLine, chargeLine, commentLine);
+        Set<String> chargeStrings = new HashSet<>(Arrays.asList(headerLine, chargeLine, commentLine));
 
         mockFile = mock(File.class);
         mockCSVFileReader = mock(CSVFileReader.class);

@@ -3,7 +3,7 @@ package org.spargonaut.io;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -16,7 +16,7 @@ public class CSVFileReaderTest {
         File creditCardFile = new File(testFileName);
 
         CSVFileReader csvFileReader = new CSVFileReader();
-        List<String> charges = csvFileReader.readCsvFile(creditCardFile);
+        Set<String> charges = csvFileReader.readCsvFile(creditCardFile);
 
         assertThat(charges.size(), is(6));
     }
