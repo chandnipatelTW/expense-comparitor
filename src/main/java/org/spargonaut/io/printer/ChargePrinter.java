@@ -3,16 +3,16 @@ package org.spargonaut.io.printer;
 import org.spargonaut.datamodels.ActivityType;
 import org.spargonaut.datamodels.CreditCardActivity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ChargePrinter {
 
     // FIXME - separate out the payments from the charges
 
-    public static void printChargesAsHumanReadable(List<CreditCardActivity> activities) {
-        List<CreditCardActivity> payments = new ArrayList<>();
-        List<CreditCardActivity> charges = new ArrayList<>();
+    public static void printChargesAsHumanReadable(Set<CreditCardActivity> activities) {
+        Set<CreditCardActivity> payments = new HashSet<>();
+        Set<CreditCardActivity> charges = new HashSet<>();
 
         separateChargesAndPayments(activities, payments, charges);
 
@@ -25,7 +25,7 @@ public class ChargePrinter {
         printActivities(payments, paymentString);
     }
 
-    private static void separateChargesAndPayments(List<CreditCardActivity> activities, List<CreditCardActivity> payments, List<CreditCardActivity> charges) {
+    private static void separateChargesAndPayments(Set<CreditCardActivity> activities, Set<CreditCardActivity> payments, Set<CreditCardActivity> charges) {
         for (CreditCardActivity activity : activities) {
             if (activity.getType() == ActivityType.PAYMENT) {
                 payments.add(activity);
@@ -35,7 +35,7 @@ public class ChargePrinter {
         }
     }
 
-    private static void printActivities(List<CreditCardActivity> charges, String chargesString) {
+    private static void printActivities(Set<CreditCardActivity> charges, String chargesString) {
         System.out.format(chargesString + " (%d) -----------------------------------------------------------------------\n", charges.size());
         for (CreditCardActivity charge : charges) {
             printActivity(charge);

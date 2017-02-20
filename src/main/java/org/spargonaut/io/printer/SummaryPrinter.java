@@ -19,7 +19,7 @@ public class SummaryPrinter {
                                     List<Expense> unmatchedExpenses) {
 
         System.out.print("\n\n\nParsed ");
-        ChargePrinter.printChargesAsHumanReadable(creditCardActivities);
+        ChargePrinter.printChargesAsHumanReadable(new HashSet<>(creditCardActivities));
 
         System.out.print("\n\n\nParsed ");
         ExpensePrinter.printExpensesAsHumanReadable(new HashSet<>(expenses));
@@ -45,7 +45,7 @@ public class SummaryPrinter {
         summaryBuilder.append("\n\n");
 
         System.out.print("\n\n\nUnmatched ");
-        ChargePrinter.printChargesAsHumanReadable(unmatchedCreditCardActivity);
+        ChargePrinter.printChargesAsHumanReadable(new HashSet<>(unmatchedCreditCardActivity));
 
         System.out.print("\n\n\nUnmatched ");
         ExpensePrinter.printExpensesAsHumanReadable(new HashSet<>(unmatchedExpenses));
