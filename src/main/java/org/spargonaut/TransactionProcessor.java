@@ -7,17 +7,20 @@ import org.spargonaut.matchers.PreviousMatchDetector;
 import org.spargonaut.matchers.TransactionMatcher;
 import org.spargonaut.matchers.UnmatchedCollector;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class TransactionProcessor {
 
-    private final List<Expense> expenses;
-    private List<CreditCardActivity> creditCardActivities;
-    private Map<String, List<MatchedTransaction>> matchedTransactions;
+    private final Set<Expense> expenses;
+    private Set<CreditCardActivity> creditCardActivities;
+    private Map<String, Set<MatchedTransaction>> matchedTransactions;
 
     public TransactionProcessor(Set<CreditCardActivity> creditCardActivities, Set<Expense> expenses) {
-        this.creditCardActivities = new ArrayList<>(creditCardActivities);
-        this.expenses = new ArrayList<>(expenses);
+        this.creditCardActivities = creditCardActivities;
+        this.expenses = expenses;
         this.matchedTransactions = new HashMap<>();
     }
 
@@ -31,19 +34,19 @@ public class TransactionProcessor {
         return unmatchedCollector.collect(this.expenses, this.matchedTransactions.values());
     }
 
-    public Map<String, List<MatchedTransaction>> getMatchedTransactions() {
+    public Map<String, Set<MatchedTransaction>> getMatchedTransactions() {
         return this.matchedTransactions;
     }
 
-    public void processTransactions(List<TransactionMatcher> matchers) {
+    public void processTransactions(Set<TransactionMatcher> matchers) {
         for (TransactionMatcher matcher : matchers) {
-            List<MatchedTransaction> matchedTransactionList = createMatchedTransactions(matcher);
+            Set<MatchedTransaction> matchedTransactionList = createMatchedTransactions(matcher);
             this.matchedTransactions.put(matcher.getType(), matchedTransactionList);
         }
     }
 
-    private List<MatchedTransaction> createMatchedTransactions(TransactionMatcher matcher) {
-        List<MatchedTransaction> matchedTransactions = new ArrayList<>();
+    private Set<MatchedTransaction> createMatchedTransactions(TransactionMatcher matcher) {
+        Set<MatchedTransaction> matchedTransactions = new HashSet<>();
         PreviousMatchDetector previousMatchDetector = new PreviousMatchDetector();
 
         for (Expense expense : this.getUnmatchedExpenses()) {

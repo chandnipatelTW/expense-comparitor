@@ -14,7 +14,10 @@ import org.spargonaut.matchers.ExactMatcher;
 import org.spargonaut.matchers.FuzzyMerchantExactAmountMatcher;
 import org.spargonaut.matchers.TransactionMatcher;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class Application {
     public static void main(String[] args) {
@@ -45,10 +48,10 @@ public class Application {
         TransactionMatcher exactMatcher = new ExactMatcher();
         TransactionMatcher closeDateMatcher = new CloseDateMatcher();
         TransactionMatcher fuzzyMatcher = new FuzzyMerchantExactAmountMatcher();
-        List<TransactionMatcher> matchers = Arrays.asList(exactMatcher, closeDateMatcher, fuzzyMatcher);
+        Set<TransactionMatcher> matchers = new HashSet<>(Arrays.asList(exactMatcher, closeDateMatcher, fuzzyMatcher));
         transactionProcessor.processTransactions(matchers);
 
-        Map<String, List<MatchedTransaction>> matchedTransactionsMap = transactionProcessor.getMatchedTransactions();
+        Map<String, Set<MatchedTransaction>> matchedTransactionsMap = transactionProcessor.getMatchedTransactions();
         Set<CreditCardActivity> unmatchedCreditCardActivity = transactionProcessor.getUnmatchedCreditCardActivies();
         Set<Expense> unmatchedExpenses = transactionProcessor.getUnmatchedExpenses();
 

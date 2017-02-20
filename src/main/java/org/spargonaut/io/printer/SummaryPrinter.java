@@ -5,13 +5,12 @@ import org.spargonaut.datamodels.Expense;
 import org.spargonaut.datamodels.MatchedTransaction;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class SummaryPrinter {
 
-    public static void printSummary(Map<String, List<MatchedTransaction>> matchedTransactionMap,
+    public static void printSummary(Map<String, Set<MatchedTransaction>> matchedTransactionMap,
                                     Set<CreditCardActivity> creditCardActivities,
                                     Set<CreditCardActivity> ignoredCreditCardActivities,
                                     Set<Expense> expenses,
@@ -29,7 +28,7 @@ public class SummaryPrinter {
         int totalMatchesCount = 0;
         for (String matcherType : matcherTypes) {
             System.out.print("\n\n\n" + matcherType + " matched");
-            List<MatchedTransaction> matchedTransactions = matchedTransactionMap.get(matcherType);
+            Set<MatchedTransaction> matchedTransactions = matchedTransactionMap.get(matcherType);
             MatchedTransactionPrinter.printMatchedTransactions(new HashSet<>(matchedTransactions));
 
             int matchCount = matchedTransactions.size();

@@ -28,9 +28,9 @@ public class UnmatchedCollectorTest {
     private final Expense unmatchedExpenseFive = new ExpenseBuilder().build();
     private final Expense unmatchedExpenseSix = new ExpenseBuilder().build();
 
-    private final List<CreditCardActivity> creditCardActivityList = createCreditCardActivitiesList();
-    private final Map<String, List<MatchedTransaction>> matchedTransactionMap = createMatchedTransactionMap();
-    private final List<Expense> expenseList = createExpensesList();
+    private final Set<CreditCardActivity> creditCardActivityList = createCreditCardActivitiesList();
+    private final Map<String, Set<MatchedTransaction>> matchedTransactionMap = createMatchedTransactionMap();
+    private final Set<Expense> expenseList = createExpensesList();
 
     @Test
     public void shouldCollectUnmatchedCreditCardactivities() {
@@ -56,7 +56,7 @@ public class UnmatchedCollectorTest {
         assertThat(actualUnmatchedExpenses.contains(unmatchedExpenseSix), is(true));
     }
 
-    private Map<String, List<MatchedTransaction>> createMatchedTransactionMap() {
+    private Map<String, Set<MatchedTransaction>> createMatchedTransactionMap() {
         MatchedTransaction matchedTransactionOne = new MatchedTransactionBuilder()
                 .withCreditCardActivity(matchedCreditCardActivityOne)
                 .withExpense(matchedExpenseOne)
@@ -69,27 +69,27 @@ public class UnmatchedCollectorTest {
                 .withCreditCardActivity(matchedCreditCardActivityThree)
                 .withExpense(matchedExpenseThree)
                 .build();
-        List<MatchedTransaction> matchedTransactionList = Arrays.asList(matchedTransactionOne, matchedTransactionTwo, matchedTransactionThree);
-        Map<String, List<MatchedTransaction>> matchedTransactionMap = new HashMap<>();
+        Set<MatchedTransaction> matchedTransactionList = new HashSet<>(Arrays.asList(matchedTransactionOne, matchedTransactionTwo, matchedTransactionThree));
+        Map<String, Set<MatchedTransaction>> matchedTransactionMap = new HashMap<>();
         matchedTransactionMap.put("someMatcher", matchedTransactionList);
         return matchedTransactionMap;
     }
 
-    private List<CreditCardActivity> createCreditCardActivitiesList() {
-        return Arrays.asList(matchedCreditCardActivityOne,
+    private Set<CreditCardActivity> createCreditCardActivitiesList() {
+        return new HashSet<>(Arrays.asList(matchedCreditCardActivityOne,
                 matchedCreditCardActivityTwo,
                 matchedCreditCardActivityThree,
                 unmatchedCreditCardActivityFour,
                 unmatchedCreditCardActivityFive,
-                unmatchedCreditCardActivitySix);
+                unmatchedCreditCardActivitySix));
     }
 
-    private List<Expense> createExpensesList() {
-        return Arrays.asList(matchedExpenseOne,
+    private Set<Expense> createExpensesList() {
+        return new HashSet<>(Arrays.asList(matchedExpenseOne,
                 matchedExpenseTwo,
                 matchedExpenseThree,
                 unmatchedExpenseFour,
                 unmatchedExpenseFive,
-                unmatchedExpenseSix);
+                unmatchedExpenseSix));
     }
 }

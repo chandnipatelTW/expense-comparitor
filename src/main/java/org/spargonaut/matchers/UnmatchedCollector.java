@@ -10,10 +10,10 @@ import java.util.stream.Collectors;
 
 public class UnmatchedCollector<T extends Transaction> {
 
-    public Set<T> collect(List<T> items, Collection<List<MatchedTransaction>> matchedTransactionLists) {
-        Class itemClassType = items.get(0).getClass();
+    public Set<T> collect(Set<T> items, Collection<Set<MatchedTransaction>> matchedTransactionLists) {
+        Class itemClassType = items.iterator().next().getClass();
         List<Transaction> matchedItems = matchedTransactionLists.stream()
-                .flatMap(List::stream)
+                .flatMap(Set::stream)
                 .map( matchedTransaction -> matchedTransaction.getItemOfType(itemClassType) )
                 .collect(Collectors.toList());
 
