@@ -52,8 +52,8 @@ public class SummaryPrinter {
         System.out.print("\n\nSUMMARY\n----------------------------------------------");
         System.out.format("\nTotal Matches:                              %d", totalMatchesCount);
         System.out.format("\nUnmatched Credit Card Activities:   %10s", unmatchedCreditCardActivity.size());
-        System.out.format("\nIgnored Credit Card Activities:     %10s", ignoredCreditCardActivities.size());
         System.out.format("\nUnmatched Expenses:                 %10s", unmatchedExpenses.size());
+        System.out.format("\nIgnored Credit Card Activities:     %10s", ignoredCreditCardActivities.size());
 
         System.out.println("");
 
