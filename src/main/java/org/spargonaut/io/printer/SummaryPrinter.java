@@ -13,7 +13,7 @@ public class SummaryPrinter {
 
     public static void printSummary(Map<String, List<MatchedTransaction>> matchedTransactionMap,
                                     Set<CreditCardActivity> creditCardActivities,
-                                    List<CreditCardActivity> ignoredCreditCardActivities,
+                                    Set<CreditCardActivity> ignoredCreditCardActivities,
                                     Set<Expense> expenses,
                                     Set<CreditCardActivity> unmatchedCreditCardActivity,
                                     Set<Expense> unmatchedExpenses) {

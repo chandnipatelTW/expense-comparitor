@@ -3,10 +3,10 @@ package org.spargonaut.io;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class CSVFileLoaderTest {
 
@@ -15,7 +15,7 @@ public class CSVFileLoaderTest {
         String testDirectoryName = "src/integrationTest/resources/test_charge_file_directory";
 
         CSVFileLoader csvFileLoader = new CSVFileLoader();
-        List<File> chargeFiles = csvFileLoader.getFileNamesIn(testDirectoryName);
+        Set<File> chargeFiles = csvFileLoader.getFileNamesIn(testDirectoryName);
 
         assertThat(chargeFiles.size(), is(2));
     }

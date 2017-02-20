@@ -1,19 +1,19 @@
 package org.spargonaut.io;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CSVFileLoader {
 
-    public List<File> getFileNamesIn(String directoryName) {
+    public Set<File> getFileNamesIn(String directoryName) {
         File directory = new File(directoryName);
-        return getCSVFiles(Arrays.asList(directory.listFiles()));
+        return getCSVFiles(new HashSet<>(Arrays.asList(directory.listFiles())));
     }
 
-    private List<File> getCSVFiles(List<File> allFiles) {
-        List<File> csvFiles = new ArrayList<>();
+    private Set<File> getCSVFiles(Set<File> allFiles) {
+        Set<File> csvFiles = new HashSet<>();
         for (File csvFile : allFiles) {
             if (isCSVFile(csvFile)) {
                 csvFiles.add(csvFile);

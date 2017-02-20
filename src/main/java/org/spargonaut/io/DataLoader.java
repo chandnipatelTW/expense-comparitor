@@ -3,34 +3,34 @@ package org.spargonaut.io;
 import org.spargonaut.io.parser.Parser;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class DataLoader<T> {
 
     private final CSVFileLoader csvFileLoader;
-    private final List<T> things;
-    private final List<T> ignoredThings;
+    private final Set<T> things;
+    private final Set<T> ignoredThings;
 
     public DataLoader(CSVFileLoader csvFilecsvFileLoader) {
         this.csvFileLoader = csvFilecsvFileLoader;
-        things = new ArrayList<T>();
-        ignoredThings = new ArrayList<T>();
+        things = new HashSet<T>();
+        ignoredThings = new HashSet<T>();
     }
 
-    public List<T> getLoadedFiles() {
+    public Set<T> getLoadedFiles() {
         return this.things;
     }
 
-    public List<T> getIgnoredData() {
+    public Set<T> getIgnoredData() {
         return this.ignoredThings;
     }
 
     public void load(String directoryName, Parser parser) {
-        List<File> csvFileNames = csvFileLoader.getFileNamesIn(directoryName);
+        Set<File> csvFileNames = csvFileLoader.getFileNamesIn(directoryName);
 
         for (File csvFile : csvFileNames) {
-            List<T> parsedThings = parser.parseFile(csvFile);
+            Set<T> parsedThings = parser.parseFile(csvFile);
             for (T parsedThing : parsedThings) {
                 if (!things.contains(parsedThing)) {
                     things.add(parsedThing);
@@ -40,10 +40,10 @@ public class DataLoader<T> {
     }
 
     public void ignore(String directoryNameOfFilesToIgnore, Parser parser) {
-        List<File> csvFileNames = csvFileLoader.getFileNamesIn(directoryNameOfFilesToIgnore);
+        Set<File> csvFileNames = csvFileLoader.getFileNamesIn(directoryNameOfFilesToIgnore);
 
         for (File csvFile : csvFileNames) {
-            List<T> parsedThings = parser.parseFile(csvFile);
+            Set<T> parsedThings = parser.parseFile(csvFile);
             for (T parsedThing : parsedThings) {
                 ignoredThings.add(parsedThing);
                 if (things.contains(parsedThing)) {

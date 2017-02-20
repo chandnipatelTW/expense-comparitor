@@ -9,6 +9,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -34,8 +35,9 @@ public class ExpenseParserTest {
         BigDecimal expectedOriginalAmount = createBigDecimalFrom(expectedExpenseOneAmount);
 
         ExpenseParser expenseParser = new ExpenseParser(mockCSVFileReader);
-        List<Expense> expenses = expenseParser.parseFile(mockFile);
-        Expense actualExpense = expenses.get(0);
+        Set<Expense> expenses = expenseParser.parseFile(mockFile);
+
+        Expense actualExpense = expenses.iterator().next();
 
         assertThat(actualExpense.getTimestamp(), is(expectedTimeStamp));
         assertThat(actualExpense.getMerchant() , is("Uber"));
@@ -62,7 +64,7 @@ public class ExpenseParserTest {
         when(mockCSVFileReader.readCsvFile(mockFile)).thenReturn(expenseStrings);
 
         ExpenseParser expenseParser = new ExpenseParser(mockCSVFileReader);
-        List<Expense> actualExpenses = expenseParser.parseFile(mockFile);
+        Set<Expense> actualExpenses = expenseParser.parseFile(mockFile);
         
         assertThat(actualExpenses.size(), is(1));
     }
@@ -92,8 +94,8 @@ public class ExpenseParserTest {
         when(mockCSVFileReader.readCsvFile(mockFile)).thenReturn(expenseStrings);
 
         ExpenseParser expenseParser = new ExpenseParser(mockCSVFileReader);
-        List<Expense> actualExpenses = expenseParser.parseFile(mockFile);
-        Expense actualExpense = actualExpenses.get(0);
+        Set<Expense> actualExpenses = expenseParser.parseFile(mockFile);
+        Expense actualExpense = actualExpenses.iterator().next();
 
         assertThat(actualExpense.getComment() , is("Lunch for myself, Max, Blake, Charith, Timothy, Bryan"));
     }

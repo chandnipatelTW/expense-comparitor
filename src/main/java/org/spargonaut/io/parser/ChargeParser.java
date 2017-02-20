@@ -7,8 +7,9 @@ import org.spargonaut.io.CSVFileReader;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ChargeParser implements Parser<CreditCardActivity> {
 
@@ -18,11 +19,11 @@ public class ChargeParser implements Parser<CreditCardActivity> {
         this.csvFileReader = csvFileReader;
     }
 
-    public List<CreditCardActivity> parseFile(File chargeFile) {
+    public Set<CreditCardActivity> parseFile(File chargeFile) {
         String chargeDelimiter = ",";
 
         List<String> chargeLines = csvFileReader.readCsvFile(chargeFile);
-        List<CreditCardActivity> creditCardActivities = new ArrayList<>();
+        Set<CreditCardActivity> creditCardActivities = new HashSet<>();
 
         for (String chargeLine : chargeLines) {
             if (isHeaderLine(chargeLine) || isCommentLine(chargeLine)) { continue; }

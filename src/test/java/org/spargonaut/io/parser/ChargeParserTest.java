@@ -5,12 +5,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.spargonaut.datamodels.ActivityType;
 import org.spargonaut.datamodels.CreditCardActivity;
+import org.spargonaut.datamodels.testbuilders.CreditCardActivityBuilder;
 import org.spargonaut.io.CSVFileReader;
 
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -42,28 +44,31 @@ public class ChargeParserTest {
         DateTime expectedPostDate = new DateTime(2016, 12, 11, 0, 0);
         BigDecimal expectedAmount = new BigDecimal(-18.09);
         expectedAmount = expectedAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        String expectedDescription = "UBER   *US DEC09 DFMHE";
 
-        List<CreditCardActivity> creditCardActivityList = chargeParser.parseFile(mockFile);
-        CreditCardActivity actualCreditCardActivity = creditCardActivityList.get(0);
+        CreditCardActivity expectedCreditCardActivity = new CreditCardActivityBuilder()
+                .setType(ActivityType.SALE)
+                .setAmount(expectedAmount.doubleValue())
+                .setDescription(expectedDescription)
+                .setPostDate(expectedPostDate)
+                .setTransactionDate(expectedTransactionDate)
+                .build();
 
-        assertThat(actualCreditCardActivity.getType(), is(ActivityType.SALE));
-        assertThat(actualCreditCardActivity.getTransactionDate(), is(expectedTransactionDate));
-        assertThat(actualCreditCardActivity.getPostDate(), is(expectedPostDate));
-        assertThat(actualCreditCardActivity.getDescription(), is("UBER   *US DEC09 DFMHE"));
-        assertThat(actualCreditCardActivity.getAmount(), is(expectedAmount));
+        Set<CreditCardActivity> creditCardActivityList = chargeParser.parseFile(mockFile);
+        assertThat(creditCardActivityList.contains(expectedCreditCardActivity), is(true));
     }
 
     @Test
     public void shouldIgnoreTheHeaderLineInTheCreditCardActivityFile() {
         ChargeParser chargeParser = new ChargeParser(mockCSVFileReader);
-        List<CreditCardActivity> creditCardActivityList = chargeParser.parseFile(mockFile);
+        Set<CreditCardActivity> creditCardActivityList = chargeParser.parseFile(mockFile);
         assertThat(creditCardActivityList.size(), is(1));
     }
 
     @Test
     public void shouldIgnoreLinesThatStartWithHashSymbol() {
         ChargeParser chargeParser = new ChargeParser(mockCSVFileReader);
-        List<CreditCardActivity> creditCardActivityList = chargeParser.parseFile(mockFile);
+        Set<CreditCardActivity> creditCardActivityList = chargeParser.parseFile(mockFile);
         assertThat(creditCardActivityList.size(), is(1));
     }
 }
