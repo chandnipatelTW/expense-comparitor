@@ -9,7 +9,8 @@ import org.spargonaut.datamodels.testbuilders.ExpenseBuilder;
 import org.spargonaut.datamodels.testbuilders.MatchedTransactionBuilder;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -24,7 +25,7 @@ public class PreviousMatchDetectorTest {
     private final Expense expenseTwo = new ExpenseBuilder().build();
     private final Expense expenseThree = new ExpenseBuilder().build();
     private final Expense expenseFour = new ExpenseBuilder().build();
-    private final List<MatchedTransaction> matchedTransactionList = createMatchedTransactions();
+    private final Set<MatchedTransaction> matchedTransactionList = createMatchedTransactions();
     private final PreviousMatchDetector previousMatchDetectorUnderTest = new PreviousMatchDetector();
 
     @Test
@@ -51,7 +52,7 @@ public class PreviousMatchDetectorTest {
         assertThat(isMatched, is(false));
     }
 
-    private List<MatchedTransaction> createMatchedTransactions() {
+    private Set<MatchedTransaction> createMatchedTransactions() {
         MatchedTransaction matchedTransactionOne = new MatchedTransactionBuilder()
                 .withCreditCardActivity(matchedCreditCardActivityOne)
                 .withExpense(expenseOne)
@@ -64,6 +65,6 @@ public class PreviousMatchDetectorTest {
                 .withCreditCardActivity(matchedCreditCardActivityThree)
                 .withExpense(expenseThree)
                 .build();
-        return Arrays.asList(matchedTransactionOne, matchedTransactionTwo, matchedTransactionThree);
+        return new HashSet<>(Arrays.asList(matchedTransactionOne, matchedTransactionTwo, matchedTransactionThree));
     }
 }

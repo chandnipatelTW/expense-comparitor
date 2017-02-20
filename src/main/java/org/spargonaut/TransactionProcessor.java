@@ -49,8 +49,8 @@ public class TransactionProcessor {
         for (Expense expense : this.getUnmatchedExpenses()) {
             for (CreditCardActivity creditCardActivity : this.getUnmatchedCreditCardActivies()) {
                 boolean isMatch = matcher.isMatch(expense, creditCardActivity);
-                boolean creditCardActivityIsPreviouslyMatched = previousMatchDetector.isPreviouslyMatched(creditCardActivity, matchedTransactions);
-                boolean expenseIsPreviouslyMatched = previousMatchDetector.isPreviouslyMatched(expense, matchedTransactions);
+                boolean creditCardActivityIsPreviouslyMatched = previousMatchDetector.isPreviouslyMatched(creditCardActivity, new HashSet<>(matchedTransactions));
+                boolean expenseIsPreviouslyMatched = previousMatchDetector.isPreviouslyMatched(expense, new HashSet<>(matchedTransactions));
 
                 if (isMatch && !creditCardActivityIsPreviouslyMatched && !expenseIsPreviouslyMatched) {
                     matchedTransactions.add(new MatchedTransaction(creditCardActivity, expense));
