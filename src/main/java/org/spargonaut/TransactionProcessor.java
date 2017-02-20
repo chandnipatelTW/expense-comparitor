@@ -40,17 +40,17 @@ public class TransactionProcessor {
 
     public void processTransactions(List<TransactionMatcher> matchers) {
         for (TransactionMatcher matcher : matchers) {
-            List<MatchedTransaction> matchedTransactionList = createMatchedTransactions(this.getUnmatchedCreditCardActivies(), this.getUnmatchedExpenses(), matcher);
+            List<MatchedTransaction> matchedTransactionList = createMatchedTransactions(matcher);
             this.matchedTransactions.put(matcher.getType(), matchedTransactionList);
         }
     }
 
-    private List<MatchedTransaction> createMatchedTransactions(List<CreditCardActivity> creditCardActivities, List<Expense> expenses, TransactionMatcher matcher) {
+    private List<MatchedTransaction> createMatchedTransactions(TransactionMatcher matcher) {
         List<MatchedTransaction> matchedTransactions = new ArrayList<>();
         PreviousMatchDetector previousMatchDetector = new PreviousMatchDetector();
 
-        for (Expense expense : expenses) {
-            for (CreditCardActivity creditCardActivity : creditCardActivities) {
+        for (Expense expense : this.getUnmatchedExpenses()) {
+            for (CreditCardActivity creditCardActivity : this.getUnmatchedCreditCardActivies()) {
                 boolean isMatch = matcher.isMatch(expense, creditCardActivity);
                 boolean creditCardActivityIsPreviouslyMatched = previousMatchDetector.isPreviouslyMatched(creditCardActivity, matchedTransactions);
                 boolean expenseIsPreviouslyMatched = previousMatchDetector.isPreviouslyMatched(expense, matchedTransactions);
