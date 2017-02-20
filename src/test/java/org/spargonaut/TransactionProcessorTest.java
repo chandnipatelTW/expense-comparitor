@@ -13,10 +13,7 @@ import org.spargonaut.matchers.ExactMatcher;
 import org.spargonaut.matchers.FuzzyMerchantExactAmountMatcher;
 import org.spargonaut.matchers.TransactionMatcher;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -52,8 +49,8 @@ public class TransactionProcessorTest {
                 .setAmount(amountToMatchOn)
                 .build();
 
-        List<CreditCardActivity> creditCardActivities = Arrays.asList(creditCardActivityTwo, creditCardActivityToMatch, creditCardActivityThree);
-        List<Expense> expenses = Arrays.asList(expenseToMatch);
+        Set<CreditCardActivity> creditCardActivities = new HashSet<>(Arrays.asList(creditCardActivityTwo, creditCardActivityToMatch, creditCardActivityThree));
+        Set<Expense> expenses = new HashSet<>(Arrays.asList(expenseToMatch));
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivities, expenses);
         TransactionMatcher exactMatcher = new ExactMatcher();
@@ -116,8 +113,8 @@ public class TransactionProcessorTest {
                 .setAmount(amountToMatchOn)
                 .build();
 
-        List<CreditCardActivity> creditCardActivitiesForTesting = Arrays.asList(creditCardActivityOne, creditCardActivityTwo, new CreditCardActivityBuilder().build());
-        List<Expense> expenses = Arrays.asList(expenseOne);
+        Set<CreditCardActivity> creditCardActivitiesForTesting = new HashSet<>(Arrays.asList(creditCardActivityOne, creditCardActivityTwo, new CreditCardActivityBuilder().build()));
+        Set<Expense> expenses = new HashSet<>(Arrays.asList(expenseOne));
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivitiesForTesting, expenses);
         TransactionMatcher exactMatcher = new ExactMatcher();
@@ -168,8 +165,8 @@ public class TransactionProcessorTest {
                 .setAmount(amountToMatchOn)
                 .build();
 
-        List<CreditCardActivity> creditCardActivitiesForTesting = Arrays.asList(creditCardActivityOne, new CreditCardActivityBuilder().build(), new CreditCardActivityBuilder().build());
-        List<Expense> expenses = Arrays.asList(expenseOne);
+        Set<CreditCardActivity> creditCardActivitiesForTesting = new HashSet<>(Arrays.asList(creditCardActivityOne, new CreditCardActivityBuilder().build(), new CreditCardActivityBuilder().build()));
+        Set<Expense> expenses = new HashSet<>(Arrays.asList(expenseOne));
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivitiesForTesting, expenses);
         CloseDateMatcher closeDateMatcher = new CloseDateMatcher();
@@ -220,8 +217,8 @@ public class TransactionProcessorTest {
                 .setAmount(amountToMatchOn)
                 .build();
 
-        List<CreditCardActivity> creditCardActivitiesForTesting = Arrays.asList(creditCardActivityOne, new CreditCardActivityBuilder().build(), new CreditCardActivityBuilder().build());
-        List<Expense> expenses = Arrays.asList(expenseOne);
+        Set<CreditCardActivity> creditCardActivitiesForTesting = new HashSet<>(Arrays.asList(creditCardActivityOne, new CreditCardActivityBuilder().build(), new CreditCardActivityBuilder().build()));
+        Set<Expense> expenses = new HashSet<>(Arrays.asList(expenseOne));
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivitiesForTesting, expenses);
         CloseDateMatcher closeDateMatcher = new CloseDateMatcher();
@@ -305,8 +302,8 @@ public class TransactionProcessorTest {
                 .setTransactionDate(dateForCreditCardActivityThatDoesntMatch)
                 .build();
 
-        List<CreditCardActivity> creditCardActivities = Arrays.asList(creditCardActivityToMatchExactly, creditCardActivityToCloselyMatchDayBefore, creditCardActivityToCloselyMatchDayAfter, creditCardActivityThatDoesntMatch);
-        List<Expense> expenses = Arrays.asList(expenseToMatchExactly, expenseToCloselyMatchDayBefore, expenseToCloselyMatchDayAfter);
+        Set<CreditCardActivity> creditCardActivities = new HashSet<>(Arrays.asList(creditCardActivityToMatchExactly, creditCardActivityToCloselyMatchDayBefore, creditCardActivityToCloselyMatchDayAfter, creditCardActivityThatDoesntMatch));
+        Set<Expense> expenses = new HashSet<>(Arrays.asList(expenseToMatchExactly, expenseToCloselyMatchDayBefore, expenseToCloselyMatchDayAfter));
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivities, expenses);
         List<TransactionMatcher> exactMatcherList = Arrays.asList(new ExactMatcher(), new CloseDateMatcher());
@@ -371,8 +368,8 @@ public class TransactionProcessorTest {
                 .build();
 
 
-        List<CreditCardActivity> creditCardActivities = Arrays.asList(creditCardActivityToMatchExactly, creditCardActivityToCloselyMatchDayBefore, creditCardActivityToCloselyMatchDayAfter);
-        List<Expense> expenses = Arrays.asList(expenseToMatchExactly, expenseToCloselyMatchDayBefore, expenseToCloselyMatchDayAfter, expenseThatDoesNotMatch);
+        Set<CreditCardActivity> creditCardActivities = new HashSet<>(Arrays.asList(creditCardActivityToMatchExactly, creditCardActivityToCloselyMatchDayBefore, creditCardActivityToCloselyMatchDayAfter));
+        Set<Expense> expenses = new HashSet<>(Arrays.asList(expenseToMatchExactly, expenseToCloselyMatchDayBefore, expenseToCloselyMatchDayAfter, expenseThatDoesNotMatch));
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivities, expenses);
         List<TransactionMatcher> exactMatcherList = Arrays.asList(new ExactMatcher(), new CloseDateMatcher());
@@ -432,8 +429,8 @@ public class TransactionProcessorTest {
                 .setTimestamp(expenseDateForMatchTwo)
                 .build();
 
-        List<CreditCardActivity> creditCardActivities = Arrays.asList(creditCardActivityMatchOne, creditCardActivityMatchTwo);
-        List<Expense> expenses = Arrays.asList(expenseMatchOne, expenseMatchTwo);
+        Set<CreditCardActivity> creditCardActivities = new HashSet<>(Arrays.asList(creditCardActivityMatchOne, creditCardActivityMatchTwo));
+        Set<Expense> expenses = new HashSet<>(Arrays.asList(expenseMatchOne, expenseMatchTwo));
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivities, expenses);
         FuzzyMerchantExactAmountMatcher fuzzyMatcher = new FuzzyMerchantExactAmountMatcher();
         List<TransactionMatcher> matchers = Arrays.asList(fuzzyMatcher);

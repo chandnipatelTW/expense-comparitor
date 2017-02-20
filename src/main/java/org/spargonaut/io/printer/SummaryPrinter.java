@@ -12,17 +12,17 @@ import java.util.Set;
 public class SummaryPrinter {
 
     public static void printSummary(Map<String, List<MatchedTransaction>> matchedTransactionMap,
-                                    List<CreditCardActivity> creditCardActivities,
+                                    Set<CreditCardActivity> creditCardActivities,
                                     List<CreditCardActivity> ignoredCreditCardActivities,
-                                    List<Expense> expenses,
+                                    Set<Expense> expenses,
                                     Set<CreditCardActivity> unmatchedCreditCardActivity,
                                     Set<Expense> unmatchedExpenses) {
 
         System.out.print("\n\n\nParsed ");
-        ChargePrinter.printChargesAsHumanReadable(new HashSet<>(creditCardActivities));
+        ChargePrinter.printChargesAsHumanReadable(creditCardActivities);
 
         System.out.print("\n\n\nParsed ");
-        ExpensePrinter.printExpensesAsHumanReadable(new HashSet<>(expenses));
+        ExpensePrinter.printExpensesAsHumanReadable(expenses);
 
         Set<String> matcherTypes = matchedTransactionMap.keySet();
         StringBuilder summaryBuilder = new StringBuilder();

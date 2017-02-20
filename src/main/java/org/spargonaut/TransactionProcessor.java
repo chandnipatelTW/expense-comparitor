@@ -15,9 +15,9 @@ public class TransactionProcessor {
     private List<CreditCardActivity> creditCardActivities;
     private Map<String, List<MatchedTransaction>> matchedTransactions;
 
-    public TransactionProcessor(List<CreditCardActivity> creditCardActivities, List<Expense> expenses) {
-        this.creditCardActivities = creditCardActivities;
-        this.expenses = expenses;
+    public TransactionProcessor(Set<CreditCardActivity> creditCardActivities, Set<Expense> expenses) {
+        this.creditCardActivities = new ArrayList<>(creditCardActivities);
+        this.expenses = new ArrayList<>(expenses);
         this.matchedTransactions = new HashMap<>();
     }
 

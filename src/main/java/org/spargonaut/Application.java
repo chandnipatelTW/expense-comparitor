@@ -14,9 +14,7 @@ import org.spargonaut.matchers.ExactMatcher;
 import org.spargonaut.matchers.FuzzyMerchantExactAmountMatcher;
 import org.spargonaut.matchers.TransactionMatcher;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Application {
     public static void main(String[] args) {
@@ -36,11 +34,11 @@ public class Application {
         DataLoader<CreditCardActivity> creditCardactivityDataLoader = new DataLoader<>(new CSVFileLoader());
         creditCardactivityDataLoader.load(chargeDirectoryName, new ChargeParser(csvFileReader));
         creditCardactivityDataLoader.ignore(manualIgnoreDirectoryName, new ChargeParser(csvFileReader));
-        List<CreditCardActivity> creditCardActivities = creditCardactivityDataLoader.getLoadedFiles();
+        Set<CreditCardActivity> creditCardActivities = new HashSet<>(creditCardactivityDataLoader.getLoadedFiles());
 
         DataLoader<Expense> expenseDataLoader = new DataLoader<>(new CSVFileLoader());
         expenseDataLoader.load(expenseDirectoryName, new ExpenseParser(csvFileReader));
-        List<Expense> expenses = expenseDataLoader.getLoadedFiles();
+        Set<Expense> expenses = new HashSet<>(expenseDataLoader.getLoadedFiles());
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivities, expenses);
 
@@ -51,8 +49,8 @@ public class Application {
         transactionProcessor.processTransactions(matchers);
 
         Map<String, List<MatchedTransaction>> matchedTransactionsMap = transactionProcessor.getMatchedTransactions();
-        List<CreditCardActivity> unmatchedCreditCardActivity = transactionProcessor.getUnmatchedCreditCardActivies();
-        List<Expense> unmatchedExpenses = transactionProcessor.getUnmatchedExpenses();
+        Set<CreditCardActivity> unmatchedCreditCardActivity = transactionProcessor.getUnmatchedCreditCardActivies();
+        Set<Expense> unmatchedExpenses = transactionProcessor.getUnmatchedExpenses();
 
         SummaryPrinter.printSummary(matchedTransactionsMap,
                                     creditCardActivities,
