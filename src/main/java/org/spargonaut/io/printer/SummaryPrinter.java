@@ -4,6 +4,7 @@ import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
 import org.spargonaut.datamodels.MatchedTransaction;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,7 +22,7 @@ public class SummaryPrinter {
         ChargePrinter.printChargesAsHumanReadable(creditCardActivities);
 
         System.out.print("\n\n\nParsed ");
-        ExpensePrinter.printExpensesAsHumanReadable(expenses);
+        ExpensePrinter.printExpensesAsHumanReadable(new HashSet<>(expenses));
 
         Set<String> matcherTypes = matchedTransactionMap.keySet();
         StringBuilder summaryBuilder = new StringBuilder();
@@ -47,7 +48,7 @@ public class SummaryPrinter {
         ChargePrinter.printChargesAsHumanReadable(unmatchedCreditCardActivity);
 
         System.out.print("\n\n\nUnmatched ");
-        ExpensePrinter.printExpensesAsHumanReadable(unmatchedExpenses);
+        ExpensePrinter.printExpensesAsHumanReadable(new HashSet<>(unmatchedExpenses));
 
         System.out.print("\n\nSUMMARY\n----------------------------------------------");
         System.out.format("\nTotal Matches:                              %d", totalMatchesCount);
