@@ -16,4 +16,12 @@ public class MatchedTransaction {
             return matchedExpense.equals(transactionToCompare);
         }
     }
+
+    public Transaction getItemOfType(Class transactionClassType) {
+        if (transactionClassType.equals(CreditCardActivity.class)) {
+            return this.matchedCreditCardActivity;
+        } else {
+            return this.matchedExpense;
+        }
+    }
 }

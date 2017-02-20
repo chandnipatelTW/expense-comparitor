@@ -1,5 +1,6 @@
 package org.spargonaut.datamodels;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.spargonaut.datamodels.testbuilders.CreditCardActivityBuilder;
 import org.spargonaut.datamodels.testbuilders.ExpenseBuilder;
@@ -9,17 +10,23 @@ import static org.junit.Assert.assertThat;
 
 public class MatchedTransactionTest {
 
+    private CreditCardActivity creditCardActivity;
+    private Expense expense;
+    private MatchedTransaction matchedTransaction;
+
+    @Before
+    public void setUp() {
+        creditCardActivity = new CreditCardActivityBuilder().build();
+        expense = new ExpenseBuilder().build();
+        matchedTransaction = new MatchedTransaction(creditCardActivity, expense);
+    }
+
     @Test
     public void shouldIndicateWhenAMatchedTransactionContainsAnExpense() {
-
-        CreditCardActivity creditCardActivity = new CreditCardActivityBuilder().build();
-        Expense expenseToMatch = new ExpenseBuilder().build();
-        MatchedTransaction matchedTransaction = new MatchedTransaction(creditCardActivity, expenseToMatch);
-
         Expense expenseToCompare = new ExpenseBuilder()
-                .setBigDecimalAmount(expenseToMatch.getAmount())
-                .setTimestamp(expenseToMatch.getTimestamp())
-                .setMerchant(expenseToMatch.getMerchant())
+                .setBigDecimalAmount(expense.getAmount())
+                .setTimestamp(expense.getTimestamp())
+                .setMerchant(expense.getMerchant())
                 .build();
 
         boolean containsExpense = matchedTransaction.contains(expenseToCompare);
@@ -28,10 +35,6 @@ public class MatchedTransactionTest {
 
     @Test
     public void shouldIndicateWhenAMatchedTransactionContainsAnCreditCardActivity() {
-        CreditCardActivity creditCardActivity = new CreditCardActivityBuilder().build();
-        Expense expenseToMatch = new ExpenseBuilder().build();
-        MatchedTransaction matchedTransaction = new MatchedTransaction(creditCardActivity, expenseToMatch);
-
         CreditCardActivity creditCardActivityToCompare = new CreditCardActivityBuilder()
                 .setTransactionDate(creditCardActivity.getTransactionDate())
                 .setDescription(creditCardActivity.getDescription())
@@ -40,5 +43,15 @@ public class MatchedTransactionTest {
 
         boolean containsCreditCardActivity = matchedTransaction.contains(creditCardActivityToCompare);
         assertThat(containsCreditCardActivity, is(true));
+    }
+
+    @Test
+    public void shouldRetrieveTheMatchedCreditCardActivityWhenRequestedByClassType() {
+        assertThat(matchedTransaction.getItemOfType(creditCardActivity.getClass()), is(creditCardActivity));
+    }
+
+    @Test
+    public void shouldRetrieveTheMatchedExpenseWhenRequestedByClassType() {
+        assertThat(matchedTransaction.getItemOfType(expense.getClass()), is(expense));
     }
 }
