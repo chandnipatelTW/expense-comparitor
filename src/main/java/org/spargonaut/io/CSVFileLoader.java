@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CSVFileLoader {
 
@@ -13,13 +14,9 @@ public class CSVFileLoader {
     }
 
     private Set<File> getCSVFiles(Set<File> allFiles) {
-        Set<File> csvFiles = new HashSet<>();
-        for (File csvFile : allFiles) {
-            if (isCSVFile(csvFile)) {
-                csvFiles.add(csvFile);
-            }
-        }
-        return csvFiles;
+        return allFiles.stream()
+                .filter(this::isCSVFile)
+                .collect(Collectors.toSet());
     }
 
     private boolean isCSVFile(File csvFile) {
