@@ -5,6 +5,7 @@ import org.spargonaut.io.parser.Parser;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class DataLoader<T> {
 
@@ -26,17 +27,14 @@ public class DataLoader<T> {
         return this.ignoredThings;
     }
 
-    public void load(String directoryName, Parser parser) {
-        Set<File> csvFileNames = csvFileLoader.getFileNamesIn(directoryName);
-
-        for (File csvFile : csvFileNames) {
-            Set<T> parsedThings = parser.parseFile(csvFile);
-            for (T parsedThing : parsedThings) {
-                if (!things.contains(parsedThing)) {
-                    things.add(parsedThing);
-                }
-            }
-        }
+    public void load(String directoryName, Parser<T> parser) {
+        csvFileLoader.getFileNamesIn(directoryName).forEach(csvFile -> {
+            Set<T> uniqueParsedThings = parser.parseFile(csvFile)
+                    .stream()
+                    .filter(parsedThing -> !things.contains(parsedThing))
+                    .collect(Collectors.toSet());
+                    things.addAll(uniqueParsedThings);
+                });
     }
 
     public void ignore(String directoryNameOfFilesToIgnore, Parser parser) {
