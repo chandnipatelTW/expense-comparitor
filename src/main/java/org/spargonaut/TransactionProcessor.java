@@ -39,10 +39,10 @@ public class TransactionProcessor {
     }
 
     public void processTransactions(Set<TransactionMatcher> matchers) {
-        for (TransactionMatcher matcher : matchers) {
+        matchers.forEach( matcher -> {
             Set<MatchedTransaction> matchedTransactionList = createMatchedTransactions(matcher);
             this.matchedTransactions.put(matcher.getType(), matchedTransactionList);
-        }
+        });
     }
 
     private Set<MatchedTransaction> createMatchedTransactions(TransactionMatcher matcher) {
