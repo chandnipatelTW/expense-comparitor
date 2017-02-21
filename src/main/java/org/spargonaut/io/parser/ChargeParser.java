@@ -7,12 +7,12 @@ import org.spargonaut.io.CSVFileReader;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ChargeParser implements Parser<CreditCardActivity> {
 
-    CSVFileReader csvFileReader;
+    private CSVFileReader csvFileReader;
 
     public ChargeParser(CSVFileReader csvFileReader) {
         this.csvFileReader = csvFileReader;
@@ -20,29 +20,30 @@ public class ChargeParser implements Parser<CreditCardActivity> {
 
     public Set<CreditCardActivity> parseFile(File chargeFile) {
         String chargeDelimiter = ",";
+        return csvFileReader.readCsvFile(chargeFile).stream()
+                .filter(this::isParsable)
+                .map(chargeLine -> parseCreditCardActivity(chargeDelimiter, chargeLine))
+                .collect(Collectors.toSet());
+    }
 
-        Set<String> chargeLines = csvFileReader.readCsvFile(chargeFile);
-        Set<CreditCardActivity> creditCardActivities = new HashSet<>();
+    private boolean isParsable(String line) {
+        return !(isHeaderLine(line) || isCommentLine(line));
+    }
 
-        for (String chargeLine : chargeLines) {
-            if (isHeaderLine(chargeLine) || isCommentLine(chargeLine)) { continue; }
-            String[] chargeTokens = chargeLine.split(chargeDelimiter);
-            DateTime transactionDate = createDateTimeFrom(chargeTokens[1]);
-            DateTime postDate = createDateTimeFrom(chargeTokens[2]);
+    private CreditCardActivity parseCreditCardActivity(String chargeDelimiter, String chargeLine) {
+        String[] chargeTokens = chargeLine.split(chargeDelimiter);
+        DateTime transactionDate = createDateTimeFrom(chargeTokens[1]);
+        DateTime postDate = createDateTimeFrom(chargeTokens[2]);
 
-            BigDecimal amount = new BigDecimal(chargeTokens[4]);
-            amount = amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        BigDecimal amount = new BigDecimal(chargeTokens[4]);
+        amount = amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 
-            CreditCardActivity creditCardActivity = new CreditCardActivity(
-                    ActivityType.fromString(chargeTokens[0]),
-                    transactionDate,
-                    postDate,
-                    chargeTokens[3],
-                    amount);
-            creditCardActivities.add(creditCardActivity);
-        }
-
-        return creditCardActivities;
+        return new CreditCardActivity(
+                ActivityType.fromString(chargeTokens[0]),
+                transactionDate,
+                postDate,
+                chargeTokens[3],
+                amount);
     }
 
     private boolean isCommentLine(String chargeLine) {
