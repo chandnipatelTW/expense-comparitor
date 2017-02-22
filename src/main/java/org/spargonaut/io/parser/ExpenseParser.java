@@ -8,6 +8,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ExpenseParser implements Parser<Expense> {
 
@@ -23,36 +24,39 @@ public class ExpenseParser implements Parser<Expense> {
         Set<String> expenseLines = csvFileReader.readCsvFile(expenseFile);
         Set<Expense> expenses = new HashSet<>();
 
-        for (String expenseLine : expenseLines) {
-            if (isHeaderLine(expenseLine)) { continue; }
+        Set<String> cleanedExpenseLines = expenseLines.stream()
+                .filter(expenseLine -> !isHeaderLine(expenseLine))
+                .collect(Collectors.toSet());
+
+        for (String expenseLine : cleanedExpenseLines) {
             String pipedExpenseString = createPipedExpenseString(expenseLine);
-            String[] expenseTokens = pipedExpenseString.split(expenseDelimiter);
-
-
-            boolean reimbursable = parseReimbursableness(expenseTokens[7]);
-            DateTime dateTimeTimeStamp = parseTheTimeStamp(expenseTokens[0]);
-
-            BigDecimal amount = parseDollarValue(expenseTokens[2]);
-            BigDecimal originalAmount = parseDollarValue(expenseTokens[9]);
-
-            Expense expense = new Expense(
-                    dateTimeTimeStamp,
-                    cleanOffQuotes(expenseTokens[1]),
-                    amount,
-                    cleanOffQuotes(expenseTokens[3]),
-                    cleanOffQuotes(expenseTokens[4]),
-                    cleanOffQuotes(expenseTokens[5]),
-                    cleanOffQuotes(expenseTokens[6]),
-                    reimbursable,
-                    cleanOffQuotes(expenseTokens[8]),
-                    originalAmount,
-                    cleanOffQuotes(expenseTokens[10])
-            );
+            Expense expense = createExpense(expenseDelimiter, pipedExpenseString);
             expenses.add(expense);
-
         }
 
         return expenses;
+    }
+
+    private Expense createExpense(String expenseDelimiter, String pipedExpenseString) {
+        String[] expenseTokens = pipedExpenseString.split(expenseDelimiter);
+        boolean reimbursable = parseReimbursableness(expenseTokens[7]);
+        DateTime dateTimeTimeStamp = parseTheTimeStamp(expenseTokens[0]);
+        BigDecimal amount = parseDollarValue(expenseTokens[2]);
+        BigDecimal originalAmount = parseDollarValue(expenseTokens[9]);
+
+        return new Expense(
+                dateTimeTimeStamp,
+                cleanOffQuotes(expenseTokens[1]),
+                amount,
+                cleanOffQuotes(expenseTokens[3]),
+                cleanOffQuotes(expenseTokens[4]),
+                cleanOffQuotes(expenseTokens[5]),
+                cleanOffQuotes(expenseTokens[6]),
+                reimbursable,
+                cleanOffQuotes(expenseTokens[8]),
+                originalAmount,
+                cleanOffQuotes(expenseTokens[10])
+        );
     }
 
     private String createPipedExpenseString(String expenseLine) {
