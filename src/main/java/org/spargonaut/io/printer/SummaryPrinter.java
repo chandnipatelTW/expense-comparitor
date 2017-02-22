@@ -24,7 +24,6 @@ public class SummaryPrinter {
         ExpensePrinter.printExpensesAsHumanReadable(expenses);
 
         Set<String> matcherTypes = matchedTransactionMap.keySet();
-        StringBuilder summaryBuilder = new StringBuilder();
         int totalMatchesCount = 0;
         for (String matcherType : matcherTypes) {
             System.out.print("\n\n\n" + matcherType + " matched");
@@ -33,15 +32,7 @@ public class SummaryPrinter {
 
             int matchCount = matchedTransactions.size();
             totalMatchesCount += matchCount;
-
-            summaryBuilder.append(matcherType);
-            summaryBuilder.append("es found:                ");
-            summaryBuilder.append(matchCount);
-            summaryBuilder.append("\n");
         }
-        summaryBuilder.append("Total Matches:                              ");
-        summaryBuilder.append(totalMatchesCount);
-        summaryBuilder.append("\n\n");
 
         System.out.print("\n\n\nUnmatched ");
         ChargePrinter.printChargesAsHumanReadable(new HashSet<>(unmatchedCreditCardActivity));
