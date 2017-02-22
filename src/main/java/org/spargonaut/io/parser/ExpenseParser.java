@@ -6,7 +6,6 @@ import org.spargonaut.io.CSVFileReader;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,21 +19,13 @@ public class ExpenseParser implements Parser<Expense> {
 
     public Set<Expense> parseFile(File expenseFile) {
         String expenseDelimiter = "\\|";
-
-        Set<String> expenseLines = csvFileReader.readCsvFile(expenseFile);
-        Set<Expense> expenses = new HashSet<>();
-
-        Set<String> cleanedExpenseLines = expenseLines.stream()
+        return csvFileReader.readCsvFile(expenseFile).stream()
                 .filter(expenseLine -> !isHeaderLine(expenseLine))
+                .map(expenseLine -> {
+                    String pipedExpenseString = createPipedExpenseString(expenseLine);
+                    return createExpense(expenseDelimiter, pipedExpenseString);
+                })
                 .collect(Collectors.toSet());
-
-        for (String expenseLine : cleanedExpenseLines) {
-            String pipedExpenseString = createPipedExpenseString(expenseLine);
-            Expense expense = createExpense(expenseDelimiter, pipedExpenseString);
-            expenses.add(expense);
-        }
-
-        return expenses;
     }
 
     private Expense createExpense(String expenseDelimiter, String pipedExpenseString) {
