@@ -27,13 +27,10 @@ public class SummaryPrinter {
         int totalMatchesCount = 0;
         for (String matcherType : matcherTypes) {
             totalMatchesCount += matchedTransactionMap.get(matcherType).size();
-        }
-
-        matcherTypes.forEach( matcherType -> {
             System.out.print("\n\n\n" + matcherType + " matched");
             Set<MatchedTransaction> matchedTransactions = matchedTransactionMap.get(matcherType);
             MatchedTransactionPrinter.printMatchedTransactions(new HashSet<>(matchedTransactions));
-        });
+        }
 
         System.out.print("\n\n\nUnmatched ");
         ChargePrinter.printChargesAsHumanReadable(new HashSet<>(unmatchedCreditCardActivity));
