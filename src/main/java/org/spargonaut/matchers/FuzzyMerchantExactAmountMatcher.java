@@ -1,6 +1,6 @@
 package org.spargonaut.matchers;
 
-import org.apache.commons.text.similarity.FuzzyScore;
+import org.apache.commons.text.beta.similarity.FuzzyScore;
 import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
 
