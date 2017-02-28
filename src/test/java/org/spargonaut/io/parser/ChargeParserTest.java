@@ -59,9 +59,9 @@ public class ChargeParserTest {
     }
 
     @Test
-    public void shouldBeAbleToParseAChargeWithACommaInTheDescriptionField() {
+    public void shouldRemoveCommasFromTheDescriptionField() {
         CSVFileReader anotherMockCSVFileReader = mock(CSVFileReader.class);
-        String chargeLineWithACommaInTheDescription = "Sale,10/12/2015,10/13/2015,King Schools, Inc.,-43.26";
+        String chargeLineWithACommaInTheDescription = "Sale,10/12/2015,10/13/2015,King, Schools, Inc.,-43.26";
         when(anotherMockCSVFileReader.readCsvFile(mockFile)).thenReturn(new HashSet<>(Arrays.asList(chargeLineWithACommaInTheDescription)));
 
         ChargeParser chargeParser = new ChargeParser(anotherMockCSVFileReader);
@@ -70,7 +70,7 @@ public class ChargeParserTest {
         DateTime expectedPostDate = new DateTime(2015, 10, 13, 0, 0);
         BigDecimal expectedAmount = new BigDecimal(-43.26);
         expectedAmount = expectedAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
-        String expectedDescription = "King Schools, Inc.";
+        String expectedDescription = "King Schools Inc.";
 
         CreditCardActivity expectedCreditCardActivity = new CreditCardActivityBuilder()
                 .setType(ActivityType.SALE)
@@ -81,7 +81,7 @@ public class ChargeParserTest {
                 .build();
 
         Set<CreditCardActivity> creditCardActivityList = chargeParser.parseFile(mockFile);
-
+        assertThat(creditCardActivityList.contains(expectedCreditCardActivity), is(true));
     }
 
     @Test
