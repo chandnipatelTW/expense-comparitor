@@ -24,7 +24,7 @@ put them in the following directory:
 <root project directory>/expense_matcher_cli/data/unicode_expense_files  
 
 run the command:  
-./gradlew prepare
+./gradlew prepare  
 (expensify exports your expense reports in unicode by default.  this script converts them to ASCII and places them in the correct directory)
 
 ### RUNNING THE APPLICATION:
