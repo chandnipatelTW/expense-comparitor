@@ -4,11 +4,6 @@ plugins {
     id 'jacoco'
 }
 
-repositories {
-    mavenCentral()
-    mavenLocal()
-}
-
 sourceSets {
     integrationTest {
         java {
