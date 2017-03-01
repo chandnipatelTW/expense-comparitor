@@ -1,4 +1,3 @@
-Documention and READMEs almost always lie.  
 the code tells the truth.  always.  
 believe the code more than the documentation.
 
@@ -35,11 +34,14 @@ run the command:
 
 ### RUNNING THE APPLICATION:
 use the command ./gradlew run  
-
-
+  
+  
 ### ADVANCED SETUP:
-in addition to the basic set up, you can identify specific transactions to be ignored so that they don't show up as unmatched charges.  
-to do this, you'll need to create a file in the directory <root project directory>/data/manual_ignores/  
-with the filename of: manual_ignores.csv  
-you'll need to find the exact lines from one of the credit card activity files, and paste it into this file.  
-if you begin the line with a hash symbal (#), this line will be considered a comment and ignored when parsing the file.  this is useful to make notes about the expenses that you've manually ignored. 
+in addition to the basic set up, you can identify specific transactions and expenses to be ignored so that they don't show up as unmatched charges or expenses.  
+to manually ignore charges, create a file in the directory <root project directory>/data/manually_ignored_credit_card_files/  
+that ends with .csv
+to manually ignore expenses, create a file in the directory <root project directory>/data/manually_ignored_expense_files/  
+that ends with .csv
+
+you'll need to find the exact lines from one of the credit card activity files or the expense files, and paste it into their respective ignore file.  
+if you begin the line with a hash symbal (#), this line will be considered a comment and ignored when parsing the file.  this is useful to make notes about the lines that you've manually ignored. 
