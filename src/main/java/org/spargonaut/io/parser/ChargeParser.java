@@ -1,5 +1,6 @@
 package org.spargonaut.io.parser;
 
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.spargonaut.datamodels.ActivityType;
 import org.spargonaut.datamodels.CreditCardActivity;
@@ -19,6 +20,7 @@ public class ChargeParser implements Parser<CreditCardActivity> {
     }
 
     public Set<CreditCardActivity> parseFile(File chargeFile) {
+        System.out.println("reading the file " + chargeFile);
         String chargeDelimiter = ",";
         return csvFileReader.readCsvFile(chargeFile).stream()
                 .filter(this::isParsable)
@@ -31,26 +33,31 @@ public class ChargeParser implements Parser<CreditCardActivity> {
     }
 
     private CreditCardActivity parseCreditCardActivity(String chargeDelimiter, String chargeLine) {
-        String[] chargeTokens = chargeLine.split(chargeDelimiter);
-        DateTime transactionDate = createDateTimeFrom(chargeTokens[1]);
-        DateTime postDate = createDateTimeFrom(chargeTokens[2]);
+        CreditCardActivity creditCardActivity = null;
+        if (!StringUtils.isBlank(chargeLine)) {
+            String[] chargeTokens = chargeLine.split(chargeDelimiter);
+            DateTime transactionDate = createDateTimeFrom(chargeTokens[1]);
+            DateTime postDate = createDateTimeFrom(chargeTokens[2]);
 
-        int lastChunkIndex = chargeTokens.length - 1;
-        BigDecimal amount = new BigDecimal(chargeTokens[lastChunkIndex]);
-        amount = amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+            int lastChunkIndex = chargeTokens.length - 1;
+            BigDecimal amount = new BigDecimal(chargeTokens[lastChunkIndex]);
+            amount = amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 
-        String description = "";
-        int descriptionStartIndex = 3;
-        for (int i = descriptionStartIndex; i < lastChunkIndex; i++) {
-            description += chargeTokens[i];
+            String description = "";
+            int descriptionStartIndex = 3;
+            for (int i = descriptionStartIndex; i < lastChunkIndex; i++) {
+                description += chargeTokens[i];
+            }
+
+            creditCardActivity = new CreditCardActivity(
+                    ActivityType.fromString(chargeTokens[0]),
+                    transactionDate,
+                    postDate,
+                    description,
+                    amount);
         }
 
-        return new CreditCardActivity(
-                ActivityType.fromString(chargeTokens[0]),
-                transactionDate,
-                postDate,
-                description,
-                amount);
+        return creditCardActivity;
     }
 
     private boolean isCommentLine(String chargeLine) {
