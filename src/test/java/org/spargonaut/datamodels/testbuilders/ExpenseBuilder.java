@@ -78,12 +78,12 @@ public class ExpenseBuilder {
         return this;
     }
 
-    public ExpenseBuilder setOriginalAmmount(double originalAmmount) {
+    public ExpenseBuilder setOriginalAmount(double originalAmmount) {
         this.originalAmount = new BigDecimal(originalAmmount);
         return this;
     }
 
-    public ExpenseBuilder setReceiptUrl(String receiptUrl) {
+    public ExpenseBuilder setReceiptURL(String receiptUrl) {
         this.receiptURL = receiptUrl;
         return this;
     }
