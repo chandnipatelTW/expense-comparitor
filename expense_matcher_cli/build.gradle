@@ -11,3 +11,7 @@ task prepare(type: Exec) {
     executable 'sh'
     args '-c', './convert_unicode_files_to_ascii.bash'
 }
+
+dependencies {
+    testCompile 'org.springframework.boot:spring-boot:1.3.5.RELEASE'
+}
