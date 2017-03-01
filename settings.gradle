@@ -1,1 +1,1 @@
-include 'expense_matcher'
+include 'expense_matcher', 'expense_matcher_cli'

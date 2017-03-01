@@ -48,21 +48,11 @@ dependencies {
     integrationTestRuntime configurations.testRuntime
 }
 
-task runLocal(dependsOn: jar, type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'org.spargonaut.Application'
-}
-
 task integrationTest(type: Test) {
     description 'Runs the integration tests'
     testClassesDir = sourceSets.integrationTest.output.classesDir
     classpath = sourceSets.integrationTest.runtimeClasspath
     outputs.upToDateWhen { false }
-}
-
-task prepare(type: Exec) {
-    executable 'sh'
-    args '-c', './convert_unicode_files_to_ascii.bash'
 }
 
 check.dependsOn integrationTest

@@ -4,3 +4,13 @@ allprojects {
     }
 }
 
+subprojects {
+    apply plugin: 'java'
+}
+
+project(':expense_matcher_cli') {
+    dependencies {
+        compile project(':expense_matcher')
+    }
+}
+

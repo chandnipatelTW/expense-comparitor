@@ -23,7 +23,7 @@ public class Application {
     public static void main(String[] args) {
         System.out.println("Hello World!");
         Application application = new Application();
-//        application.run();
+        application.run();
     }
 
     public void run() {

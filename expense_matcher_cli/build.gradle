@@ -1,0 +1,13 @@
+repositories {
+    mavenCentral()
+}
+
+task runLocal(dependsOn: jar, type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'org.spargonaut.Application'
+}
+
+task prepare(type: Exec) {
+    executable 'sh'
+    args '-c', './convert_unicode_files_to_ascii.bash'
+}
