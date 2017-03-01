@@ -7,30 +7,25 @@ believe the code more than the documentation.
 - your credit card / bank statements
 
 ### Development
-to run the tests, use this command from the projects root directory:  
+to run the tests, use the command:  
 ./gradlew clean build  
 
 for more tasks, use the command:  
-./gradlew tasks
-
-to run this application, you'll need to do the following:  
+./gradlew tasks  
+  
 ### BASIC SETUP:
-open the file at: <root_project_directory>/src/main/java/org/spargonaut/Application.java  
-uncomment the line that says: application.run();  
-its usually found on line 25. ymmv.  
-
-download your credit card statements as a csv file.  
+download your credit card statements as a csv file.    
 put them in the following directory:  
-<root project directory>/data/credit_card_files/  
-(note: currently, the application is only parsing credit card statements from Chase bank)  
-
+<root project directory>/expense_matcher_cli/data/credit_card_files/    
+(note: currently, the application is only parsing credit card statements from Chase bank)    
 
 download your expense reports from expensify (use the default csv template).  
 put them in the following directory:  
-<root project directory>/data/unicode_expense_files  
+<root project directory>/expense_matcher_cli/data/unicode_expense_files  
 
 run the command:  
-./gradlew prepare  
+./gradlew prepare
+(expensify exports your expense reports in unicode by default.  this script converts them to ASCII and places them in the correct directory)
 
 ### RUNNING THE APPLICATION:
 use the command ./gradlew run  
