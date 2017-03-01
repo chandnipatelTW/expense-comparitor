@@ -20,7 +20,7 @@ public class ExpenseParser implements Parser<Expense> {
     public Set<Expense> parseFile(File expenseFile) {
         String expenseDelimiter = "\\|";
         return csvFileReader.readCsvFile(expenseFile).stream()
-                .filter(expenseLine -> !isHeaderLine(expenseLine))
+                .filter(this::isParsable)
                 .map(expenseLine -> {
                     String pipedExpenseString = createPipedExpenseString(expenseLine);
                     return createExpense(expenseDelimiter, pipedExpenseString);
@@ -88,7 +88,7 @@ public class ExpenseParser implements Parser<Expense> {
 
     private boolean parseReimbursableness(String expenseToken) {
         String reimbursableString = cleanOffQuotes(expenseToken);
-        boolean reimbursable = false;
+        boolean reimbursable;
 
         if ("yes".equalsIgnoreCase(reimbursableString)) {
             reimbursable = true;
@@ -98,7 +98,7 @@ public class ExpenseParser implements Parser<Expense> {
             String errorMessage = "Unable to parse the string for Reimbursable" +
                     "\n" +
                     "Tried parsing the value ->" + reimbursableString + "<-";
-            throw new IllegalArgumentException(errorMessage.toString());
+            throw new IllegalArgumentException(errorMessage);
         }
         return reimbursable;
     }
@@ -109,6 +109,14 @@ public class ExpenseParser implements Parser<Expense> {
             cleanedString = token.substring(1, token.lastIndexOf("\""));
         }
         return cleanedString;
+    }
+
+    private boolean isParsable(String expenseLine) {
+        return !(isHeaderLine(expenseLine) || isCommentLine(expenseLine));
+    }
+
+    private boolean isCommentLine(String expenseLine) {
+        return expenseLine.startsWith("#");
     }
 
     private boolean isHeaderLine(String expenseLine) {

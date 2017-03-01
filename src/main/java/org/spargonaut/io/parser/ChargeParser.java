@@ -20,7 +20,6 @@ public class ChargeParser implements Parser<CreditCardActivity> {
     }
 
     public Set<CreditCardActivity> parseFile(File chargeFile) {
-        System.out.println("reading the file " + chargeFile);
         String chargeDelimiter = ",";
         return csvFileReader.readCsvFile(chargeFile).stream()
                 .filter(this::isParsable)

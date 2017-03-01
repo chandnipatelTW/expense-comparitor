@@ -100,6 +100,24 @@ public class ExpenseParserTest {
         assertThat(actualExpense.getComment() , is("Lunch for myself, Max, Blake, Charith, Timothy, Bryan"));
     }
 
+    @Test
+    public void shouldIgnoreLinesThatStartWithHashSymbol() {
+        String headerString = "Timestamp,Merchant,Amount,MCC,Category,Tag,Comment,Reimbursable,\"Original Currency\",\"Original Amount\",Receipt";
+        String expenseString = "\"2016-12-12 00:00:00\",Uber,18.68,0,\"Local Transportation\",\"Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Delivery Assurance\",\"Uber DFW to office\",yes,USD,18.68,https://salesforce.expensify.com/verifyReceipt?action=verifyreceipt&transactionID=7871304959002483&amount=-1868&created=2016-12-12";
+        String commentString = "# this is a comment line";
+
+        Set<String> expenseStrings = new HashSet<>(Arrays.asList(headerString, expenseString, commentString));
+
+        File mockFile = mock(File.class);
+        CSVFileReader mockCSVFileReader = mock(CSVFileReader.class);
+        when(mockCSVFileReader.readCsvFile(mockFile)).thenReturn(expenseStrings);
+
+        ExpenseParser expenseParser = new ExpenseParser(mockCSVFileReader);
+        Set<Expense> actualExpenses = expenseParser.parseFile(mockFile);
+
+        assertThat(actualExpenses.size(), is(1));
+    }
+
     private BigDecimal createBigDecimalFrom(double value) {
         BigDecimal expectedAmount = new BigDecimal(value);
         expectedAmount = expectedAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
