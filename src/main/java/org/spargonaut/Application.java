@@ -30,13 +30,13 @@ public class Application {
 
         String chargeDirectoryName = "./data/credit_card_files";
         String expenseDirectoryName = "./data/expense_files";
-        String manualIgnoreDirectoryName = "./data/manual_ignores";
+        String manualIgnoreCreditCardDirectoryName = "./data/manually_ignored_credit_card_files";
 
         CSVFileReader csvFileReader = new CSVFileReader();
 
         DataLoader<CreditCardActivity> creditCardactivityDataLoader = new DataLoader<>(new CSVFileLoader());
         creditCardactivityDataLoader.load(chargeDirectoryName, new ChargeParser(csvFileReader));
-        creditCardactivityDataLoader.ignore(manualIgnoreDirectoryName, new ChargeParser(csvFileReader));
+        creditCardactivityDataLoader.ignore(manualIgnoreCreditCardDirectoryName, new ChargeParser(csvFileReader));
         Set<CreditCardActivity> creditCardActivities = new HashSet<>(creditCardactivityDataLoader.getLoadedFiles());
 
         DataLoader<Expense> expenseDataLoader = new DataLoader<>(new CSVFileLoader());

@@ -7,7 +7,7 @@ import org.spargonaut.datamodels.Expense;
 import org.spargonaut.datamodels.testbuilders.CreditCardActivityBuilder;
 import org.spargonaut.datamodels.testbuilders.ExpenseBuilder;
 import org.spargonaut.io.parser.ChargeParser;
-import org.spargonaut.io.parser.Parser;
+import org.spargonaut.io.parser.ExpenseParser;
 
 import java.io.File;
 import java.util.Arrays;
@@ -42,7 +42,7 @@ public class DataLoaderTest {
         Expense expenseTwoFromMockFileTwo = new ExpenseBuilder().build();
         Set<Expense> expensesFromMockFileTwo = new HashSet<>(Arrays.asList(expenseOneFromMockFileTwo, expenseTwoFromMockFileTwo));
 
-        Parser mockParser = mock(Parser.class);
+        ExpenseParser mockParser = mock(ExpenseParser.class);
         when(mockParser.parseFile(mockFileOne)).thenReturn(expensesFromMockFileOne);
         when(mockParser.parseFile(mockFileTwo)).thenReturn(expensesFromMockFileTwo);
 
