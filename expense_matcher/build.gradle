@@ -76,15 +76,3 @@ integrationTest.mustRunAfter test
 tasks.withType(Test) {
     reports.html.destination = file("${reporting.baseDir}/${name}")
 }
-
-idea {
-    project {
-        vcs = 'Git'
-    }
-
-    module {
-        excludeDirs += file 'gradle'
-        excludeDirs += file 'build'
-        excludeDirs += file '.idea'
-    }
-}
