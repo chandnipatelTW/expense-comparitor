@@ -96,6 +96,35 @@ public class ExpenseParserTest {
     }
 
     @Test
+    public void shouldParseDollarAmountsOverOneThousandDollars() {
+        String expenseOverOneThousandDollars = "\"2017-02-27 12:00:00\",\"Courtyard By Marriott\",\"1,210.23\",0,Hotel,\"Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Delivery Assurance\",Hotel,yes,USD,\"1,210.23\",https://some-url.com";
+        Set<String> expenseStrings = new HashSet<>(Arrays.asList(headerString, expenseOverOneThousandDollars));
+        when(mockCSVFileReader.readCsvFile(mockFile)).thenReturn(expenseStrings);
+
+        DateTime expectedTimeStamp = new DateTime(2017, 2, 27, 0, 0);
+        double expectedAmount = 1210.23;
+
+        Expense expectedExpense = new ExpenseBuilder()
+                .setTimestamp(expectedTimeStamp)
+                .setMerchant("Courtyard By Marriott")
+                .setAmount(expectedAmount)
+                .setMcc("0")
+                .setCategory("Hotel")
+                .setTag("Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Delivery Assurance")
+                .setComment("Uber DFW to office")
+                .setReimbursable(true)
+                .setOriginalCurrency("USD")
+                .setOriginalAmount(expectedAmount)
+                .setReceiptURL("https://salesforce.expensify.com/verifyReceipt?action=verifyreceipt&transactionID=7871304959002483&amount=-1868&created=2016-12-12")
+                .build();
+
+        ExpenseParser expenseParser = new ExpenseParser(mockCSVFileReader);
+        Set<Expense> expenses = expenseParser.parseFile(mockFile);
+
+        assertThat(expenses.contains(expectedExpense), is(true));
+    }
+
+    @Test
     public void shouldIgnoreLinesThatStartWithHashSymbol() {
         when(mockCSVFileReader.readCsvFile(mockFile)).thenReturn(expenseStrings);
 

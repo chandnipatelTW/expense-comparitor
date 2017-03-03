@@ -66,6 +66,14 @@ public class ExpenseParser implements Parser<Expense> {
     }
 
     private BigDecimal parseDollarValue(String expenseToken) {
+        if (expenseToken.contains("\"")) {
+            expenseToken = expenseToken.replace("\"", "");
+        }
+
+        if (expenseToken.contains(",")) {
+            expenseToken = expenseToken.replace(",", "");
+        }
+
         BigDecimal amount = new BigDecimal(Float.parseFloat(expenseToken));
         amount = amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
         return amount;
