@@ -56,6 +56,14 @@ public class UnmatchedCollectorTest {
         assertThat(actualUnmatchedExpenses.contains(unmatchedExpenseSix), is(true));
     }
 
+    @Test
+    public void shouldProduceAnEmptySetWhenGivenAnEmptySet() {
+        UnmatchedCollector<Expense> unmatchedCollector = new UnmatchedCollector<>();
+        Set<Expense> emptySet = new HashSet<>();
+        Set<Expense> actualUnmatchedExpenses = unmatchedCollector.collect(emptySet, matchedTransactionMap.values());
+        assertThat(actualUnmatchedExpenses.size(), is(0));
+    }
+
     private Map<String, Set<MatchedTransaction>> createMatchedTransactionMap() {
         MatchedTransaction matchedTransactionOne = new MatchedTransactionBuilder()
                 .withCreditCardActivity(matchedCreditCardActivityOne)
