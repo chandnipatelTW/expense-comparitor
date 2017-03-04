@@ -24,8 +24,8 @@ public class ChargePrinterTest {
     public void shouldPrintTheFormattedCharges() {
         Set<CreditCardActivity> activities = createCreditCardActivities();
         ChargePrinter.printChargesAsHumanReadable(activities);
-        String formattedChargeOne = "Sale       2016-11-28      2016-11-29      UBER   *US NOV27 CQ6IT             -27.67\n";
-        String formattedChargeTwo = "Sale       2016-11-28      2016-11-30      SALATA - LAS COLINAS               -12.00\n";
+        String formattedChargeOne = "Sale       2016-11-28      2016-11-29      UBER   *US NOV27 CQ6IT                       -27.67\n";
+        String formattedChargeTwo = "Sale       2016-11-28      2016-11-30      SALATA - LAS COLINAS                         -12.00\n";
         assertThat(capture.toString().contains(formattedChargeOne), is(true));
         assertThat(capture.toString().contains(formattedChargeTwo), is(true));
     }
@@ -34,7 +34,7 @@ public class ChargePrinterTest {
     public void shouldPrintTheFormattedFees() {
         Set<CreditCardActivity> activities = createCreditCardActivities();
         ChargePrinter.printChargesAsHumanReadable(activities);
-        String formattedFeeOne = "Payment    2016-11-26      2016-11-27      Payment Thank You - Web           3004.37\n";
+        String formattedFeeOne = "Payment    2016-11-26      2016-11-27      Payment Thank You - Web                     3004.37\n";
         assertThat(capture.toString().contains(formattedFeeOne), is(true));
     }
 

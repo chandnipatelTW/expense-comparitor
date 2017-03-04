@@ -36,7 +36,7 @@ public class ChargePrinter {
 
     private static void printActivities(Set<CreditCardActivity> charges) {
         charges.forEach(charge -> {
-            System.out.format("%-10s %-15s %-15s %-30s %10s\n",
+            System.out.format("%-10s %-15s %-15s %-40s %10s\n",
                     charge.getType().getValue(),
                     charge.getTransactionDate().toLocalDate(),
                     charge.getPostDate().toLocalDate(),

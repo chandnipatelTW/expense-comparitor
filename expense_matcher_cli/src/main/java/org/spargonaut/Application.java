@@ -6,6 +6,7 @@ import org.spargonaut.datamodels.MatchedTransaction;
 import org.spargonaut.io.CSVFileLoader;
 import org.spargonaut.io.CSVFileReader;
 import org.spargonaut.io.DataLoader;
+import org.spargonaut.io.parser.BankOfAmericaChargeParser;
 import org.spargonaut.io.parser.ChargeParser;
 import org.spargonaut.io.parser.ExpenseParser;
 import org.spargonaut.io.printer.SummaryPrinter;
@@ -29,6 +30,9 @@ public class Application {
     public void run() {
 
         String chargeDirectoryName = "./data/credit_card_files";
+
+        String boaChargeDirectoryName = "./data/bank_of_america";
+
         String manualIgnoreCreditCardDirectoryName = "./data/manually_ignored_credit_card_files";
         String expenseDirectoryName = "./data/expense_files";
         String manualIgnoreExpenseDirectoryName = "./data/manually_ignored_expense_files";
@@ -36,9 +40,14 @@ public class Application {
         CSVFileReader csvFileReader = new CSVFileReader();
 
         DataLoader<CreditCardActivity> creditCardactivityDataLoader = new DataLoader<>(new CSVFileLoader());
+
         creditCardactivityDataLoader.load(chargeDirectoryName, new ChargeParser(csvFileReader));
         creditCardactivityDataLoader.ignore(manualIgnoreCreditCardDirectoryName, new ChargeParser(csvFileReader));
         Set<CreditCardActivity> creditCardActivities = new HashSet<>(creditCardactivityDataLoader.getLoadedFiles());
+
+        creditCardactivityDataLoader.load(boaChargeDirectoryName, new BankOfAmericaChargeParser(csvFileReader));
+        creditCardActivities.addAll(creditCardactivityDataLoader.getLoadedFiles());
+
 
         DataLoader<Expense> expenseDataLoader = new DataLoader<>(new CSVFileLoader());
         expenseDataLoader.load(expenseDirectoryName, new ExpenseParser(csvFileReader));

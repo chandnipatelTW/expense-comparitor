@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
-public class BankOfAmericaChargeParser {
+public class BankOfAmericaChargeParser implements Parser<CreditCardActivity> {
     private final CSVFileReader csvFileReader;
 
     public BankOfAmericaChargeParser(CSVFileReader csvFileReader) {
