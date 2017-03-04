@@ -14,10 +14,12 @@ for more tasks, use the command:
 ./gradlew tasks  
   
 ### BASIC SETUP:
-download your credit card statements as a csv file.    
-put them in the following directory:  
-<root project directory>/expense_matcher_cli/data/credit_card_files/    
-(note: currently, the application is only parsing credit card statements from Chase bank)    
+(note: the application currently supports statements from Chase bank and Bank of America)
+
+download your credit card statements as a csv file.
+put them in the following directories:  
+for chase statements: <root project directory>/expense_matcher_cli/data/credit_card_files/
+for bank of america statements: <root project directory>/expense_matcher_cli/data/bank_of_america
 
 download your expense reports from expensify (use the default csv template).  
 put them in the following directory:  
