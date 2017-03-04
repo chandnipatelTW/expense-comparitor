@@ -24,7 +24,8 @@ public class BankOfAmericaChargeParser {
 
         Set<String> chargeLines = csvFileReader.readCsvFile(mockFile);
         for (String chargeLine : chargeLines) {
-            if (!StringUtils.isBlank(chargeLine)) {
+            if (!StringUtils.isBlank(chargeLine) &&
+                    !isHeaderLine(chargeLine)) {
                 ActivityType defaultActivityType = ActivityType.SALE;
                 DateTime defaultTransactionDate = new DateTime(1999, 12, 23, 0, 0, 0);
 
@@ -55,5 +56,9 @@ public class BankOfAmericaChargeParser {
         }
 
         return creditCardActivities;
+    }
+
+    private boolean isHeaderLine(String chargeLine) {
+        return chargeLine.equals("Posted Date,Reference Number,Payee,Address,Amount");
     }
 }
