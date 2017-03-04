@@ -46,6 +46,22 @@ public class BankOfAmericaChargeParserTest {
                 .build();
 
         Set<CreditCardActivity> creditCardActivitySet = bankOfAmericaChargeParser.parseFile(mockFile);
+
         assertThat(creditCardActivitySet.contains(expectedCreditCardActivity), is(true));
+    }
+
+    @Test
+    public void shouldIgnoreBlankLines() {
+        String blankLine = "";
+
+        File mockFile = mock(File.class);
+        CSVFileReader mockCSVFileReader = mock(CSVFileReader.class);
+        Set<String> chargeStrings = new HashSet<>(Arrays.asList(blankLine));
+        when(mockCSVFileReader.readCsvFile(mockFile)).thenReturn(chargeStrings);
+        BankOfAmericaChargeParser bankOfAmericaChargeParser = new BankOfAmericaChargeParser(mockCSVFileReader);
+
+        Set<CreditCardActivity> creditCardActivitySet = bankOfAmericaChargeParser.parseFile(mockFile);
+
+        assertThat(creditCardActivitySet.isEmpty(), is(true));
     }
 }

@@ -1,5 +1,6 @@
 package org.spargonaut.io.parser;
 
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.spargonaut.datamodels.ActivityType;
 import org.spargonaut.datamodels.CreditCardActivity;
@@ -23,32 +24,34 @@ public class BankOfAmericaChargeParser {
 
         Set<String> chargeLines = csvFileReader.readCsvFile(mockFile);
         for (String chargeLine : chargeLines) {
-            ActivityType defaultActivityType = ActivityType.SALE;
-            DateTime defaultTransactionDate = new DateTime(1999, 12, 23, 0, 0, 0);
+            if (!StringUtils.isBlank(chargeLine)) {
+                ActivityType defaultActivityType = ActivityType.SALE;
+                DateTime defaultTransactionDate = new DateTime(1999, 12, 23, 0, 0, 0);
 
 
-            String[] chargeTokens = chargeLine.split(",");
+                String[] chargeTokens = chargeLine.split(",");
 
-            String postDateString = chargeTokens[0];
-            String[] postDateTokens = postDateString.split("/");
-            int postMonth = Integer.parseInt(postDateTokens[0]);
-            int postDay = Integer.parseInt(postDateTokens[1]);
-            int postYear = Integer.parseInt(postDateTokens[2]);
-            DateTime postDate = new DateTime(postYear, postMonth, postDay, 0, 0, 0);
+                String postDateString = chargeTokens[0];
+                String[] postDateTokens = postDateString.split("/");
+                int postMonth = Integer.parseInt(postDateTokens[0]);
+                int postDay = Integer.parseInt(postDateTokens[1]);
+                int postYear = Integer.parseInt(postDateTokens[2]);
+                DateTime postDate = new DateTime(postYear, postMonth, postDay, 0, 0, 0);
 
-            String desctription = chargeTokens[2].replace("\"", "");
+                String desctription = chargeTokens[2].replace("\"", "");
 
 
-            BigDecimal amount = new BigDecimal(chargeTokens[4]);
-            amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                BigDecimal amount = new BigDecimal(chargeTokens[4]);
+                amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 
-            CreditCardActivity creditCardActivity = new CreditCardActivity(
-                    defaultActivityType,
-                    defaultTransactionDate,
-                    postDate,
-                    desctription,
-                    amount);
-            creditCardActivities.add(creditCardActivity);
+                CreditCardActivity creditCardActivity = new CreditCardActivity(
+                        defaultActivityType,
+                        defaultTransactionDate,
+                        postDate,
+                        desctription,
+                        amount);
+                creditCardActivities.add(creditCardActivity);
+            }
         }
 
         return creditCardActivities;
