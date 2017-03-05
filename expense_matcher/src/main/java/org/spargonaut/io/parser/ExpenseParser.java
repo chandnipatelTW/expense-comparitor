@@ -29,7 +29,7 @@ public class ExpenseParser implements Parser<Expense> {
     }
 
     private Expense createExpense(String expenseDelimiter, String pipedExpenseString) {
-        String[] expenseTokens = pipedExpenseString.split(expenseDelimiter);
+        String[] expenseTokens = pipedExpenseString.split(expenseDelimiter, 11);
         boolean reimbursable = parseReimbursableness(expenseTokens[7]);
         DateTime dateTimeTimeStamp = parseTheTimeStamp(expenseTokens[0]);
         BigDecimal amount = parseDollarValue(expenseTokens[2]);

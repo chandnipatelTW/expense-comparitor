@@ -133,4 +133,31 @@ public class ExpenseParserTest {
 
         assertThat(actualExpenses.size(), is(2));
     }
+
+    @Test
+    public void shouldBeAbleToParseAnExpenseThatIsMissingAReceiptImageURL() {
+        String expenseWithMissingReceiptImageURL = "\"2016-11-30 12:00:00\",\"American Airlines\",385.50,,\"Airfare & Upgrades\",\"Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Travel\",\"Had to move my travel around to get onsite.\",yes,USD,385.50,";
+        Set<String> expenseStrings = new HashSet<>(Arrays.asList(headerString, expenseWithMissingReceiptImageURL));
+        when(mockCSVFileReader.readCsvFile(mockFile)).thenReturn(expenseStrings);
+
+        DateTime expectedTimeStamp = new DateTime(2016, 11, 30, 0, 0);
+        double expectedAmount = 385.50;
+
+        Expense expectedExpense = new ExpenseBuilder()
+                .setTimestamp(expectedTimeStamp)
+                .setMerchant("American Airlines")
+                .setAmount(expectedAmount)
+                .setCategory("Airfare & Upgrades")
+                .setTag("Neiman Marcus Group Inc:NMG P4G Design/Deliver Phase:NMG P4G Design/Deliver Phase:Travel")
+                .setComment("Had to move my travel around to get onsite.")
+                .setReimbursable(true)
+                .setOriginalCurrency("USD")
+                .setOriginalAmount(expectedAmount)
+                .build();
+
+        ExpenseParser expenseParser = new ExpenseParser(mockCSVFileReader);
+        Set<Expense> expenses = expenseParser.parseFile(mockFile);
+
+        assertThat(expenses.contains(expectedExpense), is(true));
+    }
 }
