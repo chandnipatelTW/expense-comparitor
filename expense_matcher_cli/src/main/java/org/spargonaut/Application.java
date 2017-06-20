@@ -7,7 +7,7 @@ import org.spargonaut.io.CSVFileLoader;
 import org.spargonaut.io.CSVFileReader;
 import org.spargonaut.io.DataLoader;
 import org.spargonaut.io.parser.BankOfAmericaChargeParser;
-import org.spargonaut.io.parser.ChargeParser;
+import org.spargonaut.io.parser.JPMCChargeParser;
 import org.spargonaut.io.parser.ExpenseParser;
 import org.spargonaut.io.printer.SummaryPrinter;
 import org.spargonaut.matchers.CloseDateMatcher;
@@ -41,8 +41,8 @@ public class Application {
 
         DataLoader<CreditCardActivity> creditCardactivityDataLoader = new DataLoader<>(new CSVFileLoader());
 
-        creditCardactivityDataLoader.load(chargeDirectoryName, new ChargeParser(csvFileReader));
-        creditCardactivityDataLoader.ignore(manualIgnoreCreditCardDirectoryName, new ChargeParser(csvFileReader));
+        creditCardactivityDataLoader.load(chargeDirectoryName, new JPMCChargeParser(csvFileReader));
+        creditCardactivityDataLoader.ignore(manualIgnoreCreditCardDirectoryName, new JPMCChargeParser(csvFileReader));
         Set<CreditCardActivity> creditCardActivities = new HashSet<>(creditCardactivityDataLoader.getLoadedFiles());
 
         creditCardactivityDataLoader.load(boaChargeDirectoryName, new BankOfAmericaChargeParser(csvFileReader));

@@ -19,7 +19,7 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ChargeParserTest {
+public class JPMCChargeParserTest {
 
     private CSVFileReader mockCSVFileReader;
     private File mockFile;
@@ -38,7 +38,7 @@ public class ChargeParserTest {
 
     @Test
     public void shouldParseAChargeLineIntoACreditCardActivity() {
-        ChargeParser chargeParser = new ChargeParser(mockCSVFileReader);
+        JPMCChargeParser JPMCChargeParser = new JPMCChargeParser(mockCSVFileReader);
 
         CreditCardActivity expectedCreditCardActivity =
                 createExpectedCreditCardActivity(
@@ -47,21 +47,21 @@ public class ChargeParserTest {
                         chargeAmount(-18.09),
                         "UBER   *US DEC09 DFMHE");
 
-        Set<CreditCardActivity> creditCardActivityList = chargeParser.parseFile(mockFile);
+        Set<CreditCardActivity> creditCardActivityList = JPMCChargeParser.parseFile(mockFile);
         assertThat(creditCardActivityList.contains(expectedCreditCardActivity), is(true));
     }
 
     @Test
     public void shouldIgnoreTheHeaderLineInTheCreditCardActivityFile() {
-        ChargeParser chargeParser = new ChargeParser(mockCSVFileReader);
-        Set<CreditCardActivity> creditCardActivityList = chargeParser.parseFile(mockFile);
+        JPMCChargeParser JPMCChargeParser = new JPMCChargeParser(mockCSVFileReader);
+        Set<CreditCardActivity> creditCardActivityList = JPMCChargeParser.parseFile(mockFile);
         assertThat(creditCardActivityList.size(), is(1));
     }
 
     @Test
     public void shouldIgnoreLinesThatStartWithHashSymbol() {
-        ChargeParser chargeParser = new ChargeParser(mockCSVFileReader);
-        Set<CreditCardActivity> creditCardActivityList = chargeParser.parseFile(mockFile);
+        JPMCChargeParser JPMCChargeParser = new JPMCChargeParser(mockCSVFileReader);
+        Set<CreditCardActivity> creditCardActivityList = JPMCChargeParser.parseFile(mockFile);
         assertThat(creditCardActivityList.size(), is(1));
     }
 
@@ -71,7 +71,7 @@ public class ChargeParserTest {
         String chargeLineWithACommaInTheDescription = "Sale,10/12/2015,10/13/2015,King, Schools, Inc.,-43.26";
         when(anotherMockCSVFileReader.readCsvFile(mockFile)).thenReturn(new HashSet<>(Arrays.asList(chargeLineWithACommaInTheDescription)));
 
-        ChargeParser chargeParser = new ChargeParser(anotherMockCSVFileReader);
+        JPMCChargeParser JPMCChargeParser = new JPMCChargeParser(anotherMockCSVFileReader);
 
         CreditCardActivity expectedCreditCardActivity =
                 createExpectedCreditCardActivity(
@@ -80,7 +80,7 @@ public class ChargeParserTest {
                         chargeAmount(-43.26),
                         "King Schools Inc.");
 
-        Set<CreditCardActivity> creditCardActivityList = chargeParser.parseFile(mockFile);
+        Set<CreditCardActivity> creditCardActivityList = JPMCChargeParser.parseFile(mockFile);
         assertThat(creditCardActivityList.contains(expectedCreditCardActivity), is(true));
     }
 
@@ -91,7 +91,7 @@ public class ChargeParserTest {
         String blankLine = "";
         when(anotherMockCSVFileReader.readCsvFile(mockFile)).thenReturn(new HashSet<>(Arrays.asList(chargeLineWithACommaInTheDescription, blankLine)));
 
-        ChargeParser chargeParser = new ChargeParser(anotherMockCSVFileReader);
+        JPMCChargeParser JPMCChargeParser = new JPMCChargeParser(anotherMockCSVFileReader);
 
         CreditCardActivity expectedCreditCardActivity =
                 createExpectedCreditCardActivity(
@@ -100,7 +100,7 @@ public class ChargeParserTest {
                         chargeAmount(-43.26),
                         "King Schools Inc.");
 
-        Set<CreditCardActivity> creditCardActivityList = chargeParser.parseFile(mockFile);
+        Set<CreditCardActivity> creditCardActivityList = JPMCChargeParser.parseFile(mockFile);
         assertThat(creditCardActivityList.size(), is(2));
         assertThat(creditCardActivityList.contains(expectedCreditCardActivity), is(true));
     }

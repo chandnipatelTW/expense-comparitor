@@ -6,8 +6,8 @@ import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.Expense;
 import org.spargonaut.datamodels.testbuilders.CreditCardActivityBuilder;
 import org.spargonaut.datamodels.testbuilders.ExpenseBuilder;
-import org.spargonaut.io.parser.ChargeParser;
 import org.spargonaut.io.parser.ExpenseParser;
+import org.spargonaut.io.parser.Parser;
 
 import java.io.File;
 import java.util.Arrays;
@@ -63,7 +63,7 @@ public class DataLoaderTest {
         CreditCardActivity creditCardActivityTwoFromMockFileTwo = new CreditCardActivityBuilder().build();
         Set<CreditCardActivity> creditCardActivitiesFromMockFileTwo = new HashSet<>(Arrays.asList(creditCardActivityOneFromMockFileTwo, creditCardActivityTwoFromMockFileTwo));
 
-        ChargeParser mockParser = mock(ChargeParser.class);
+        Parser mockParser = mock(Parser.class);
         when(mockParser.parseFile(mockFileOne)).thenReturn(creditCardActivitiesFromMockFileOne);
         when(mockParser.parseFile(mockFileTwo)).thenReturn(creditCardActivitiesFromMockFileTwo);
 
@@ -83,7 +83,7 @@ public class DataLoaderTest {
         CreditCardActivity creditCardActivityThree = new CreditCardActivityBuilder().build();
         Set<CreditCardActivity> creditCardActivitiesFromMockFileTwo = new HashSet<>(Arrays.asList(creditCardActivityThree, creditCardActivityTwo));
 
-        ChargeParser mockParser = mock(ChargeParser.class);
+        Parser mockParser = mock(Parser.class);
         when(mockParser.parseFile(mockFileOne)).thenReturn(creditCardActivitiesFromMockFileOne);
         when(mockParser.parseFile(mockFileTwo)).thenReturn(creditCardActivitiesFromMockFileTwo);
 
@@ -102,7 +102,7 @@ public class DataLoaderTest {
         CreditCardActivity creditCardActivityFour = new CreditCardActivityBuilder().build();
         Set<CreditCardActivity> creditCardActivities = new HashSet<>(Arrays.asList(creditCardActivityOne, creditCardActivityTwo, creditCardActivityThree, creditCardActivityFour));
 
-        ChargeParser mockParserForCreditCardActivities = mock(ChargeParser.class);
+        Parser mockParserForCreditCardActivities = mock(Parser.class);
         when(mockParserForCreditCardActivities.parseFile(mockFileOne)).thenReturn(creditCardActivities);
 
         DataLoader<CreditCardActivity> dataLoader = new DataLoader<>(mockCsvFileLoader);
@@ -114,7 +114,7 @@ public class DataLoaderTest {
 
         File mockFileOfChargesToIgnore = mock(File.class);
         when(mockCsvFileLoader.getFileNamesIn(directoryNameOfFilesToIgnore)).thenReturn(new HashSet<>(Arrays.asList(mockFileOfChargesToIgnore)));
-        ChargeParser mockParserForCreditCardActivitiesToIgnore = mock(ChargeParser.class);
+        Parser mockParserForCreditCardActivitiesToIgnore = mock(Parser.class);
         when(mockParserForCreditCardActivitiesToIgnore.parseFile(mockFileOfChargesToIgnore)).thenReturn(creditCardActivitiesToIgnore);
 
         dataLoader.ignore(directoryNameOfFilesToIgnore, mockParserForCreditCardActivitiesToIgnore);
@@ -133,7 +133,7 @@ public class DataLoaderTest {
         CreditCardActivity creditCardActivityFour = new CreditCardActivityBuilder().build();
         Set<CreditCardActivity> creditCardActivities = new HashSet<>(Arrays.asList(creditCardActivityOne, creditCardActivityTwo, creditCardActivityThree, creditCardActivityFour));
 
-        ChargeParser mockParserForCreditCardActivities = mock(ChargeParser.class);
+        Parser mockParserForCreditCardActivities = mock(Parser.class);
         when(mockParserForCreditCardActivities.parseFile(mockFileOne)).thenReturn(creditCardActivities);
 
         DataLoader<CreditCardActivity> dataLoader = new DataLoader<>(mockCsvFileLoader);
@@ -145,7 +145,7 @@ public class DataLoaderTest {
 
         File mockFileOfChargesToIgnore = mock(File.class);
         when(mockCsvFileLoader.getFileNamesIn(directoryNameOfFilesToIgnore)).thenReturn(new HashSet<>(Arrays.asList(mockFileOfChargesToIgnore)));
-        ChargeParser mockParserForCreditCardActivitiesToIgnore = mock(ChargeParser.class);
+        Parser mockParserForCreditCardActivitiesToIgnore = mock(Parser.class);
         when(mockParserForCreditCardActivitiesToIgnore.parseFile(mockFileOfChargesToIgnore)).thenReturn(creditCardActivitiesToIgnore);
 
         dataLoader.ignore(directoryNameOfFilesToIgnore, mockParserForCreditCardActivitiesToIgnore);

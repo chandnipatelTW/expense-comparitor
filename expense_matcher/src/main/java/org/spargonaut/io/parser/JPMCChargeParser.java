@@ -11,11 +11,11 @@ import java.math.BigDecimal;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ChargeParser implements Parser<CreditCardActivity> {
+public class JPMCChargeParser implements Parser<CreditCardActivity> {
 
     private CSVFileReader csvFileReader;
 
-    public ChargeParser(CSVFileReader csvFileReader) {
+    public JPMCChargeParser(CSVFileReader csvFileReader) {
         this.csvFileReader = csvFileReader;
     }
 
