@@ -42,17 +42,17 @@ public class JPMCChargeParser implements Parser<CreditCardActivity> {
             BigDecimal amount = new BigDecimal(chargeTokens[lastChunkIndex]);
             amount = amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 
-            String description = "";
+            StringBuilder description = new StringBuilder();
             int descriptionStartIndex = 3;
             for (int i = descriptionStartIndex; i < lastChunkIndex; i++) {
-                description += chargeTokens[i];
+                description.append(chargeTokens[i]);
             }
 
             creditCardActivity = new CreditCardActivity(
                     ActivityType.fromString(chargeTokens[0]),
                     transactionDate,
                     postDate,
-                    description,
+                    description.toString(),
                     amount);
         }
 

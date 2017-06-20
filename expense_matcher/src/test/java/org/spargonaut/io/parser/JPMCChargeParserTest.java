@@ -1,8 +1,10 @@
 package org.spargonaut.io.parser;
 
+import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.spargonaut.datamodels.ActivityType;
 import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.datamodels.testbuilders.CreditCardActivityBuilder;
@@ -19,106 +21,106 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@RunWith(HierarchicalContextRunner.class)
 public class JPMCChargeParserTest {
 
     private CSVFileReader mockCSVFileReader;
     private File mockFile;
+    private JPMCChargeParser jpmcChargeParser;
 
     @Before
     public void setUp() {
-        String headerLine = "Type,Trans Date,Post Date,Description,Amount";
-        String chargeLine = "Sale,12/10/2016,12/11/2016,UBER   *US DEC09 DFMHE,-18.09";
-        String commentLine = "# this line is a comment because it starts with a hash";
-        Set<String> chargeStrings = new HashSet<>(Arrays.asList(headerLine, chargeLine, commentLine));
-
         mockFile = mock(File.class);
         mockCSVFileReader = mock(CSVFileReader.class);
-        when(mockCSVFileReader.readCsvFile(mockFile)).thenReturn(chargeStrings);
+        jpmcChargeParser = new JPMCChargeParser(mockCSVFileReader);
     }
 
-    @Test
-    public void shouldParseAChargeLineIntoACreditCardActivity() {
-        JPMCChargeParser JPMCChargeParser = new JPMCChargeParser(mockCSVFileReader);
+    public class BasicJPMCChargeFile {
+        @Before
+        public void setUp() {
+            String headerLine = "Type,Trans Date,Post Date,Description,Amount";
+            String chargeLine = "Sale,12/10/2016,12/11/2016,UBER   *US DEC09 DFMHE,-18.09";
+            String commentLine = "# this line is a comment because it starts with a hash";
+            Set<String> chargeStrings = new HashSet<>(Arrays.asList(headerLine, chargeLine, commentLine));
+            when(mockCSVFileReader.readCsvFile(mockFile)).thenReturn(chargeStrings);
+        }
 
-        CreditCardActivity expectedCreditCardActivity =
-                createExpectedCreditCardActivity(
-                        date(10, 12, 2016),
-                        date(11, 12, 2016),
-                        chargeAmount(-18.09),
-                        "UBER   *US DEC09 DFMHE");
+        @Test
+        public void shouldParseAChargeLineIntoACreditCardActivity() {
+            assertParsedFileContainsActivity(jpmcChargeParser.parseFile(mockFile), createUberCreditCardActivity());
+        }
 
-        Set<CreditCardActivity> creditCardActivityList = JPMCChargeParser.parseFile(mockFile);
-        assertThat(creditCardActivityList.contains(expectedCreditCardActivity), is(true));
+        @Test
+        public void shouldIgnoreTheHeaderLineInTheCreditCardActivityFile() {
+            assertParsedSetIsSize(jpmcChargeParser.parseFile(mockFile), 1);
+        }
+
+        @Test
+        public void shouldIgnoreLinesThatStartWithHashSymbol() {
+            assertParsedSetIsSize(jpmcChargeParser.parseFile(mockFile), 1);
+        }
     }
 
-    @Test
-    public void shouldIgnoreTheHeaderLineInTheCreditCardActivityFile() {
-        JPMCChargeParser JPMCChargeParser = new JPMCChargeParser(mockCSVFileReader);
-        Set<CreditCardActivity> creditCardActivityList = JPMCChargeParser.parseFile(mockFile);
-        assertThat(creditCardActivityList.size(), is(1));
+    public class JPMCChargeFileWithDirtyChargeLines {
+        @Before
+        public void setUp() {
+            String chargeLineWithACommaInTheDescription = "Sale,10/12/2015,10/13/2015,King, Schools, Inc.,-43.26";
+            String blankLine = "";
+            when(mockCSVFileReader.readCsvFile(mockFile)).thenReturn(new HashSet<>(Arrays.asList(chargeLineWithACommaInTheDescription, blankLine)));
+        }
+
+        @Test
+        public void shouldRemoveCommasFromTheDescriptionField() {
+            assertParsedFileContainsActivity(jpmcChargeParser.parseFile(mockFile), kingSchoolsCreditCardActivity());
+        }
+
+        @Test
+        public void shouldIgnoreBlankLines() {
+            Set<CreditCardActivity> creditCardActivitySet = jpmcChargeParser.parseFile(mockFile);
+            assertParsedSetIsSize(creditCardActivitySet, 2);
+            assertParsedFileContainsActivity(creditCardActivitySet, kingSchoolsCreditCardActivity());
+        }
+
     }
 
-    @Test
-    public void shouldIgnoreLinesThatStartWithHashSymbol() {
-        JPMCChargeParser JPMCChargeParser = new JPMCChargeParser(mockCSVFileReader);
-        Set<CreditCardActivity> creditCardActivityList = JPMCChargeParser.parseFile(mockFile);
-        assertThat(creditCardActivityList.size(), is(1));
+    private void assertParsedFileContainsActivity(Set<CreditCardActivity> creditCardActivitySet, CreditCardActivity creditCardActivity) {
+        assertThat(creditCardActivitySet.contains(creditCardActivity), is(true));
     }
 
-    @Test
-    public void shouldRemoveCommasFromTheDescriptionField() {
-        CSVFileReader anotherMockCSVFileReader = mock(CSVFileReader.class);
-        String chargeLineWithACommaInTheDescription = "Sale,10/12/2015,10/13/2015,King, Schools, Inc.,-43.26";
-        when(anotherMockCSVFileReader.readCsvFile(mockFile)).thenReturn(new HashSet<>(Arrays.asList(chargeLineWithACommaInTheDescription)));
-
-        JPMCChargeParser JPMCChargeParser = new JPMCChargeParser(anotherMockCSVFileReader);
-
-        CreditCardActivity expectedCreditCardActivity =
-                createExpectedCreditCardActivity(
-                        date(12, 10, 2015),
-                        date(13, 10, 2015),
-                        chargeAmount(-43.26),
-                        "King Schools Inc.");
-
-        Set<CreditCardActivity> creditCardActivityList = JPMCChargeParser.parseFile(mockFile);
-        assertThat(creditCardActivityList.contains(expectedCreditCardActivity), is(true));
+    private void assertParsedSetIsSize(Set<CreditCardActivity> creditCardActivitySet, int size) {
+        assertThat(creditCardActivitySet.size(), is(size));
     }
 
-    @Test
-    public void shouldIgnoreBlankLines() {
-        CSVFileReader anotherMockCSVFileReader = mock(CSVFileReader.class);
-        String chargeLineWithACommaInTheDescription = "Sale,10/12/2015,10/13/2015,King, Schools, Inc.,-43.26";
-        String blankLine = "";
-        when(anotherMockCSVFileReader.readCsvFile(mockFile)).thenReturn(new HashSet<>(Arrays.asList(chargeLineWithACommaInTheDescription, blankLine)));
-
-        JPMCChargeParser JPMCChargeParser = new JPMCChargeParser(anotherMockCSVFileReader);
-
-        CreditCardActivity expectedCreditCardActivity =
-                createExpectedCreditCardActivity(
-                        date(12, 10, 2015),
-                        date(13, 10, 2015),
-                        chargeAmount(-43.26),
-                        "King Schools Inc.");
-
-        Set<CreditCardActivity> creditCardActivityList = JPMCChargeParser.parseFile(mockFile);
-        assertThat(creditCardActivityList.size(), is(2));
-        assertThat(creditCardActivityList.contains(expectedCreditCardActivity), is(true));
+    private CreditCardActivity createUberCreditCardActivity() {
+        return createExpectedCreditCardActivity(
+                date(10, 12, 2016),
+                date(11, 12, 2016),
+                chargeAmount(-18.09),
+                "UBER   *US DEC09 DFMHE");
     }
 
-    private CreditCardActivity createExpectedCreditCardActivity(DateTime expectedTransactionDate, DateTime expectedPostDate, BigDecimal expectedAmount, String expectedDescription) {
+    private CreditCardActivity kingSchoolsCreditCardActivity() {
+        return createExpectedCreditCardActivity(
+                date(12, 10, 2015),
+                date(13, 10, 2015),
+                chargeAmount(-43.26),
+                "King Schools Inc.");
+    }
+
+    private CreditCardActivity createExpectedCreditCardActivity(DateTime expectedTransactionDate, DateTime expectedPostDate, double expectedAmount, String expectedDescription) {
         return new CreditCardActivityBuilder()
                 .setType(ActivityType.SALE)
-                .setAmount(expectedAmount.doubleValue())
+                .setAmount(expectedAmount)
                 .setDescription(expectedDescription)
                 .setPostDate(expectedPostDate)
                 .setTransactionDate(expectedTransactionDate)
                 .build();
     }
 
-    private BigDecimal chargeAmount(double amount) {
+    private double chargeAmount(double amount) {
         BigDecimal expectedAmount = new BigDecimal(amount);
         expectedAmount = expectedAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
-        return expectedAmount;
+        return expectedAmount.doubleValue();
     }
 
     private DateTime date(int dayOfMonth, int monthOfYear, int year) {
