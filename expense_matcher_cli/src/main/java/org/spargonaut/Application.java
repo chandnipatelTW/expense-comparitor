@@ -7,8 +7,8 @@ import org.spargonaut.io.CSVFileLoader;
 import org.spargonaut.io.CSVFileReader;
 import org.spargonaut.io.DataLoader;
 import org.spargonaut.io.parser.BankOfAmericaChargeParser;
-import org.spargonaut.io.parser.JPMCChargeParser;
 import org.spargonaut.io.parser.ExpenseParser;
+import org.spargonaut.io.parser.JPMCChargeParser;
 import org.spargonaut.io.printer.SummaryPrinter;
 import org.spargonaut.matchers.CloseDateMatcher;
 import org.spargonaut.matchers.ExactMatcher;
@@ -21,33 +21,36 @@ import java.util.Map;
 import java.util.Set;
 
 public class Application {
-    public static void main(String[] args) {
-        System.out.println("Hello World!");
+
+    private final String dataDirectoryName = "data";
+    private final String fileSeparator = "/";
+    private final String chargeFileDirectoryName = "charge_files";
+    private final String ignoredFileDirectoryName = "manually_ignored";
+    private final String expenseFileDirectoryName = "expense_files";
+
+    public static void main(String[] args) throws Exception {
         Application application = new Application();
         application.run();
     }
 
-    public void run() {
-
-        String chargeDirectoryName = "./data/credit_card_files";
-
-        String boaChargeDirectoryName = "./data/bank_of_america";
-
-        String manualIgnoreCreditCardDirectoryName = "./data/manually_ignored_credit_card_files";
-        String expenseDirectoryName = "./data/expense_files";
-        String manualIgnoreExpenseDirectoryName = "./data/manually_ignored_expense_files";
+    private void run() {
+        String jpmcChargeFileDirectoryName = createChargeFileDirectoryPath() + "jpmc";
+        String boaChargeDirectoryName = createChargeFileDirectoryPath() + "bank_of_america";
+        String manualIgnoreCreditCardDirectoryName = createChargeFileDirectoryPath() + ignoredFileDirectoryName;
 
         CSVFileReader csvFileReader = new CSVFileReader();
 
+
         DataLoader<CreditCardActivity> creditCardactivityDataLoader = new DataLoader<>(new CSVFileLoader());
 
-        creditCardactivityDataLoader.load(chargeDirectoryName, new JPMCChargeParser(csvFileReader));
+        Set<CreditCardActivity> creditCardActivities = new HashSet<>();
+        creditCardactivityDataLoader.load(jpmcChargeFileDirectoryName, new JPMCChargeParser(csvFileReader));
         creditCardactivityDataLoader.ignore(manualIgnoreCreditCardDirectoryName, new JPMCChargeParser(csvFileReader));
-        Set<CreditCardActivity> creditCardActivities = new HashSet<>(creditCardactivityDataLoader.getLoadedFiles());
-
         creditCardactivityDataLoader.load(boaChargeDirectoryName, new BankOfAmericaChargeParser(csvFileReader));
         creditCardActivities.addAll(creditCardactivityDataLoader.getLoadedFiles());
 
+        String expenseDirectoryName = expenceFileDirectoryPath() + "expensify";
+        String manualIgnoreExpenseDirectoryName = expenceFileDirectoryPath() + ignoredFileDirectoryName;
 
         DataLoader<Expense> expenseDataLoader = new DataLoader<>(new CSVFileLoader());
         expenseDataLoader.load(expenseDirectoryName, new ExpenseParser(csvFileReader));
@@ -72,5 +75,13 @@ public class Application {
                                     expenses,
                                     unmatchedCreditCardActivity,
                                     unmatchedExpenses);
+    }
+
+    private String expenceFileDirectoryPath() {
+        return dataDirectoryName + fileSeparator + expenseFileDirectoryName + fileSeparator;
+    }
+
+    private String createChargeFileDirectoryPath() {
+        return dataDirectoryName + fileSeparator + chargeFileDirectoryName + fileSeparator;
     }
 }
