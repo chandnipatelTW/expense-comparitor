@@ -46,12 +46,12 @@ public class JPMCChargeParserTest {
         }
 
         @Test
-        public void shouldParseAChargeLineIntoACreditCardActivity() {
+        public void shouldParseAJPMCChargeLineIntoACreditCardActivity() {
             assertParsedFileContainsActivity(jpmcChargeParser.parseFile(mockFile), createUberCreditCardActivity());
         }
 
         @Test
-        public void shouldIgnoreTheHeaderLineInTheCreditCardActivityFile() {
+        public void shouldIgnoreTheHeaderLineInTheJPMCCreditCardActivityFile() {
             assertParsedSetIsSize(jpmcChargeParser.parseFile(mockFile), 1);
         }
 
