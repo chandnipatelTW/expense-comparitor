@@ -6,30 +6,15 @@ import org.spargonaut.datamodels.ActivityType;
 import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.io.CSVFileReader;
 
-import java.io.File;
 import java.math.BigDecimal;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-public class BankOfAmericaChargeParser implements Parser<CreditCardActivity> {
-    private final CSVFileReader csvFileReader;
+public class BankOfAmericaChargeParser extends ChargeParser<CreditCardActivity> {
 
     public BankOfAmericaChargeParser(CSVFileReader csvFileReader) {
-        this.csvFileReader = csvFileReader;
+        super(csvFileReader);
     }
 
-    public Set<CreditCardActivity> parseFile(File chargeFile) {
-        String chargeDelimiter = ",";
-
-        return csvFileReader.readCsvFile(chargeFile).stream()
-                .filter(this::isParsable)
-                .map(chargeLine -> parseCreditCardActivity(chargeDelimiter, chargeLine))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
-    }
-
-    private CreditCardActivity parseCreditCardActivity(String chargeDelimiter, String chargeLine) {
+    CreditCardActivity parseCreditCardActivity(String chargeDelimiter, String chargeLine) {
         CreditCardActivity creditCardActivity = null;
         if (!StringUtils.isBlank(chargeLine)) {
             ActivityType defaultActivityType = ActivityType.SALE;
@@ -60,15 +45,7 @@ public class BankOfAmericaChargeParser implements Parser<CreditCardActivity> {
         return creditCardActivity;
     }
 
-    private boolean isParsable(String chargeLine) {
-        return !(isHeaderLine(chargeLine) || isCommentLine(chargeLine));
-    }
-
-    private boolean isCommentLine(String chargeLine) {
-        return chargeLine.startsWith("#");
-    }
-
-    private boolean isHeaderLine(String chargeLine) {
+    boolean isHeaderLine(String chargeLine) {
         return chargeLine.equals("Posted Date,Reference Number,Payee,Address,Amount");
     }
 }

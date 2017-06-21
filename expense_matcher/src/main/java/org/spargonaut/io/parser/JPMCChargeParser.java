@@ -6,34 +6,15 @@ import org.spargonaut.datamodels.ActivityType;
 import org.spargonaut.datamodels.CreditCardActivity;
 import org.spargonaut.io.CSVFileReader;
 
-import java.io.File;
 import java.math.BigDecimal;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-public class JPMCChargeParser implements Parser<CreditCardActivity> {
-
-    private CSVFileReader csvFileReader;
+public class JPMCChargeParser extends ChargeParser<CreditCardActivity> {
 
     public JPMCChargeParser(CSVFileReader csvFileReader) {
-        this.csvFileReader = csvFileReader;
+        super(csvFileReader);
     }
 
-    public Set<CreditCardActivity> parseFile(File chargeFile) {
-        String chargeDelimiter = ",";
-        return csvFileReader.readCsvFile(chargeFile).stream()
-                .filter(this::isParsable)
-                .map(chargeLine -> parseCreditCardActivity(chargeDelimiter, chargeLine))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
-    }
-
-    private boolean isParsable(String line) {
-        return !(isHeaderLine(line) || isCommentLine(line));
-    }
-
-    private CreditCardActivity parseCreditCardActivity(String chargeDelimiter, String chargeLine) {
+    CreditCardActivity parseCreditCardActivity(String chargeDelimiter, String chargeLine) {
         CreditCardActivity creditCardActivity = null;
         if (!StringUtils.isBlank(chargeLine)) {
             String[] chargeTokens = chargeLine.split(chargeDelimiter);
@@ -61,10 +42,6 @@ public class JPMCChargeParser implements Parser<CreditCardActivity> {
         return creditCardActivity;
     }
 
-    private boolean isCommentLine(String chargeLine) {
-        return chargeLine.startsWith("#");
-    }
-
     private DateTime createDateTimeFrom(String chargeToken) {
         String[] transactionDateChunks = chargeToken.split("/");
         int transactionYearString = Integer.parseInt(transactionDateChunks[2]);
@@ -73,7 +50,7 @@ public class JPMCChargeParser implements Parser<CreditCardActivity> {
         return new DateTime(transactionYearString, transactionMonthString, transactionDayString, 0, 0);
     }
 
-    private boolean isHeaderLine(String chargeLine) {
+    boolean isHeaderLine(String chargeLine) {
         return chargeLine.equals("Type,Trans Date,Post Date,Description,Amount");
     }
 }
