@@ -8,6 +8,7 @@ import org.spargonaut.io.CSVFileReader;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,7 @@ public class JPMCChargeParser implements Parser<CreditCardActivity> {
         return csvFileReader.readCsvFile(chargeFile).stream()
                 .filter(this::isParsable)
                 .map(chargeLine -> parseCreditCardActivity(chargeDelimiter, chargeLine))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
     }
 

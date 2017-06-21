@@ -68,7 +68,7 @@ public class JPMCChargeParserTest extends BaseChargeParserTest {
         @Test
         public void shouldIgnoreBlankLines() {
             Set<CreditCardActivity> creditCardActivitySet = jpmcChargeParser.parseFile(mockFile);
-            assertParsedSetIsSize(creditCardActivitySet, 2);
+            assertParsedSetIsSize(creditCardActivitySet, 1);
             assertParsedFileContainsActivity(creditCardActivitySet, kingSchoolsCreditCardActivity());
         }
     }
