@@ -25,7 +25,7 @@ public class BankOfAmericaChargeParser implements Parser<CreditCardActivity> {
         Set<String> chargeLines = csvFileReader.readCsvFile(mockFile);
         for (String chargeLine : chargeLines) {
             if (!StringUtils.isBlank(chargeLine) &&
-                    !isHeaderLine(chargeLine)) {
+                    !(isHeaderLine(chargeLine) || isCommentLine(chargeLine))) {
                 ActivityType defaultActivityType = ActivityType.SALE;
                 DateTime defaultTransactionDate = new DateTime(1999, 12, 23, 0, 0, 0);
 
@@ -43,7 +43,7 @@ public class BankOfAmericaChargeParser implements Parser<CreditCardActivity> {
 
 
                 BigDecimal amount = new BigDecimal(chargeTokens[4]);
-                amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                amount = amount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 
                 CreditCardActivity creditCardActivity = new CreditCardActivity(
                         defaultActivityType,
@@ -56,6 +56,10 @@ public class BankOfAmericaChargeParser implements Parser<CreditCardActivity> {
         }
 
         return creditCardActivities;
+    }
+
+    private boolean isCommentLine(String chargeLine) {
+        return chargeLine.startsWith("#");
     }
 
     private boolean isHeaderLine(String chargeLine) {
