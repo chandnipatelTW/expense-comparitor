@@ -9,8 +9,13 @@ import java.util.stream.Collectors;
 public class CSVFileLoader {
 
     public Set<File> getFileNamesIn(String directoryName) {
-        File directory = new File(directoryName);
-        return getCSVFiles(new HashSet<>(Arrays.asList(directory.listFiles())));
+        try {
+            File directory = new File(directoryName);
+            return getCSVFiles(new HashSet<>(Arrays.asList(directory.listFiles())));
+        } catch (Exception e) {
+            String message = "Trouble loading the file: " + directoryName + "\n" +e.getMessage();
+            throw new RuntimeException(message, e.getCause());
+        }
     }
 
     private Set<File> getCSVFiles(Set<File> allFiles) {
