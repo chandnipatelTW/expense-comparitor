@@ -6,6 +6,7 @@ import org.spargonaut.datamodels.MatchedTransaction;
 import org.spargonaut.io.CSVFileLoader;
 import org.spargonaut.io.CSVFileReader;
 import org.spargonaut.io.DataLoader;
+import org.spargonaut.io.parser.BankOfAmericaChargeParser;
 import org.spargonaut.io.parser.ExpenseParser;
 import org.spargonaut.io.parser.JPMCChargeParser;
 import org.spargonaut.io.parser.ParsableDirectory;
@@ -33,14 +34,21 @@ public class Application {
     }
 
     private void run() {
-        String boaChargeDirectoryName = createChargeFileDirectoryPath() + "bank_of_america";
-
         CSVFileReader csvFileReader = new CSVFileReader();
+        Set<CreditCardActivity> creditCardActivities = new HashSet<>();
+        Set<CreditCardActivity> ignoredCreditCardActivities = new HashSet<>();
+
+        String boaDirectorPath = createChargeFileDirectoryPath() + "bank_of_america";
+        ParsableDirectory<CreditCardActivity> boaDirectory = new ParsableDirectory<>(boaDirectorPath, new BankOfAmericaChargeParser(csvFileReader));
+        DataLoader<CreditCardActivity> boaDataLoader = new DataLoader<>(new CSVFileLoader(), boaDirectory);
+        creditCardActivities.addAll(boaDataLoader.loadTransactions());
+        ignoredCreditCardActivities.addAll(boaDataLoader.getIgnoredData());
 
         String jpmcDirectoryPath = createChargeFileDirectoryPath() + "jpmc";
         ParsableDirectory<CreditCardActivity> jpmcDirectory = new ParsableDirectory<>(jpmcDirectoryPath, new JPMCChargeParser(csvFileReader));
-        DataLoader<CreditCardActivity> creditCardactivityDataLoader = new DataLoader<>(new CSVFileLoader(), jpmcDirectory);
-        Set<CreditCardActivity> creditCardActivities = creditCardactivityDataLoader.loadTransactions();
+        DataLoader<CreditCardActivity> jpmcDataLoader = new DataLoader<>(new CSVFileLoader(), jpmcDirectory);
+        creditCardActivities.addAll(jpmcDataLoader.loadTransactions());
+        ignoredCreditCardActivities.addAll(jpmcDataLoader.getIgnoredData());
 
         String expenseDirectoryName = expenseFileDirectoryPath() + "expensify";
         ParsableDirectory<Expense> expensifyExpensesDirectory = new ParsableDirectory<>(expenseDirectoryName, new ExpenseParser(csvFileReader));
@@ -57,7 +65,7 @@ public class Application {
 
         ReportPrinter.printSummary(matchedTransactionsMap,
                                     creditCardActivities,
-                                    creditCardactivityDataLoader.getIgnoredData(),
+                                    ignoredCreditCardActivities,
                                     expenses,
                                     unmatchedCreditCardActivity,
                                     unmatchedExpenses);
