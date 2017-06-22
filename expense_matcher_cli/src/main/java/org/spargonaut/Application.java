@@ -9,7 +9,7 @@ import org.spargonaut.io.DataLoader;
 import org.spargonaut.io.parser.ExpenseParser;
 import org.spargonaut.io.parser.JPMCChargeParser;
 import org.spargonaut.io.parser.ParsableDirectory;
-import org.spargonaut.io.printer.SummaryPrinter;
+import org.spargonaut.io.printer.ReportPrinter;
 import org.spargonaut.matchers.CloseDateMatcher;
 import org.spargonaut.matchers.ExactMatcher;
 import org.spargonaut.matchers.FuzzyMerchantExactAmountMatcher;
@@ -55,7 +55,7 @@ public class Application {
         Set<CreditCardActivity> unmatchedCreditCardActivity = transactionProcessor.getUnmatchedCreditCardActivies();
         Set<Expense> unmatchedExpenses = transactionProcessor.getUnmatchedExpenses();
 
-        SummaryPrinter.printSummary(matchedTransactionsMap,
+        ReportPrinter.printSummary(matchedTransactionsMap,
                                     creditCardActivities,
                                     creditCardactivityDataLoader.getIgnoredData(),
                                     expenses,

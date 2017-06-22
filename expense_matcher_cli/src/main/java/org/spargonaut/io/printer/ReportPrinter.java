@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class SummaryPrinter {
+public class ReportPrinter {
 
     public static void printSummary(Map<String, Set<MatchedTransaction>> matchedTransactionMap,
                                     Set<CreditCardActivity> creditCardActivities,
@@ -19,11 +19,11 @@ public class SummaryPrinter {
         printParsedTransactions(creditCardActivities, expenses);
         int totalMatchesCount = printMatchedTransactions(matchedTransactionMap);
         printUnmatchedTransactions(unmatchedCreditCardActivity, unmatchedExpenses);
-        printMainSummary(creditCardActivities, ignoredCreditCardActivities, expenses, unmatchedCreditCardActivity, unmatchedExpenses, totalMatchesCount);
+        printSummary(creditCardActivities, ignoredCreditCardActivities, expenses, unmatchedCreditCardActivity, unmatchedExpenses, totalMatchesCount);
 
     }
 
-    private static void printMainSummary(Set<CreditCardActivity> creditCardActivities, Set<CreditCardActivity> ignoredCreditCardActivities, Set<Expense> expenses, Set<CreditCardActivity> unmatchedCreditCardActivity, Set<Expense> unmatchedExpenses, int totalMatchesCount) {
+    private static void printSummary(Set<CreditCardActivity> creditCardActivities, Set<CreditCardActivity> ignoredCreditCardActivities, Set<Expense> expenses, Set<CreditCardActivity> unmatchedCreditCardActivity, Set<Expense> unmatchedExpenses, int totalMatchesCount) {
         System.out.print("\n\nSUMMARY\n----------------------------------------------");
         System.out.format("\nTotal Matches:                              %d", totalMatchesCount);
         System.out.format("\nUnmatched Credit Card Activities:   %10s", unmatchedCreditCardActivity.size());
