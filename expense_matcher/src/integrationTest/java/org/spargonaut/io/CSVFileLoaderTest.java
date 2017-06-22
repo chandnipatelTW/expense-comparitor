@@ -27,10 +27,9 @@ public class CSVFileLoaderTest {
     }
 
     @Test
-    public void shouldGiveAMessageIndicatingTheProblemFileWhenThrowingAnExceptionDuringFileLoading() throws Exception{
-        String testDirectoryName = "src/bad_directory_name";
-        expectedEx.expect(RuntimeException.class);
-        expectedEx.expectMessage("Trouble loading the file: src/bad_directory_name");
+    public void shouldSkipDirectoriesWhenCollectingCSVFiles() {
+        testDirectoryName = "src/integrationTest/resources/test_charge_file_directory";
         csvFileLoader.getFileNamesIn(testDirectoryName);
+        assertThat(csvFileLoader.getFileNamesIn(testDirectoryName).size(), is(2));
     }
 }
