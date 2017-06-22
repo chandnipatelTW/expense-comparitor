@@ -23,20 +23,21 @@ put them in the following directory:
 run the command:  
 ./gradlew prepare  
   
-This will convert the expensify files from unicode to ASCII, and copy them to the correct directory:
+This will convert the expensify files from unicode to ASCII, and copy them to the correct directory:  
 \<root project directory>/data/expense_files/expensify/  
 The need to 'prepare' the expensify files is due to them being exported in unicode by default.
 This script converts them to ASCII and places them in the correct directory  
   
 
 ### RUNNING THE APPLICATION:
-use the command ./gradlew run  
+use the command  
+./gradlew run  
  
   
 #### Ignoring certain transactions:
 in addition to the basic set up, you can identify specific transactions and expenses to be ignored so that they don't
 show up as unmatched charges or expenses.  To manually ignore charges, create a .csv file in the directory  
-for JPM Chase charges: \<root project directory>/expense_matcher_cli/data/charge_files/jpmc/manually_ignored/
+for JPM Chase charges: \<root project directory>/expense_matcher_cli/data/charge_files/jpmc/manually_ignored/  
 for Bank of America charges: \<root project directory>/expense_matcher_cli/data/charge_files/bank_of_america/manually_ignored
 for expenses: \<root project directory>/data/expense_files/expensify/manually_ignored  
 
@@ -44,7 +45,7 @@ for expenses: \<root project directory>/data/expense_files/expensify/manually_ig
 you'll need to find the exact lines from one of the credit card activity files or the expense files, and paste it into
 their respective ignore file.  
 if you begin the line with a hash symbal (#), this line will be considered a comment and ignored when parsing the file.
-  this is useful to make notes about the lines that you've manually ignored. 
+  this is useful to make notes about the lines that you've manually ignored, or for any other reason. 
 
 ### RUNNING AN EXAMPLE
 Included in this repository, is a set of example files including charge files from a JPMC statement, some manually
