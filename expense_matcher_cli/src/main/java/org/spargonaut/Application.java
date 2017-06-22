@@ -39,22 +39,16 @@ public class Application {
 
         String jpmcDirectoryPath = createChargeFileDirectoryPath() + "jpmc";
         ParsableDirectory<CreditCardActivity> jpmcDirectory = new ParsableDirectory<>(jpmcDirectoryPath, new JPMCChargeParser(csvFileReader));
-
         DataLoader<CreditCardActivity> creditCardactivityDataLoader = new DataLoader<>(new CSVFileLoader(), jpmcDirectory);
         Set<CreditCardActivity> creditCardActivities = creditCardactivityDataLoader.loadTransactions();
 
         String expenseDirectoryName = expenseFileDirectoryPath() + "expensify";
         ParsableDirectory<Expense> expensifyExpensesDirectory = new ParsableDirectory<>(expenseDirectoryName, new ExpenseParser(csvFileReader));
-
         DataLoader<Expense> expenseDataLoader = new DataLoader<>(new CSVFileLoader(), expensifyExpensesDirectory);
         Set<Expense> expenses = expenseDataLoader.loadTransactions();
 
         TransactionProcessor transactionProcessor = new TransactionProcessor(creditCardActivities, expenses);
-
-        TransactionMatcher exactMatcher = new ExactMatcher();
-        TransactionMatcher closeDateMatcher = new CloseDateMatcher();
-        TransactionMatcher fuzzyMatcher = new FuzzyMerchantExactAmountMatcher();
-        Set<TransactionMatcher> matchers = new HashSet<>(Arrays.asList(exactMatcher, closeDateMatcher, fuzzyMatcher));
+        Set<TransactionMatcher> matchers = aSetOfMatchers(new ExactMatcher(), new CloseDateMatcher(), new FuzzyMerchantExactAmountMatcher());
         transactionProcessor.processTransactions(matchers);
 
         Map<String, Set<MatchedTransaction>> matchedTransactionsMap = transactionProcessor.getMatchedTransactions();
@@ -67,6 +61,10 @@ public class Application {
                                     expenses,
                                     unmatchedCreditCardActivity,
                                     unmatchedExpenses);
+    }
+
+    private HashSet<TransactionMatcher> aSetOfMatchers(TransactionMatcher... transactionMatchers) {
+        return new HashSet<>(Arrays.asList(transactionMatchers));
     }
 
     private String expenseFileDirectoryPath() {
