@@ -28,6 +28,10 @@ public class ExpenseParser implements Parser<Expense> {
                 .collect(Collectors.toSet());
     }
 
+    public String fileLocation() {
+        return csvFileReader.getFileNameOfLastReadFile();
+    }
+
     private Expense createExpense(String expenseDelimiter, String pipedExpenseString) {
         String[] expenseTokens = pipedExpenseString.split(expenseDelimiter, 11);
         boolean reimbursable = parseReimbursableness(expenseTokens[7]);
@@ -46,7 +50,8 @@ public class ExpenseParser implements Parser<Expense> {
                 reimbursable,
                 cleanOffQuotes(expenseTokens[8]),
                 originalAmount,
-                cleanOffQuotes(expenseTokens[10])
+                cleanOffQuotes(expenseTokens[10]),
+                fileLocation()
         );
     }
 

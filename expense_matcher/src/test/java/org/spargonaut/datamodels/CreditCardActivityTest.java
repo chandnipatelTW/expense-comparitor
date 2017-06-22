@@ -18,12 +18,15 @@ public class CreditCardActivityTest {
         int hourOfDay = 0;
         int minuteOfHour = 0;
         String description = "some sort of description";
+        String fileLocation = "a_test_file_name.csv";
         double amount = 2.25;
+
         CreditCardActivity creditCardActivityOne = new CreditCardActivityBuilder()
                 .setType(activityType)
                 .setTransactionDate(new DateTime(transactionYear, transactionMonth, transactionDay, hourOfDay, minuteOfHour))
                 .setDescription(description)
                 .setAmount(amount)
+                .setFileLocation(fileLocation)
                 .build();
 
 
@@ -32,6 +35,7 @@ public class CreditCardActivityTest {
                 .setTransactionDate(new DateTime(transactionYear, transactionMonth, transactionDay, hourOfDay, minuteOfHour))
                 .setDescription(description)
                 .setAmount(amount)
+                .setFileLocation(fileLocation)
                 .build();
 
         assertThat(creditCardActivityOne.equals(creditCardActivityTwo), is(true));

@@ -25,6 +25,10 @@ public abstract class ChargeParser<T> implements Parser<T> {
                 .collect(Collectors.toSet());
     }
 
+    public String fileLocation() {
+        return csvFileReader.getFileNameOfLastReadFile();
+    }
+
     private boolean isParsable(String chargeLine) {
         return !(isHeaderLine(chargeLine) || isCommentLine(chargeLine));
     }

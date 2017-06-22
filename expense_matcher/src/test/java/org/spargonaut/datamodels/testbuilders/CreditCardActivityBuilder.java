@@ -17,9 +17,10 @@ public class CreditCardActivityBuilder {
     private DateTime postDate = DateTime.now().minusDays(randomizer.nextInt());
     private String description = RandomStringUtils.random(20);
     private BigDecimal amount = new BigDecimal(randomizer.nextDouble());
+    private String fileLocation;
 
     public CreditCardActivity build() {
-        return new CreditCardActivity(type, transactionDate, postDate, description, amount);
+        return new CreditCardActivity(type, transactionDate, postDate, description, amount, fileLocation);
     }
 
     public CreditCardActivityBuilder setType(ActivityType type) {
@@ -50,6 +51,11 @@ public class CreditCardActivityBuilder {
 
     public CreditCardActivityBuilder setBigDecimalAmount(BigDecimal amount) {
         this.amount = amount;
+        return this;
+    }
+
+    public CreditCardActivityBuilder setFileLocation(String fileLocation) {
+        this.fileLocation = fileLocation;
         return this;
     }
 }

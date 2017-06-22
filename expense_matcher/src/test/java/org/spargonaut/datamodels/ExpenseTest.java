@@ -17,18 +17,20 @@ public class ExpenseTest {
         int day = 25;
         String merchant = "Some Merchant";
         double amount = 4.56;
+        String fileLocation = "some_expense_file";
 
         Expense expenseOne = new ExpenseBuilder()
                 .setTimestamp(new DateTime(year, month, day, 0, 0))
                 .setMerchant(merchant)
                 .setAmount(amount)
+                .setFileLocation(fileLocation)
                 .build();
-
 
         Expense expenseTwo = new ExpenseBuilder()
                 .setTimestamp(new DateTime(year, month, day, 0, 0))
                 .setMerchant(merchant)
                 .setAmount(amount)
+                .setFileLocation(fileLocation)
                 .build();
 
 

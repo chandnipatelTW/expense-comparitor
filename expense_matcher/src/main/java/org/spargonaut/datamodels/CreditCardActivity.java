@@ -8,7 +8,7 @@ import org.joda.time.DateTime;
 import java.math.BigDecimal;
 
 @Getter
-@EqualsAndHashCode(exclude = {"postDate"})
+@EqualsAndHashCode(exclude = {"postDate", "fileLocation"})
 @AllArgsConstructor
 public class CreditCardActivity implements Transaction {
 
@@ -17,4 +17,5 @@ public class CreditCardActivity implements Transaction {
     private final DateTime postDate;
     private final String description;
     private final BigDecimal amount;
+    private final String fileLocation;
 }

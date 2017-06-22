@@ -19,11 +19,13 @@ public class JPMCChargeParserTest extends BaseChargeParserTest {
     private CSVFileReader mockCSVFileReader;
     private File mockFile;
     private JPMCChargeParser jpmcChargeParser;
+    private final String fileLocation = "jpmc_statement.csv";
 
     @Before
     public void setUp() {
         mockFile = mock(File.class);
         mockCSVFileReader = mock(CSVFileReader.class);
+        when(mockCSVFileReader.getFileNameOfLastReadFile()).thenReturn(fileLocation);
         jpmcChargeParser = new JPMCChargeParser(mockCSVFileReader);
     }
 
@@ -78,7 +80,8 @@ public class JPMCChargeParserTest extends BaseChargeParserTest {
                 date(10, 12, 2016),
                 date(11, 12, 2016),
                 chargeAmount(-18.09),
-                "UBER   *US DEC09 DFMHE");
+                "UBER   *US DEC09 DFMHE",
+                fileLocation);
     }
 
     private CreditCardActivity kingSchoolsCreditCardActivity() {
@@ -86,6 +89,7 @@ public class JPMCChargeParserTest extends BaseChargeParserTest {
                 date(12, 10, 2015),
                 date(13, 10, 2015),
                 chargeAmount(-43.26),
-                "King Schools Inc.");
+                "King Schools Inc.",
+                fileLocation);
     }
 }

@@ -40,7 +40,8 @@ public class BankOfAmericaChargeParser extends ChargeParser<CreditCardActivity> 
                     defaultTransactionDate,
                     postDate,
                     desctription,
-                    amount);
+                    amount,
+                    fileLocation());
         }
         return creditCardActivity;
     }

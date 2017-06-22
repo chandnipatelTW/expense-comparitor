@@ -55,7 +55,8 @@ public class ExpensePrinterTest {
                 true,
                 "USD",
                 originalAmountForExpenseOne,
-                "someURL"
+                "someURL",
+                "some_expense_file.csv"
         );
         DateTime dateTimeForExpenseTwo = new DateTime(2016, 12, 12, 0, 0);
         double amountTwo = 747.20;
@@ -72,7 +73,8 @@ public class ExpensePrinterTest {
                 true,
                 "USD",
                 originalAmountForExpenseTwo,
-                "anotherURL"
+                "anotherURL",
+                "some_expense_file.csv"
         );
 
         return new HashSet<>(Arrays.asList(expenseOne, expenseTwo));

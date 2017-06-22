@@ -22,4 +22,5 @@ public class Expense implements Transaction {
     private final String originalCurrency;
     private final BigDecimal originalAmount;
     private final String receiptURL;
+    private final String fileLocation;
 }

@@ -8,8 +8,11 @@ import java.util.Set;
 
 public class CSVFileReader {
 
+    private String fileName;
+
     public Set<String> readCsvFile(File creditCardFile) {
         Set<String> chargeLines = new HashSet<>();
+        fileName = creditCardFile.getName();
 
         try (BufferedReader br = new BufferedReader(new FileReader(creditCardFile))) {
             String currentLine;
@@ -21,5 +24,9 @@ public class CSVFileReader {
         }
 
         return chargeLines;
+    }
+
+    public String getFileNameOfLastReadFile() {
+        return fileName;
     }
 }

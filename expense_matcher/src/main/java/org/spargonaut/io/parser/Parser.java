@@ -5,4 +5,5 @@ import java.util.Set;
 
 public interface Parser<T> {
     Set<T> parseFile(File filename);
+    String fileLocation();
 }

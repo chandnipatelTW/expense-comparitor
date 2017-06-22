@@ -20,6 +20,13 @@ public class BankOfAmericaChargeParserTest extends BaseChargeParserTest {
 
     private final File mockFile = mock(File.class);
     private final CSVFileReader mockCSVFileReader = mock(CSVFileReader.class);
+    private String fileLocation;
+
+    @Before
+    public void setUp() {
+        fileLocation = "boa_statement.csv";
+        when(mockCSVFileReader.getFileNameOfLastReadFile()).thenReturn(fileLocation);
+    }
 
     public class BasicBankOfAmericaChargeFile {
 
@@ -70,6 +77,7 @@ public class BankOfAmericaChargeParserTest extends BaseChargeParserTest {
                 date( 23, 12, 1999),
                 date(7, 2, 2017),
                 chargeAmount(-75.99),
-                "DOORDASH-MCALISTERS DE 650-681-9470 CA");
+                "DOORDASH-MCALISTERS DE 650-681-9470 CA",
+                fileLocation);
     }
 }

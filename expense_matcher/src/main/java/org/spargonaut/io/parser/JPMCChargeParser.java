@@ -36,7 +36,8 @@ public class JPMCChargeParser extends ChargeParser<CreditCardActivity> {
                     transactionDate,
                     postDate,
                     description.toString(),
-                    amount);
+                    amount,
+                    fileLocation());
         }
 
         return creditCardActivity;

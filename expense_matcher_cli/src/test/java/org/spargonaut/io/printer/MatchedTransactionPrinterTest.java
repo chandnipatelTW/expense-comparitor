@@ -27,11 +27,11 @@ public class MatchedTransactionPrinterTest {
         Set<MatchedTransaction> matchedTransactions = createMatchedTransactions();
         MatchedTransactionPrinter.printMatchedTransactions (matchedTransactions);
 
-        String expectedMatcheOne = "               A credit card transaction description              2017-01-01      2017-01-02           -3.49\n" +
-                                   "matched with:  An expense merchant                                2017-02-03                            3.49\n\n";
+        String expectedMatcheOne = "               A credit card transaction description              2017-01-01      2017-01-02           -3.49                               some_charge_file.csv\n" +
+                                   "matched with:  An expense merchant                                2017-02-03                            3.49                              some_expense_file.csv\n\n";
 
-        String expectedMatchTwo = "               Another credit card transaction description        2017-04-05      2017-04-06           -5.68\n" +
-                                   "matched with:  Another expense merchant                           2017-06-07                            5.68\n\n";
+        String expectedMatchTwo = "               Another credit card transaction description        2017-04-05      2017-04-06           -5.68                               some_charge_file.csv\n" +
+                                   "matched with:  Another expense merchant                           2017-06-07                            5.68                              some_expense_file.csv\n\n";
 
         assertThat (outputCapture.toString().contains(expectedMatcheOne), is(true));
         assertThat (outputCapture.toString().contains(expectedMatchTwo), is(true));
@@ -54,6 +54,7 @@ public class MatchedTransactionPrinterTest {
         int postDayOne = 2;
         DateTime activityTransactionDateOne = new DateTime (transactionYear, transactionMonthOne, transactionDayOne, 0, 0);
         DateTime activityPostDateOne = new DateTime (transactionYear, transactionMonthOne, postDayOne, 0, 0);
+        String chargeFileLocation = "some_charge_file.csv";
 
         String transactionDescriptionOne = "A credit card transaction description";
         double matchedAmountOneForCreditCardActivityOne = matchedAmountOne * -1;
@@ -62,18 +63,21 @@ public class MatchedTransactionPrinterTest {
                 .setTransactionDate (activityTransactionDateOne)
                 .setPostDate(activityPostDateOne)
                 .setDescription (transactionDescriptionOne)
+                .setFileLocation(chargeFileLocation)
                 .build ();
 
 
         int expenseMonthOne = 2;
         int expenseDayOne = 3;
         DateTime expenseDateOne = new DateTime (transactionYear, expenseMonthOne, expenseDayOne, 0, 0);
+        String expenseFileLocation = "some_expense_file.csv";
 
         String merchantOne = "An expense merchant";
         Expense expenseOne = new ExpenseBuilder()
                 .setAmount (matchedAmountOne)
                 .setTimestamp (expenseDateOne)
                 .setMerchant (merchantOne)
+                .setFileLocation(expenseFileLocation)
                 .build ();
 
         MatchedTransaction matchedTransactionOne = new MatchedTransaction (creditCardActivityOne, expenseOne);
@@ -92,6 +96,7 @@ public class MatchedTransactionPrinterTest {
                 .setTransactionDate (activityTransactionDateTwo)
                 .setPostDate(activityPostDateTwo)
                 .setDescription (transactionDescriptionTwo)
+                .setFileLocation(chargeFileLocation)
                 .build ();
 
         int expenseMonthTwo = 6;
@@ -103,6 +108,7 @@ public class MatchedTransactionPrinterTest {
                 .setAmount (matchedAmountTwo)
                 .setTimestamp (expenseDateTwo)
                 .setMerchant (merchantTwo)
+                .setFileLocation(expenseFileLocation)
                 .build ();
 
         MatchedTransaction matchedTransactionTwo = new MatchedTransaction (creditCardActivityTwo, expenseTwo);

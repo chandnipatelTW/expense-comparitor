@@ -22,9 +22,10 @@ public class ExpenseBuilder {
     private String originalCurrency = RandomStringUtils.random(3);
     private BigDecimal originalAmount = new BigDecimal(randomizer.nextDouble());
     private String receiptURL = RandomStringUtils.random(50);
+    private String fileLocation;
 
     public Expense build() {
-        return new Expense(timestamp, merchant, amount, mcc, category, tag, comment, reimbursable, originalCurrency, originalAmount, receiptURL);
+        return new Expense(timestamp, merchant, amount, mcc, category, tag, comment, reimbursable, originalCurrency, originalAmount, receiptURL, fileLocation);
     }
 
     public ExpenseBuilder setTimestamp(DateTime timestamp) {
@@ -85,6 +86,11 @@ public class ExpenseBuilder {
 
     public ExpenseBuilder setReceiptURL(String receiptUrl) {
         this.receiptURL = receiptUrl;
+        return this;
+    }
+
+    public ExpenseBuilder setFileLocation(String fileLocation) {
+        this.fileLocation = fileLocation;
         return this;
     }
 }

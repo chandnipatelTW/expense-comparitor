@@ -1,5 +1,6 @@
 package org.spargonaut.io;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -10,14 +11,25 @@ import static org.hamcrest.core.Is.is;
 
 public class CSVFileReaderTest {
 
+    private CSVFileReader csvFileReader;
+    private File creditCardFile;
+
+    @Before
+    public void setUp() {
+        csvFileReader = new CSVFileReader();
+        String testFileName = "src/integrationTest/resources/test_charges.csv";
+        creditCardFile = new File(testFileName);
+    }
+
     @Test
     public void shouldReadTheCreditCardFile() {
-        String testFileName = "src/integrationTest/resources/test_charges.csv";
-        File creditCardFile = new File(testFileName);
-
-        CSVFileReader csvFileReader = new CSVFileReader();
         Set<String> charges = csvFileReader.readCsvFile(creditCardFile);
-
         assertThat(charges.size(), is(6));
+    }
+
+    @Test
+    public void shouldRetrieveTheNameOfTheFileBeingRead() {
+        csvFileReader.readCsvFile(creditCardFile);
+        assertThat(csvFileReader.getFileNameOfLastReadFile(), is("test_charges.csv"));
     }
 }

@@ -23,13 +23,14 @@ abstract class BaseChargeParserTest {
         assertThat(creditCardActivitySet.size(), is(size));
     }
 
-    CreditCardActivity createExpectedCreditCardActivity(DateTime transactionDate, DateTime postDate, double amount, String description) {
+    CreditCardActivity createExpectedCreditCardActivity(DateTime transactionDate, DateTime postDate, double amount, String description, String fileLocation) {
         return new CreditCardActivityBuilder()
                 .setType(ActivityType.SALE)
                 .setAmount(amount)
                 .setDescription(description)
                 .setPostDate(postDate)
                 .setTransactionDate(transactionDate)
+                .setFileLocation(fileLocation)
                 .build();
     }
 
