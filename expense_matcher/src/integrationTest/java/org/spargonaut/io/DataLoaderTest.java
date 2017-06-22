@@ -10,6 +10,7 @@ import org.spargonaut.datamodels.testbuilders.CreditCardActivityBuilder;
 import org.spargonaut.datamodels.testbuilders.ExpenseBuilder;
 import org.spargonaut.io.parser.ChargeParser;
 import org.spargonaut.io.parser.ExpenseParser;
+import org.spargonaut.io.parser.ParsableDirectory;
 
 import java.io.File;
 import java.util.Arrays;
@@ -43,9 +44,11 @@ public class DataLoaderTest {
             when(mockParser.parseFile(mockFileOne)).thenReturn(aSetOfExpenses(aRandomExpense(), aRandomExpense()));
             when(mockParser.parseFile(mockFileTwo)).thenReturn(aSetOfExpenses(aRandomExpense(), aRandomExpense()));
 
-            DataLoader<Expense> dataLoader = new DataLoader<>(mockCsvFileLoader);
-            dataLoader.load(testDirectoryName, mockParser);
-            Set<Expense> actualExpenseList = dataLoader.getLoadedFiles();
+            ParsableDirectory<Expense> parsableDirectory = new ParsableDirectory<>(testDirectoryName, mockParser);
+
+            DataLoader<Expense> dataLoader = new DataLoader<>(mockCsvFileLoader, parsableDirectory);
+
+            Set<Expense> actualExpenseList = dataLoader.loadTransactions();
 
             assertThat(actualExpenseList.size(), is(4));
         }
@@ -54,10 +57,12 @@ public class DataLoaderTest {
     public class ChargeFiles {
         private ChargeParser mockParser = mock(ChargeParser.class);
         private DataLoader<CreditCardActivity> dataLoader;
+        private ParsableDirectory<CreditCardActivity> parsableDirectory;
 
         @Before
         public void setUp() {
-            dataLoader = new DataLoader<>(mockCsvFileLoader);
+            parsableDirectory = new ParsableDirectory<CreditCardActivity>(testDirectoryName, mockParser);
+            dataLoader = new DataLoader<>(mockCsvFileLoader, parsableDirectory);
         }
 
         @Test
@@ -65,8 +70,8 @@ public class DataLoaderTest {
             when(mockParser.parseFile(mockFileOne)).thenReturn(aSetOfCreditCardActivities(aRandomCreditCardActivity(), aRandomCreditCardActivity()));
             when(mockParser.parseFile(mockFileTwo)).thenReturn(aSetOfCreditCardActivities(aRandomCreditCardActivity(), aRandomCreditCardActivity()));
 
-            dataLoader.load(testDirectoryName, mockParser);
-            Set<CreditCardActivity> actualExpenseList = dataLoader.getLoadedFiles();
+            dataLoader.loadTransactions();
+            Set<CreditCardActivity> actualExpenseList = dataLoader.loadTransactions();
 
             assertThat(actualExpenseList.size(), is(4));
         }
@@ -77,15 +82,16 @@ public class DataLoaderTest {
             when(mockParser.parseFile(mockFileOne)).thenReturn(aSetOfCreditCardActivities(aRandomCreditCardActivity(), duplicateCreditCardActivity));
             when(mockParser.parseFile(mockFileTwo)).thenReturn(aSetOfCreditCardActivities(aRandomCreditCardActivity(), duplicateCreditCardActivity));
 
-            dataLoader.load(testDirectoryName, mockParser);
-            Set<CreditCardActivity> actualExpenseList = dataLoader.getLoadedFiles();
+            dataLoader.loadTransactions();
+            Set<CreditCardActivity> actualExpenseList = dataLoader.loadTransactions();
 
             assertThat(actualExpenseList.size(), is(3));
         }
 
         public class IgnoredChargeFiles {
 
-            private final String directoryNameOfFilesToIgnore = "./another-test-directory";
+//            private final String directoryNameOfFilesToIgnore = "./another-test-directory/manually_ignored";
+            private final String directoryNameOfFilesToIgnore = testDirectoryName + "/manually_ignored";
             private File mockFileOfChargesToIgnore = mock(File.class);
             private ChargeParser mockParserForCreditCardActivitiesToIgnore = mock(ChargeParser.class);
 
@@ -95,13 +101,17 @@ public class DataLoaderTest {
                 CreditCardActivity creditCardActivityTwoToKeep = aRandomCreditCardActivity();
                 CreditCardActivity creditCardActivityOneToIgnore = aRandomCreditCardActivity();
                 CreditCardActivity creditCardActivityTwoToIgnore = aRandomCreditCardActivity();
-                when(mockParser.parseFile(mockFileOne)).thenReturn(aSetOfCreditCardActivities(creditCardActivityOneToKeep, creditCardActivityOneToIgnore, creditCardActivityTwoToIgnore, creditCardActivityTwoToKeep));
+                when(mockParser.parseFile(mockFileOne)).thenReturn(
+                        aSetOfCreditCardActivities(
+                                creditCardActivityOneToKeep,
+                                creditCardActivityOneToIgnore,
+                                creditCardActivityTwoToIgnore,
+                                creditCardActivityTwoToKeep));
                 when(mockCsvFileLoader.getFileNamesIn(directoryNameOfFilesToIgnore)).thenReturn(aSetOfFiles(mockFileOfChargesToIgnore));
-                when(mockParserForCreditCardActivitiesToIgnore.parseFile(mockFileOfChargesToIgnore)).thenReturn(aSetOfCreditCardActivities(creditCardActivityOneToIgnore, creditCardActivityTwoToIgnore));
+                when(mockParser.parseFile(mockFileOfChargesToIgnore)).thenReturn(aSetOfCreditCardActivities(creditCardActivityOneToIgnore, creditCardActivityTwoToIgnore));
 
-                dataLoader.load(testDirectoryName, mockParser);
-                dataLoader.ignore(directoryNameOfFilesToIgnore, mockParserForCreditCardActivitiesToIgnore);
-                Set<CreditCardActivity> actualExpenseList = dataLoader.getLoadedFiles();
+                dataLoader.loadTransactions();
+                Set<CreditCardActivity> actualExpenseList = dataLoader.loadTransactions();
 
                 assertThat(actualExpenseList.size(), is(2));
                 assertThat(actualExpenseList.contains(creditCardActivityOneToKeep), is(true));
@@ -114,10 +124,9 @@ public class DataLoaderTest {
                 CreditCardActivity creditCardActivityTwoToIgnore = aRandomCreditCardActivity();
                 when(mockParser.parseFile(mockFileOne)).thenReturn(aSetOfCreditCardActivities(aRandomCreditCardActivity(), creditCardActivityOneToIgnore, creditCardActivityTwoToIgnore, aRandomCreditCardActivity()));
                 when(mockCsvFileLoader.getFileNamesIn(directoryNameOfFilesToIgnore)).thenReturn(aSetOfFiles(mockFileOfChargesToIgnore));
-                when(mockParserForCreditCardActivitiesToIgnore.parseFile(mockFileOfChargesToIgnore)).thenReturn(aSetOfCreditCardActivities(creditCardActivityOneToIgnore, creditCardActivityTwoToIgnore));
+                when(mockParser.parseFile(mockFileOfChargesToIgnore)).thenReturn(aSetOfCreditCardActivities(creditCardActivityOneToIgnore, creditCardActivityTwoToIgnore));
 
-                dataLoader.load(testDirectoryName, mockParser);
-                dataLoader.ignore(directoryNameOfFilesToIgnore, mockParserForCreditCardActivitiesToIgnore);
+                dataLoader.loadTransactions();
                 Set<CreditCardActivity> actualExpenseList = dataLoader.getIgnoredData();
 
                 assertThat(actualExpenseList.size(), is(2));

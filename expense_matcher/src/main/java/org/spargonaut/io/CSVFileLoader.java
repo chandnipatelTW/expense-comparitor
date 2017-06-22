@@ -2,17 +2,21 @@ package org.spargonaut.io;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CSVFileLoader {
 
-    public Set<File> getFileNamesIn(String directoryName) {
+    Set<File> getFileNamesIn(String directoryName) {
         try {
-            File directory = new File(directoryName);
-            return Arrays.stream(directory.listFiles())
-                    .filter(this::isCSVFile)
-                    .collect(Collectors.toSet());
+            File[] files = new File(directoryName).listFiles();
+            return (files == null) ?
+                    new HashSet<>() :
+                    Arrays.stream(files)
+                        .filter(this::isCSVFile)
+                        .collect(Collectors.toSet());
+
         } catch (Exception e) {
             String message = "Trouble loading the file: " + directoryName + "\n" +e.getMessage();
             throw new RuntimeException(message, e.getCause());

@@ -2,6 +2,7 @@ package org.spargonaut.io.parser;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.spargonaut.datamodels.CreditCardActivity;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -9,15 +10,14 @@ import static org.mockito.Mockito.mock;
 
 public class ParsableDirectoryTest {
 
-    private String directoryPath;
     private Parser mockParser;
     private ParsableDirectory parsableDirectory;
 
     @Before
     public void setUp() throws Exception {
-        directoryPath = "some/relative/path/directory";
+        String directoryPath = "some/relative/path/directory";
         mockParser = mock(Parser.class);
-        parsableDirectory = new ParsableDirectory(directoryPath, mockParser);
+        parsableDirectory = new ParsableDirectory<CreditCardActivity>(directoryPath, mockParser);
     }
 
     @Test
@@ -26,7 +26,12 @@ public class ParsableDirectoryTest {
     }
 
     @Test
-    public void shouldREtrieveTheParser() {
+    public void shouldRetrieveTheParser() {
         assertThat(parsableDirectory.getParser(), is(mockParser));
+    }
+
+    @Test
+    public void shouldRetrieveTheDirectoryPathOfFilesToIgnore() {
+        assertThat(parsableDirectory.getDirectoryToIgnore(), is("some/relative/path/directory/manually_ignored"));
     }
 }

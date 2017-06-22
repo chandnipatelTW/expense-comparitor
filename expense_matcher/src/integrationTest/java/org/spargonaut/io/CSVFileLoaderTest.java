@@ -32,4 +32,10 @@ public class CSVFileLoaderTest {
         csvFileLoader.getFileNamesIn(testDirectoryName);
         assertThat(csvFileLoader.getFileNamesIn(testDirectoryName).size(), is(2));
     }
+
+    @Test
+    public void shouldIgnoreMissingManuallyIgnoredDirectories() {
+        String testDirectoryName = "src/directory_that_does_not_exist";
+        csvFileLoader.getFileNamesIn(testDirectoryName);
+    }
 }

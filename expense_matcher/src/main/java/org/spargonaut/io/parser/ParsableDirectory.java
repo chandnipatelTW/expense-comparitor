@@ -1,12 +1,10 @@
 package org.spargonaut.io.parser;
 
-import org.spargonaut.datamodels.CreditCardActivity;
-
-public class ParsableDirectory {
+public class ParsableDirectory<T> {
     private String directoryPath;
-    private Parser<CreditCardActivity> parser;
+    private Parser<T> parser;
 
-    public ParsableDirectory(String directoryPath, Parser<CreditCardActivity> parser) {
+    public ParsableDirectory(String directoryPath, Parser<T> parser) {
         this.directoryPath = directoryPath;
         this.parser = parser;
     }
@@ -15,7 +13,11 @@ public class ParsableDirectory {
         return directoryPath;
     }
 
-    public Parser<CreditCardActivity> getParser() {
+    public Parser<T> getParser() {
         return parser;
+    }
+
+    public String getDirectoryToIgnore() {
+        return directoryPath + "/manually_ignored";
     }
 }
