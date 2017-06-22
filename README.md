@@ -12,8 +12,8 @@ different types of matching techniques.
 ### BASIC SETUP:
 download your credit card statements as a csv file.
 put them in the following directories:  
-for JPM chase statements:: \<root project directory>/expense_matcher_cli/data/charge_files/jpmc/  
-for bank of america statements: \<root project directory>/expense_matcher_cli/data/charge_files/bank_of_america/  
+for JPM Chase statements:: \<root project directory>/expense_matcher_cli/data/charge_files/jpmc/  
+for Bank of America statements: \<root project directory>/expense_matcher_cli/data/charge_files/bank_of_america/  
 
 for expenses:   
 download your expense reports from expensify (use the default csv template).  
@@ -41,9 +41,24 @@ for Bank of America charges: \<root project directory>/expense_matcher_cli/data/
 for expenses: \<root project directory>/data/expense_files/expensify/manually_ignored  
 
 
-you'll need to find the exact lines from one of the credit card activity files or the expense files, and paste it into their respective ignore file.  
-if you begin the line with a hash symbal (#), this line will be considered a comment and ignored when parsing the file.  this is useful to make notes about the lines that you've manually ignored. 
+you'll need to find the exact lines from one of the credit card activity files or the expense files, and paste it into
+their respective ignore file.  
+if you begin the line with a hash symbal (#), this line will be considered a comment and ignored when parsing the file.
+  this is useful to make notes about the lines that you've manually ignored. 
 
+### RUNNING AN EXAMPLE
+Included in this repository, is a set of example files including charge files from a JPMC statement, some manually
+ignored charges, and some example expense reports from expensify.  You will find this example dataset in the directory:  
+\<root project directory>/expense_matcher_cli/example_data
+
+To prepare the example, use the command:  
+./gradlew prepareExample  
+
+Then run the program normally with the command:  
+./gradlew run
+
+afterwords, you can put the repository back to its intial state by using the command:  
+./gradlew cleanExample
 
 ### Development notes
 to run the tests, use the command:  
