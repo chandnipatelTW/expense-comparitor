@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 UNICODE_FILE_DIRECTORY="./data/unicode_expense_files"
-TARGET_DIRECTORY="./data/expense_files"
-UNICODE_FILES=$(ls $UNICODE_FILE_DIRECTORY)
+TARGET_DIRECTORY="./data/expense_files/expensify"
+UNICODE_FILES=$(ls $UNICODE_FILE_DIRECTORY | grep .csv$)
 
 for UNICODE_FILE in $UNICODE_FILES; do
     #ls -l $UNICODE_FILE_DIRECTORY/$UNICODE_FILE
