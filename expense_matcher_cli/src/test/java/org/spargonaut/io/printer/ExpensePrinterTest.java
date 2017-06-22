@@ -24,8 +24,8 @@ public class ExpensePrinterTest {
         Set<Expense> expenses = createExpenseSet();
         ExpensePrinter.printExpensesAsHumanReadable(expenses);
 
-        String formattedExpenseOne = "2016-12-12      American Airlines                  747.20\n";
-        String formattedExpenseTwo = "2016-12-12      Uber                                18.68\n";
+        String formattedExpenseOne = "2016-12-12      American Airlines                  747.20                              some_expense_file.csv\n";
+        String formattedExpenseTwo = "2016-12-12      Uber                                18.68                              some_expense_file.csv\n";
 
         assertThat(outputCapture.toString().contains(formattedExpenseOne), is(true));
         assertThat(outputCapture.toString().contains(formattedExpenseTwo), is(true));

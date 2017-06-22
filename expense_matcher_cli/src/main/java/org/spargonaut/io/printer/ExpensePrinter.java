@@ -8,10 +8,11 @@ public class ExpensePrinter {
     public static void printExpensesAsHumanReadable(Set<Expense> expenses) {
         System.out.format("expenses (%d) -------------------------------------------\n", expenses.size());
         expenses.forEach(expense -> {
-            System.out.format("%-15s %-30s %10s\n",
+            System.out.format("%-15s %-30s %10s %50s\n",
                     expense.getTimestamp().toLocalDate(),
                     expense.getMerchant(),
-                    expense.getAmount());
+                    expense.getAmount(),
+                    expense.getFileLocation());
         });
     }
 }
